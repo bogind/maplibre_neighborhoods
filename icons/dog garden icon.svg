@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>dog garden icon</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="map-icons_fill" transform="translate(-155.000000, -382.000000)" fill="#2B393F" fill-rule="nonzero">
+            <g id="גינות-כלבים-אייקון" transform="translate(141.000000, 368.000000)">
+                <g id="dog-garden-icon" transform="translate(14.000000, 14.000000)">
+                    <circle id="Oval" cx="2.1" cy="5.7" r="2.1"></circle>
+                    <circle id="Oval" cx="6.15" cy="2.1" r="2.1"></circle>
+                    <circle id="Oval" cx="11.55" cy="2.1" r="2.1"></circle>
+                    <circle id="Oval" cx="15.6" cy="5.7" r="2.1"></circle>
+                    <path d="M13.806,10.674 C13.023,9.756 12.366,8.973 11.574,8.055 C11.16,7.569 10.629,7.083 9.999,6.867 C9.9,6.831 9.801,6.804 9.702,6.786 C9.477,6.75 9.234,6.75 9,6.75 C8.766,6.75 8.523,6.75 8.289,6.795 C8.19,6.813 8.091,6.84 7.992,6.876 C7.362,7.092 6.84,7.578 6.417,8.064 C5.634,8.982 4.977,9.765 4.185,10.683 C3.006,11.862 1.557,13.167 1.827,14.994 C2.088,15.912 2.745,16.821 3.924,17.082 C4.581,17.217 6.678,16.686 8.91,16.686 L9.072,16.686 C11.304,16.686 13.401,17.208 14.058,17.082 C15.237,16.821 15.894,15.903 16.155,14.994 C16.434,13.158 14.985,11.853 13.806,10.674 L13.806,10.674 Z" id="Path"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

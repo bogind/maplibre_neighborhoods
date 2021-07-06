@@ -1,0 +1,164 @@
+body {
+    color: #444;
+    font-size: 13px;
+    line-height: 1.42857143;
+    direction: rtl;
+    margin: 0; 
+    padding: 0; 
+    font-family: "Segoe UI",Tahoma,Arial,sans-serif;
+}
+.map-container {
+    width: 910px;
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    left: 50px;/* DELETE LATER*/
+    height: 100%;
+    
+}
+.gis-header {
+    height: 84px;
+    background: #00ac4e;
+    display: table;
+    width: 100%;
+    direction: rtl;
+    position: relative;
+    z-index: 4;
+}
+
+.gis-header {
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+    /*height: 20%;*/
+}
+#gis-map { 
+    position: absolute; 
+    
+    bottom: 0; 
+    width: 100%; 
+    /*height: 80%; */
+}
+.ShhunaReSize {
+    display: inline-block;
+    border-radius: 2px;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+    border-style: solid;
+    border-width: 1px;
+    border-image-source: linear-gradient(to bottom, #ffffff 2%, rgba(255, 255, 255, 0) 21%, rgba(255, 255, 255, 0) 98%);
+    border-image-slice: 1;
+    background-image: linear-gradient(to bottom, #fafafa, #fafafa), linear-gradient(to bottom, #ffffff 2%, rgba(255, 255, 255, 0) 21%, rgba(255, 255, 255, 0) 98%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    cursor: pointer;
+    margin: 20px -14px 11px auto;
+}
+
+.ShhunaTitle {
+    font-family: 'blenderRegular';
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.11;
+    letter-spacing: normal;
+    text-align: right;
+    color: #2b393f;
+    display: block;
+    /*vertical-align: middle;*/
+    padding: 0 25px 0 5px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+}
+.gis-icons {
+    text-align: right;
+    list-style: none;
+    margin: 0;
+    height: 38px;
+    white-space: nowrap;
+    padding-right: 0;
+}
+.gis-icons li {
+    list-style: none;
+    display: table;
+    float: right;
+    padding-right: 25px;
+    cursor: pointer;
+    text-align: right;
+    height: 38px;
+    line-height: 42px;
+}
+
+@media (min-width: 1200px){
+    .map-container {
+        width: 1100px;
+    }
+    .shhuna .gis-header {
+        padding-bottom: 30px;
+        height: 90px;
+    
+    }
+    .shhuna .gis-map {
+        height: 900px;
+        background-size: cover;
+        top: 90px;
+    }
+    .shhuna .gis-header .gis-icons-wrap {
+        display: block;
+    }
+    .gis-header .gis-icons-wrap {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: left;
+        padding: 0 0 0 25px;
+        width: 100%;
+    }
+    .gis-icons {
+        list-style: none;
+        margin: 0;
+        height: 38px;
+        white-space: nowrap;
+    }
+    .gis-icons {
+        text-align: right;
+        list-style: none;
+        margin: 0;
+        height: 38px;
+        white-space: nowrap;
+        padding-right: 0;
+    }
+    .gis-icons li {
+        list-style: none;
+        display: table;
+        float: right;
+        padding-right: 25px;
+        cursor: pointer;
+        text-align: right;
+        height: 38px;
+        line-height: 42px;
+    }
+    
+}
+
+@media (min-width: 992px){
+    .map-container {
+        width: 910px;
+    }
+    .gis-header {
+        height: 70px;
+    }
+    .gis-map {
+        background-position: left top;
+        top: 70px;
+    }
+}
+
+@media (min-width: 768px){
+    .gis-header {
+        height: 80px;
+    }
+    .gis-map {
+        top: 80px;
+    }
+}

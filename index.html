@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>פרופיל שכונה</title>
+    <script src="js/turf.v6.3.0.min.js"></script>
+    <script src="js/maplibre-gl.v1.14.0.js"></script>
+    <link href="css/maplibre-gl.v1.14.0.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/desktop1_map.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="map-container shhuna">
+        <div class="gis-header" ng-style="{'background': gis.gisClient.backgroundColor }" style="background: rgb(255, 242, 227);">
+            <div ng-if="'True' =='True'" class="ShhunaReSize smallSize ng-scope">
+                <div class="ShhunaReSizeBtn "></div>
+                <div class="ShhunaReSizeTxt">פתח מפה במסך מלא</div>
+            </div>
+            <div ng-if="'True' =='True'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="'<b>מפת מרחב</b> הצג לפי:'"><b>מפת מרחב</b> הצג לפי:</div>
+            
+        </div>
+            <!-- ngIf: 'True' =='True' --><div ng-if="'True' =='True'" class="ShhunaReSize smallSize ng-scope"></div>
+        <div id="gis-map" class="gis-map">
+            <script src="js/desktop1_map.js"></script>
+        </div>
+    </div>
+</body>
+</html>
