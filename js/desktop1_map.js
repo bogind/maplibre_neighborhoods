@@ -366,16 +366,42 @@ let map = new maplibregl.Map({
 map.addControl(new maplibregl.NavigationControl());
 let neighborhood_url;
 let neighborhhod_bounds;
+
+/* Layer Urls */
 let parks1_url = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/842/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson";
 let parks2_url = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/551/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson";
+
 let libraryUrl1 = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/635/query?where=1%3D1&outFields=Shape,sug&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
 let libraryUrl2 = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/570/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
+
 let mosdotKehilaUrl = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/553/query?where=1%3D1&outFields=Shape,shem&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
+
+let mosdotTarbutUrl1 = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/552/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
+let mosdotTarbutUrl2 = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/572/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
+let mosdotTarbutUrl3 = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/573/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
+let mosdotTarbutUrl4 = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/574/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
+let mosdotTarbutUrl5 = 'http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/569/query?where=1%3D1&outFields=Shape&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson'
+
+/* Icons */
 let libraryIcon1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAYCAYAAAARfGZ1AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAABCFJREFUSIm11X1oE3ccx/H33SUm6YOpqX1IY3xoTaumdlBt2toWHPOBVqEOx6ZuE4azjsEm1UJ1groH6TY3K90U2fbHGChzTFC7dQoKyrSGMbdurton06S2TQ1LTam2PZvL7Q9tl2jQ7I994OCO34/XfflwP07D/xhN+MM2iFfNWDVTdFZVK1uRSEIhgEQARXcHXXxAkAfvMIPA/gsMAepT8ZocakNjjIpwHz23BRgIKlwQFFQJ9qkK60EGWX6g9ULNXELAEBBgnDshLW3BBLY3tDAQgSsa07l6z+BVVVXLgGQg7eHFcCBw+v2i9HWqIguPDCYC04BpaJkjQr45uzKFllMrInAJQg831wEl4UKC0YjOPJ+x3pYYStYUPFZLKDiYCfwebf/ArZ7YYGDWIkc/x05E4tIYadvm8vXx+k/mmTIsTLdYMKWlI4+McOrg/pjgRPtyLLYc307Q1sH4JL7fw2HgsFpdc+mW62aJPDKC+8Z1fD1u5pUtpXDtS+gNcQy4u+lr+4uU2ZlMSzdjnJ6C0ZRMQlISicYk+rpd/vEcttPOh5N4eLRTpmDNzGJu7sKoE/494GV6ujnqWnbeM70ouiSQ/61lIoM+n6G3q5O0DAuCKMZUx6MRJHnqxH0Ero8zBEfuDnOktpqC1WvIdRSiN8TFDCuKIiphB2sS3zqLrOamJovX1UH/b5c5frKBk2Y7pVtqyX/2OVIzMqKCaiiE3+ejv9uFs/FEpYRu/WO1SFqOpFqtI60XzzHWcxUA2dvK+b0bOb8XFry8iyVr1hJvNNLvcdN3swvXtT+4cfYU9zp/nmBmChIOoHkS/wKkDvDkFS8xLFhcYLvUVEFT7XpURZ6c8PrRfVw/ui/q9Kb8ShwvbkAfF3++tGJ1Q0QtVaDUQAKARqtlaeXzzFvUyYkDH+FuPBQVnGpfSeG6jcx3FGKZPQdRFOl1uQZ4cNojawGd+0/nlfy8omIA0mdYeePjgziXlXN612ZCd73E28pwbNiE3VGMNSsLUZIiXqgoQbEONDshGIHf75J3tzmbXx/y+yktr0AQRSSNhpKKVVhtF5HHRsmcvwBJ89jRAGB4aAjnj415/hy20s6nEXgD3K9/u7qt+cxPJd99Vs+aLW+i0xsA0Op0zLTZoqKDvts4z57B29lO/spy97pqDkSpBURRpLRiFa2/pvLljho2vLMHU2oq0f4J3h4PlxtP4u/1sPzVTZS/shGgi2jfeXjsiwswmpL5quYtXtixG0NCIgCqquLpaOfi999yb9DPiteqyLLnIgjC5Hp4InBBEErDn6vN5oWHruT+II3zi6rHiaLbDLIEvJfdxTHbgc+VqF09afKJ1Hu913baKQpCIwr5IH+Q3cU3VfBENCYcoK4V7x4o08P4xCcWa56KA7wLo/8Fncg/50JzgPiI/YEAAAAASUVORK5CYII='
 let libraryIcon2 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAb9JREFUOI2t1LGK4lAUBuD/XkOWYDBN0CqFlorYuCDBzhQRBMFyy3kDn0SQeYUpbPQJbEQRQS2CYCG4RYQopBANJDuQOMUwzsREM9ndU13+e/hyknsJg/9czMdis9m8nM/nn5fLhcRFKKUuy7LPhULh+Qrquv5rPB7/9WSKojwB+AQ9z/M1iKKIer0OjuMwn8+xXC4fgp7nJYAvr3xbjUYDkiQBAFRVxXa7xfF4jJz0LphKpa7rRCIBQRD+DdQ0DdVqFYQQ7HY76LoeiT0EXdeFbduYzWaYTqeBb0wpDWR3wVqtBlmWAQCmacJ13etepVKBIAiwLAuTyeR7YD6fD526VCpBURQQQmBZFhaLBRzHiQY5jgtkkiRBVVUQ8n7veZ5Hs9lEr9eLBm+L53m0Wi2wLOvLTdMM9H4LZBgGlmX5rtJ6vcZwOIwPZrNZJJNJaJoGhmGQTqdhGAYGg0H4w6PAcrkcyA6Hg+/kY4Ffy7ZtrFYrjEajuz2hYL/fB6U0kJ9OJ+z3+1Do4/SvYCaT+S3LcvbRhKIoIpfLhe7xPD/3gcViMdfpdH44jhP7B2sYhtftdl99IAC02+0/cbHbegN+tZl2GPzIFQAAAABJRU5ErkJggg=='
 let libraryIcon3 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAXdJREFUOI2t0bFPU1EUx/HvKQ0nYWyCpBM6sBhdXV3cTJgciAPEscXQNA4kzv4FrHRjc3TSURJcmGCTQEw6+BJjmk7EH9Aeh9LSlve8pPib7rv5vc89970y/znl4SLcnyM9AWwGp0el8s06naMbUNoweDPzaJ3OO+AGBOanKj+BJu4Z0jbwMkHOw9iVc1Iz+IREwCHQBhZTgxaD1eoZWQaAwZ+AX/cCI8s2A94a9GNw3ccp7N8TggPVPnwA1rn99yNnLx8M952S1Lh+awUojSkfcW8jPbDBQWnQKpXW8PtN5YvBa5N6AY+AV8BCEiTL0dy/I60Z9AAMfgQ0gN00eDtdpFWD7vhmuD81aaJ4V/AS92WkkxEGdaSt6WISDPd9k34j1cL93KSDcH+BtJPXT4Il6f3oYXg96RkwNxM4MS0shXsTqV7UKU/2R/kccJXTXzLpYfF5Y6DB1xgtC3MKHOTs9w2Op8FWwF4CLErf4GICvEaV3797/gKJVoFQ4PzC2AAAAABJRU5ErkJggg=='
 let libraryIcon4 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAbpJREFUOI2t1EFIFFEcx/Hvm33sgygIo8RTdoggDATBgSC62Enw1CE8GF0W1N2VpUPYWfAoONupvXXz6MnoUobBEkJ1iaIIPDQQIp7Ev86b10VHd3bW2bX+l3nz3o/P+8MMf81/Ln28MCPBfcENYTzVsyLYPht/2PlU/ZyAonkM6gnWnautHc1T4AQkUkV0C/abiJrRcSh4z4Dxs1VVPLI7BqbZLK8KAIsf8S9uAVe7aDa7BiL3M0ze5vch+PNPYGiYhTdleBBztz6OdbfzsDNBrDPc+jrA5WAB66aA9Nd3GXvZoIlYls3qHAB+cBPwksMCK8ayJahr4Ka6Avus1wizDiL1mmZxUihZ7gU32OMhmgu5YGjiNs/AN7nkPYKSBeB95Rd+MAe8zAUzalewE7yt7LZcEnFHUkK34KEp6usC35OdkWBGNNV0MBc0uHVBbcsB08av70mzvGGGX4yJjpez8rmgNKvPk/Xx08SjQOFcYEsN1/uNcTWBmU6RE1C7U5NBreEHUXvc9QsMdrBcusN3AETq6O/PHIs/gI32tlxMgS+tYLPSgKVXsN/7gOVKDKWDdIdATbLivdRfVDyODE9oZBgAAAAASUVORK5CYII='
+
 let mosdotKehilaIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAY9JREFUSInd1b1qwmAUxvF/pMWxsw4hiwa6dHIqFBddXOrkdQRcjJvDq0PAu3DzBrwFA65+LCWCWc2Y6XRKiEaNH8RCnymEc95fzpuvF56Ul6dDxWJRhWH4lYPRAoIYCsPwHfjMAXqFxESz2cwwDCOzq1qtArBerzNrF4sFnU6HA0jX9bdKpXKxUdO0A1BELtYHQRAfX/0wJJHkuSzsZujRXISiKUQEEUlNFU2TrLsZSi4abZGIUC6XAdjtdmfrMqF+v49SChHBNE1Wq9XBotvtFt/3AfB9n1KphOd56LoOgGmaMWjbNu12+zSklDp7ZcfbFk0WTXpcp5Q6D2UtfirJmmPUdd3TUNQ0HA7p9XpxcxYY1Wiaxng8xrIsAObzeRqaTCYA2LYdI/fEsiy63S6O4zCdTtPQYDAAoNFoxPfq3rRaLRzHYTQapaG884+h5XIZv3CPpl6vIyK4rkutVjuEkrn2i3xLTwx5nhcUCoWbAYDNZnPy/H6/T0PNZvMH+LgHiv66l/InT933s6Bc8wvT66OVbn7ltgAAAABJRU5ErkJggg=='
+
+// mahol
+let mosdotTarbutIcon1 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAeCAYAAABNChwpAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAuNJREFUSIntlktoE1EUhv9z78QmJtM0pA/S0FJKRbAgClJduRKFrkRQWlAsgl3oQtAuXLkVXVfRnSBaoQt3FUT3deVjoZQWtc+UxrQmsTVOZua6GBx6Z+7kgYZ24b/8557zf2fumRANOyxtVwEIIVIA4g3OzBFRNgjgNhFdrKebaQpoGtV8XghxB8BNJUCtKvywsLBiwLaBUIhQLgswArrTe9Ac43X1qhmgULSwmDFgC6BF5+jfFwFtG1wIYHnVwMKyASKgq7M2mIoA+aKFDzMl5DYsJFs4etIh99lSxlDWxHUn9P2nEta/W0gmOA7uD6NZV8MEAggBQACFgo3mGEPZFJidV4cGSY8x5As2hHD6kWJVAgGInAbtrRwH+sJ1BW/Xx7kS9BhThlcEcCAIuQ0L0++2cOJ+0fXvDUbQlmA492TT9SbPR7G2buPq1E/Xe3VFR7ksQEHp1QGAzg4Ne8NM8tNtDO1JuTTdoUHjpuT1pEPY3LIDp68K8AeCy/nQOEHjXg8IcTmJMUBU6V/TZ8iY3FjTCNwTxhmBe6C8dVUBVrOWHm6SiwwDYLpcxJkzneRxB8J7zigLbOQt1ytuWgkMZfrwLDXnA+i8nj3jJXw6FEWqTX5RjMM3LWeOL51jhNl5EwN389vtUXCMAiAfgEqqxpyTf1quuBYO3654VRVAU7xajfkbq8JUe1E3AOekuO+gJZQ9Yg7sXwFozL/NnCuWUBHGGUHjlb+EQIALvRyDR8OIRAhflwxMDEfdZ78MgWzOkry1nAXDFJL3ZdFAJEKYGI5i6k0Jjz9b8EoJcLaL49alOPp6mlzvcH/Ed27gUMXhJB3pb0LpYR6TizKEDyAVIoyPJdCa0GDb1X7Haldv9x6MjyXw+kZOrJvCvRcfQKYs0HHt2z8LVkhait31r/g/wIvLselkCz/WyMCVNfPl6Udbz5UAp47HZoiooQBCiLc4GX+gBGCMjQAYaSSAVzu+A78BC/vKvWu20ukAAAAASUVORK5CYII='
+// museoms
+let mosdotTarbutIcon2 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAbCAYAAAAdx42aAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAqZJREFUSIntlktrFEEUhb+umprKQwRHRMXHuIjOT/CNy4AgLgT/gYhbScRsFN0o6sadGx97cSGCoHtBQUHwAcERmSQoKk4UFLv6dlW7MCTdPWMm0Wg2nuXp03W/unWL7grLrMqfLnAa+s/A938KMNZgs8DOyFP5pvk+6un3Gu/hweVxJv8KwIkh6kGzPYAW7OSlcXcTCLmIGm3YnccbbreCYODhuXEm/ghgdIgtmeYQUE9hAm8fKU0GMNKwu8r5DFDYqeCJnHaHRxp2E7iW8ty60KS1WADlIdKxXZcZ90FBH7h9+F57AgX8zLmPkdj1qXFqxg7l7HwAYU2TyU9110xWcLt32e6qTruDa5pMdiveC4Ax8CPGbql+dUeAs7MPNHfwvAWO5uJX0GzAcyDnncLYgTHcL/vWawizCPccYTozedu+CeJeq7wnvEQj+ZQXHmvjVvNzPH4LADQZYgXcrBXFJAqSUjIhtglmLmeMlYCL5lt+QdcwM6QFwyABRJU8KHYgo/ReL4CTdYbKgcQzoDSSn/6MzmJ08zRCzEC3dc+3aHYApIZX5aCC64HBZyp3BOCEElTQiPKu1IFBwbgdKVwprwtEHQC/kFApFpsZts4OlKCoIMGXjqqkhQyhZG0rDBbchJiE/C2ISegrDmZoW2FlCWqxABE2tbxLC9MUI1lHB6wQO8lDZbxLNTalcHyLBCBGqHa2e+aKzTkGQYq5UEV0TAFqMQBTwL3MuC8e9gBXZ5/0MZjGbqsyOU/cNvrox895VcPeDPd55t1hYONCAd5HwtGLLe7mvBvzwPbUaJ39meEasLYXgFft2vCqdvvFuSX4Y5pVi/vTtdpwqLWfAHo+AB1q7aefaktWOqd2h7N0O/xN/QcoAgjHlhXgUqvrR+PfASyHfgAr6QuovEVvbAAAAABJRU5ErkJggg=='
+// theater
+let mosdotTarbutIcon3 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAABbFJREFUSInVln+MXFUVxz/v3rnzhs66lNmycUphin04xGnQbqMVokmLGjQhbSIqSMSqaUCUtMk4s/wQlbbq1u52mxYwbbKBiPH3j4YNIi1/2BpixCArxQW2jG7H0I5C9227P2Bu35x3/YPdzcp21sVgjCd5/7zzffd8zj33nXsS/I8t8X8B0Flg6c5BaoB7o68UcHcccbS3Sv9/DcBZPl8K+KgX+du6q/bx2T4P/oGhvVjIdPQOhk9Pv98MLckcR2LYOh/cHIDyWhY3hrIX767Vnp0B0P4RGcv0e8napcUcW5TxlxCxCGMXOc1FCv6GnVxRDvgYcALtH0PsSTS7EonMyfLacHH3YU4XC5mOxmB4bC9MNAXQwyyRdG1/KeAZIv9VjP0AYocTrbWnBf6awP9DLHaLGs906dA+1wWNTZDMZO2KOM1XFP4TDrtc4CNKuAQJr5Eav94EB7DhNck828ri93RX7OFzAgh4SjMCRIK9PxGxTwyf7B1i55Y8FyfEqhge9d422d4V8mw58L/ZXbFfLbVyuSf+922LfSE5ysneKj8s5bnD1fklfqZlcRDuAU70DHEt2OYlkBQblGB6KmyeLnM54EQpxztVC6M6gdOnORxFdj3w+GjFbpsif9dlFds1DC1SQG/JscIT/m6rHN9LeBa4tRTwUqmQeaRnMBxoCoBwGnhvqZBZ1TMYDhSz2UJ3pfa9Uo7bdv6R+6ZlpTxJgL6pdOKIsZtBgDMMcqac40vdFb7bmcm8mzA8WsxzPUKbhOFrs8PNAeit0FfKsx4b/r6U52AstYc7s8QODpbzdLo6V8aGDoS3lwK+DXhTjysF3AUcB/7kNIdK+cz7HOHaYoY+JayMNXfvrvHCvADFPMsQXvO0fzViL1OwJ077J8HmEGoYhhUcef24EE995gPGi1DOkAWuRfgsUTjkDO0q8r+AsRdpIXtngWzX6z3l3AD+YurRiL/Sib0l1pn7lYTP91Ts+zdDUmez+URr7XJXp81L0Srit6qIFIbJWNtxDWOxZiQ5xnPvqHHsZpBywFOSSp9R2NuccEFikHvn3YGuJzlVytvfeKCUhD8BlhQDfoXmASW18x2MxilOaRjT2kZMclZSJABPNADe2VYKL6bpKMKNDjqUTD7kQQXo2w5jTQHuyBFIilVOuN5FbD1bpTMZ+E9p7E+d+GGsrdc7xIFp/UZIZbIsbx+icic0ZpXxEy7yX9HG/gzNspeH7Jr2nL/dGfu1Yo6RJDy/o0plDkDD8CKCoNkXw8ZkwNfBRk6TicYyA7q11jYTZDXt6gwDwNKRgMFNFVb3zfrBpSU94jXsFUpY3hbwksOOE/EdZeifIvXOVYJhL/JvcXBvwk9/pjERjivDYU94j07XxoHTM8oJPoSmJ65TVykWteb8dVTtY9NuPRFeGRtWAqGGdQ6uxnBTjP9hsA80OwOXSsp+mTp7wB7A8Fvww8ak7UrV+IvNs2FaqIQHAV8ZQEAZOwjMAJgq+xs5DophnYIdwBoiepWx24BLmgGghA0YVqPZrSHhxC710jzRyPkPgn3yjfpmFgXsBa4DngH+DP5xUnY7wvmzdc2u42UIuwRGgEd0xM9JMaBg2SzNKFN1nLLxmSRAS0S/TnFM1fkghrvAnofMDTTvPKCgDdjoDBsR+wpwXzHPp1WdNiJ+h2F2W11SDvici0ghXKUNNyJozHwR3txIdiGwVQsPgf+yM/bjcxSax4AbgDULXfTNzoSnXOT/AGMfPZfTCdsl4lPa8DD8u9z/AwAPyg67A9BNJC2JFF8U4VsK7nmrAQ6huRBYNZ/ICevR/MiDo0644q0CeFXhd8diFzT5KmGX4N+ksIdovlsLB4g134jF3q7gvIXogaVoex3i94C9feEAEbfOCW5o0EK/OsUE8IsFAqBBJir2x+kcw/xrv2gO0FNl3zxrzudrblX2z+f+JzcpXBN18tqXAAAAAElFTkSuQmCC'
+// cinema
+let mosdotTarbutIcon4 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAWCAYAAAAxSueLAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAxdJREFUSIm91U9oHGUYx/HvzLvDW7Ih0bSCWwir8sKipYdgJAdLq1jwWouHgnpoxVI8qJhJ6Jr6D9RIdg022FaERnoRxIOUgnipFnsKpRQEoSsjZlLs0qazDbXb7rPvzo6HbNOmancji8/lPcyP9/O+Lw/PpPgfK9WtjcYMDzlKZxo1qUyH/AokXcf8HM8R648SJJfE4rge1jcsOpYPCyGHu4aNGSbimB0pxZ5LJc49YLjRtGxWns4kHkd8I8PFgD3/ivlZ/azjyfOJIkPMhSb6m+lAfrg7N2709qaVnYRsnUKqAD5EykMKgZw6MMIWiZjzs+wrhny+CpuE1KLhGMiGxHIC2OXAqItMvGl4uRGwewbqt/JNJN/0OJ/aRD+/UM2PsMFG9MSKYWC+tpB5kHQ5wmMC7sIioz9wlVwtlngBwDeMDgTMXoMvreEzbfR7k4G8A/AbKGCLC2eawhnfcN5GehAlJ92YWT9LHq9smoofXcjtz2I+DglSAG9D303kDWAiDz2SY4CYbGSwtw6TIESGPMB9t19zuLU+DeJ4JZ6wWY4Cj7j9mOJZFn3DT3HvwP1QWb6ZGD0EcpUaT1qjX3FjGQScDnpEt9YyULeGBaDPUYxPnWWx9S2TNCoXV56xAcqF+WLIztdzMujFLHQA3VkZ4JS1PKM8XnRj9h0YYba6kNnoqPKNQok/VjC9Xn62Szyah57aNdKkuQms6/B2AHUHdh8MmQfe9w1ba0ucVOlyndry069gk3Nc8Q3fSo6CinncsfiJxwzLjdBJXW+AC62uthx34VMUo4WA71ZhANWA19KG74GhuHfgVVcqHToA9Ck45xt0BA0XTjfR26ZLcvrO0Ap2BP7MBzzVyLLXpfLJGm4FcAn0S46Vxy6HHD0GNZC/hVZNkEmwhBwCDvmGxhrAfpAvEg+zcYSvmaP2T6FuTf1ewLQLde0X00l1B7MsAb/jMfSfMEfxVhwz7sL6NtS7DlzhYb6SJdYV54jWjBVKTI0Z9iZtsHrA9AxcJ2xzpHthAIlimxPj3SszA9X2TAdYsTXTulV/AeG+JaTPxU4ZAAAAAElFTkSuQmCC'
+// music centers
+let mosdotTarbutIcon5 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAYAAAAinad/AAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAbtJREFUOI2t07FrFEEUx/HvzswyCRtEDoucYIIQWCHYaGGuSCmJaBX/gVSxUeIdR8DC1gORBa01/4FG7CVl0MJCOHWJgSSQbCG3ouQk493s2ph4xsvtrvor33vzmQfDKP5j1L8croEnx5m3I6W1oBm/+Sts0eeMu69vgllIXU6y175SeLOaX5oSNr6N5Tqu+eNsJtYA1fKZw1LFxlODZgdidZ/aJ8uisIwdM/IVGM63meWeAN2ns4nkUTvksTfBej7sSBJYQxKcC1lZAAtQ7+nnwbrAs0SWgiCMXw0azMQS9Gzw0byEOPPWTExp7wuYTCgXdiROdUJPK5hJMaOgd5FmiE5B7M4lTpkWLwSmkh5WDVgQkBbCOi19S2AqfVpdd8i8L4Ql0rwVlhRwesqfHcmNRsh2ISwIeVovl887J6KrqdUjjjQfVMjzBnw7mDnE6uXyJF5UTeCygFFgB3B7wQdR1CSiedzrKoAlX1cSG60CWvzqnQXoxno/7/YKILVco/8ffB1E0btC2PeOWXZhFpcLP+ttpH4yHJq7QFIIe7jFBnBxaZLT6R6e2mKzgenkRX7DDnK/yW5RoDc/AGp6jVHjUhVhAAAAAElFTkSuQmCC'
+
+/* get query string */
 var search = location.search.substring(1);
 if(search.length > 1){
         var QS = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
@@ -454,20 +480,22 @@ if(search.length > 1){
                     });
                     
                 }).then(function(){
-                  bounds = map.getBounds()
-                  xmin = bounds.getWest()
-                  xmax = bounds.getEast()
-                  ymin = bounds.getSouth()
-                  ymax = bounds.getNorth()
+                  
                   parks1_url = parks1_url+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
                   parks2_url = parks2_url+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
                   libraryUrl1 = libraryUrl1+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
                   libraryUrl2 = libraryUrl2+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
                   mosdotKehilaUrl = mosdotKehilaUrl+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
+                  mosdotTarbutUrl1 = mosdotTarbutUrl1+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
+                  mosdotTarbutUrl2 = mosdotTarbutUrl2+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
+                  mosdotTarbutUrl3 = mosdotTarbutUrl3+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
+                  mosdotTarbutUrl4 = mosdotTarbutUrl4+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
+                  mosdotTarbutUrl5 = mosdotTarbutUrl5+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
                   //parks2_url = parks2_url+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry={xmin:${xmin}, ymin: ${ymin} xmax: ${xmax}, ymax:${ymax}}`
                   addParks()
                   addLibraries()
                   addMosdotKehila()
+                  addMosdotTarbut()
                 });
                 
                 
@@ -664,3 +692,158 @@ function addMosdotKehila(){
 }
 
 
+function addMosdotTarbut(){
+  //
+  map.loadImage(mosdotTarbutIcon1, function(error, image) {
+    if (error) throw error;
+    
+    map.addImage('mosdotTarbutIcon1', image);
+    if(map.getSource('mosdotTarbut-source1') === undefined){
+      map.addSource('mosdotTarbut-source1', {
+        type: 'geojson',
+        data: mosdotTarbutUrl1
+        });
+        if(map.getLayer('mosdotKehila') === undefined){
+          map.addLayer({
+            'id': 'mosdotKehila',
+            'type': 'symbol',
+            'source': 'mosdotTarbut-source1',
+            'layout': {
+              'icon-image':'mosdotTarbutIcon1',
+              'visibility': 'visible'  
+            },
+            "paint": {
+            }
+            });
+        }else{
+          return
+        }
+    }else{
+      return
+    }
+    });
+
+//
+map.loadImage(mosdotTarbutIcon2, function(error, image) {
+  if (error) throw error;
+  
+  map.addImage('mosdotTarbutIcon2', image);
+  if(map.getSource('mosdotTarbut-source2') === undefined){
+    map.addSource('mosdotTarbut-source2', {
+      type: 'geojson',
+      data: mosdotTarbutUrl2
+      });
+      if(map.getLayer('mosdotTarbut2') === undefined){
+        map.addLayer({
+          'id': 'mosdotTarbut2',
+          'type': 'symbol',
+          'source': 'mosdotTarbut-source2',
+          'layout': {
+            'icon-image':'mosdotTarbutIcon2',
+            'visibility': 'visible'  
+          },
+          "paint": {
+          }
+          });
+      }else{
+        return
+      }
+  }else{
+    return
+  }
+  });
+
+
+//
+map.loadImage(mosdotTarbutIcon3, function(error, image) {
+  if (error) throw error;
+  
+  map.addImage('mosdotTarbutIcon3', image);
+  if(map.getSource('mosdotTarbut-source3') === undefined){
+    map.addSource('mosdotTarbut-source3', {
+      type: 'geojson',
+      data: mosdotTarbutUrl3
+      });
+      if(map.getLayer('mosdotTarbut3') === undefined){
+        map.addLayer({
+          'id': 'mosdotTarbut3',
+          'type': 'symbol',
+          'source': 'mosdotTarbut-source3',
+          'layout': {
+            'icon-image':'mosdotTarbutIcon3',
+            'visibility': 'visible'  
+          },
+          "paint": {
+          }
+          });
+      }else{
+        return
+      }
+  }else{
+    return
+  }
+  });
+
+
+//
+map.loadImage(mosdotTarbutIcon4, function(error, image) {
+  if (error) throw error;
+  
+  map.addImage('mosdotTarbutIcon4', image);
+  if(map.getSource('mosdotTarbut-source4') === undefined){
+    map.addSource('mosdotTarbut-source4', {
+      type: 'geojson',
+      data: mosdotTarbutUrl4
+      });
+      if(map.getLayer('mosdotTarbut4') === undefined){
+        map.addLayer({
+          'id': 'mosdotTarbut4',
+          'type': 'symbol',
+          'source': 'mosdotTarbut-source4',
+          'layout': {
+            'icon-image':'mosdotTarbutIcon4',
+            'visibility': 'visible'  
+          },
+          "paint": {
+          }
+          });
+      }else{
+        return
+      }
+  }else{
+    return
+  }
+  });
+
+
+
+//
+map.loadImage(mosdotTarbutIcon5, function(error, image) {
+  if (error) throw error;
+  
+  map.addImage('mosdotTarbutIcon5', image);
+  if(map.getSource('mosdotTarbut-source5') === undefined){
+    map.addSource('mosdotTarbut-source5', {
+      type: 'geojson',
+      data: mosdotTarbutUrl5
+      });
+      if(map.getLayer('mosdotTarbut5') === undefined){
+        map.addLayer({
+          'id': 'mosdotTarbut5',
+          'type': 'symbol',
+          'source': 'mosdotTarbut-source5',
+          'layout': {
+            'icon-image':'mosdotTarbutIcon5',
+            'visibility': 'visible'  
+          },
+          "paint": {
+          }
+          });
+      }else{
+        return
+      }
+  }else{
+    return
+  }
+  });
+}
