@@ -492,10 +492,8 @@ if(search.length > 1){
                   mosdotTarbutUrl4 = mosdotTarbutUrl4+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
                   mosdotTarbutUrl5 = mosdotTarbutUrl5+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry=${turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))}`
                   //parks2_url = parks2_url+`&inSR=4326&geometryType=esriGeometryEnvelope&geometry={xmin:${xmin}, ymin: ${ymin} xmax: ${xmax}, ymax:${ymax}}`
-                  addParks()
-                  addLibraries()
-                  addMosdotKehila()
-                  addMosdotTarbut()
+                  
+                
                 });
                 
                 
@@ -507,7 +505,7 @@ if(search.length > 1){
     }
     
 
-function addParks(){
+function addParks(_callback){
   if(map.getSource('parks-source') === undefined){
     map.addSource('parks-source', {
       type: 'geojson',
@@ -519,7 +517,7 @@ function addParks(){
           'type': 'fill',
           'source': 'parks-source',
           'layout': {
-            'visibility': 'visible'
+            'visibility': 'none'
           },
           'paint': {
           'fill-color': 'rgb(199, 215, 158)',
@@ -544,7 +542,7 @@ function addParks(){
           'type': 'line',
           'source': 'parks2-source',
           'layout': {
-            'visibility': 'visible'
+            'visibility': 'none'
           },
           'paint': {
           'line-color': 'rgb(112, 158, 0)',
@@ -559,10 +557,10 @@ function addParks(){
     return
     
   }
-
+  _callback();
 }
 
-function addLibraries(){
+function addLibraries(_callback){
   map.loadImage(libraryIcon1, function(error, image) {
     if (error) throw error;
     
@@ -645,9 +643,10 @@ function addLibraries(){
     })
   })
    
+  _callback();
 }
 
-function addMosdotKehila(){
+function addMosdotKehila(_callback){
   map.loadImage(mosdotKehilaIcon, function(error, image) {
     if (error) throw error;
     
@@ -689,10 +688,11 @@ function addMosdotKehila(){
     }
 
     });
+    _callback()
 }
 
 
-function addMosdotTarbut(){
+function addMosdotTarbut(_callback){
   //
   map.loadImage(mosdotTarbutIcon1, function(error, image) {
     if (error) throw error;
@@ -815,8 +815,6 @@ map.loadImage(mosdotTarbutIcon4, function(error, image) {
   }
   });
 
-
-
 //
 map.loadImage(mosdotTarbutIcon5, function(error, image) {
   if (error) throw error;
@@ -846,4 +844,135 @@ map.loadImage(mosdotTarbutIcon5, function(error, image) {
     return
   }
   });
+
+  _callback()
+
 }
+
+function addButtons(){
+  var mapHeader = document.getElementsByClassName('gis-header')[0];
+  var buttonSpan = document.createElement('span');
+  buttonSpan.classList.add('buttons-span')
+
+  //############################################## 
+  //  Parks
+  //##############################################
+
+  var parksSpan = document.createElement('span');
+  var parksButton = document.createElement('input');
+  var parksSVGIcon = document.createElement('img');
+  var parksText = document.createElement('span');
+
+  parksSpan.classList.add('button-span')
+  parksButton.type = "checkbox"
+  parksButton.onchange = function(){
+    addParks(() =>{
+      if(this.checked){
+        map.setLayoutProperty('parks','visibility','visible')
+        map.setLayoutProperty('parks2','visibility','visible')
+      }else{
+        map.setLayoutProperty('parks','visibility','none')
+        map.setLayoutProperty('parks2','visibility','none')
+      }
+    })
+  }
+  parksSVGIcon.src = 'icons/garden icon.svg'
+  parksSVGIcon.classList.add('icon')
+  parksText.innerText = 'גנים\nופארקים'
+  parksText.classList.add('button-text')
+  parksSpan.append(parksButton,parksSVGIcon,parksText)
+
+  //############################################## 
+  //  Libraries
+  //##############################################
+  var librarySpan = document.createElement('span');
+  var libraryButton = document.createElement('input');
+  var librarySVGIcon = document.createElement('img');
+  var libraryText = document.createElement('span');
+
+  librarySpan.classList.add('button-span')
+  libraryButton.type = "checkbox"
+  libraryButton.onchange = function(){
+    addLibraries(()=>{
+      if(this.checked){
+        map.setLayoutProperty('libraries','visibility','visible')
+      }else{
+        map.setLayoutProperty('libraries','visibility','none')
+      }
+    })
+    
+      
+    
+  }
+  librarySVGIcon.src = 'icons/library icon.svg'
+  librarySVGIcon.classList.add('icon')
+  libraryText.innerText = 'ספריות'
+  libraryText.classList.add('button-text')
+  librarySpan.append(libraryButton,librarySVGIcon,libraryText)
+
+  //############################################## 
+  //  Mosdot Kehila
+  //##############################################
+  var mosdotKehilaSpan = document.createElement('span');
+  var mosdotKehilaButton = document.createElement('input');
+  var mosdotKehilaSVGIcon = document.createElement('img');
+  var mosdotKehilaText = document.createElement('span');
+
+  mosdotKehilaSpan.classList.add('button-span')
+  mosdotKehilaButton.type = "checkbox"
+  mosdotKehilaButton.onchange = function(){
+    addMosdotKehila(()=>{
+      if(this.checked){
+        map.setLayoutProperty('mosdotKehila','visibility','visible')
+      }else{
+        map.setLayoutProperty('mosdotKehila','visibility','none')
+      }
+    })
+    
+  }
+  mosdotKehilaSVGIcon.src = 'icons/community_icon.svg'
+  mosdotKehilaSVGIcon.classList.add('icon')
+  mosdotKehilaText.innerText = 'מוסדות\nקהילה'
+  mosdotKehilaText.classList.add('button-text')
+  mosdotKehilaSpan.append(mosdotKehilaButton,mosdotKehilaSVGIcon,mosdotKehilaText)
+
+
+  //############################################## 
+  //  Mosdot Tarbut
+  //##############################################
+  var mosdotTarbutSpan = document.createElement('span');
+  var mosdotTarbutButton = document.createElement('input');
+  var mosdotTarbutSVGIcon = document.createElement('img');
+  var mosdotTarbutText = document.createElement('span');
+
+  mosdotTarbutSpan.classList.add('button-span')
+  mosdotTarbutButton.type = "checkbox"
+  mosdotTarbutButton.onchange = function(){
+    addMosdotTarbut(()=>{
+      if(this.checked){
+        map.setLayoutProperty('mosdotTarbut1','visibility','visible')
+        map.setLayoutProperty('mosdotTarbut2','visibility','visible')
+        map.setLayoutProperty('mosdotTarbut3','visibility','visible')
+        map.setLayoutProperty('mosdotTarbut4','visibility','visible')
+        map.setLayoutProperty('mosdotTarbut5','visibility','visible')
+      }else{
+        map.setLayoutProperty('mosdotTarbut1','visibility','none')
+        map.setLayoutProperty('mosdotTarbut2','visibility','none')
+        map.setLayoutProperty('mosdotTarbut3','visibility','none')
+        map.setLayoutProperty('mosdotTarbut4','visibility','none')
+        map.setLayoutProperty('mosdotTarbut5','visibility','none')
+      }
+    })
+    
+  }
+  mosdotTarbutSVGIcon.src = 'icons/Cultural_institutions_icon.svg'
+  mosdotTarbutSVGIcon.classList.add('icon')
+  mosdotTarbutText.innerText = 'מוסדות\nתרבות'
+  mosdotTarbutText.classList.add('button-text')
+  mosdotTarbutSpan.append(mosdotTarbutButton,mosdotTarbutSVGIcon,mosdotTarbutText)
+
+  buttonSpan.append(parksSpan,librarySpan,mosdotKehilaSpan,mosdotTarbutSpan)
+  mapHeader.append(buttonSpan)
+
+}
+addButtons()
