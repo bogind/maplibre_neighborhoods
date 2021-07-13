@@ -359,11 +359,12 @@ let map = new maplibregl.Map({
           }
         ]
       },
+    animate: false,
     center: [34.789071,32.085432], // starting position
     zoom: 12 // starting zoom
     });
 
-map.addControl(new maplibregl.NavigationControl());
+
 let neighborhood_url;
 let neighborhhod_bounds;
 
@@ -421,9 +422,10 @@ if(search.length > 1){
                 .then(response => response.json())
                 .then(data => {
                     neighborhhod_bounds = data;
-                    
+                    topHeight = document.getElementsByClassName('map-header')[0].clientHeight
                     map.fitBounds(turf.bbox(neighborhhod_bounds), {
-                        padding: 20, linear:true
+                        padding: {top: topHeight+10, bottom:20, left: 20, right: 20},
+                        linear:true
                         })
                           
                         
@@ -528,11 +530,10 @@ function addParks(_callback){
           }
           },'neighborhoods-stroke');
       }else{
-        return
+        _callback();
       }
   }else{
-    return
-    
+    _callback();
   }
   if(map.getSource('parks2-source') === undefined){
     map.addSource('parks2-source', {
@@ -555,19 +556,44 @@ function addParks(_callback){
           },'parks');
       }else{
         return
+        _callback();
       }
   }else{
-    return
-    
+    _callback();
   }
+  var requiredSources = 2;
+  var loadedSources = 0;
+  sources = ['parks-source','parks2-source']
+  for(var i=0;i<sources.length;i++){
+    if(!(map.getSource(sources[i]) === undefined)){
+      loadedSources+=1
+      if(loadedSources==requiredSources){
+        _callback();
+      }
+    }
+  }
+  map.on('sourcedata',function(e){
+    if(e.sourceId == 'parks-source' || e.sourceId == 'parks2-source'){
+      loadedSources+=1
+      if(loadedSources==requiredSources){
+        _callback();
+      }
+    }
+  })
+  
   _callback();
 }
 
 function addLibraries(_callback){
-  map.loadImage(libraryIcon1, function(error, image) {
-    if (error) throw error;
-    
+  if(!map.hasImage('libraryIcon1')){
+    map.loadImage(libraryIcon1, function(error, image) {
+      if (error) throw error;
+      
+      map.addImage('libraryIcon1', image);  
     map.addImage('libraryIcon1', image);
+      map.addImage('libraryIcon1', image);  
+  
+
     if(map.getSource('library-source1') === undefined){
       map.addSource('library-source1', {
         type: 'geojson',
@@ -589,14 +615,18 @@ function addLibraries(_callback){
             });
         }else{
           return
+          _callback();
         }
     }else{
       return
-      
+      _callback();
     }
 
     });
+    
+  }
 
+  if(!map.hasImage('libraryIcon2')){
   map.loadImage(libraryIcon2, function(error, image) {
     if (error) throw error;
     
@@ -642,14 +672,34 @@ function addLibraries(_callback){
           
         }
 
+        })
       })
     })
+  }
+  var requiredSources = 2;
+  var loadedSources = 0;
+  sources = ['library-source2','library-source1']
+  for(var i=0;i<sources.length;i++){
+    if(!(map.getSource(sources[i]) === undefined)){
+      loadedSources+=1
+      if(loadedSources==requiredSources){
+        _callback();
+      }
+    }
+  }
+  map.on('sourcedata',function(e){
+    if(e.sourceId == 'library-source1' || e.sourceId == 'library-source2'){
+      loadedSources+=1
+      if(loadedSources==requiredSources){
+        _callback();
+      }
+    }
   })
-   
-  _callback();
+  
 }
 
 function addMosdotKehila(_callback){
+  if(!map.hasImage('mosdotKehilaIcon')){
   map.loadImage(mosdotKehilaIcon, function(error, image) {
     if (error) throw error;
     
@@ -691,12 +741,23 @@ function addMosdotKehila(_callback){
     }
 
     });
-    _callback()
+  }
+  
+    if(!(map.getSource('mosdotKehila-source') === undefined)){
+        _callback();
+    }
+  
+    map.on('sourcedata',function(e){
+      if(e.sourceId == 'mosdotKehila-source' ){
+          _callback();
+      }
+    })
 }
 
 
 function addMosdotTarbut(_callback){
   //
+  if(!map.hasImage('mosdotTarbutIcon1')){
   map.loadImage(mosdotTarbutIcon1, function(error, image) {
     if (error) throw error;
     
@@ -706,9 +767,9 @@ function addMosdotTarbut(_callback){
         type: 'geojson',
         data: mosdotTarbutUrl1
         });
-        if(map.getLayer('mosdotKehila') === undefined){
+        if(map.getLayer('mosdotTarbut1') === undefined){
           map.addLayer({
-            'id': 'mosdotKehila',
+            'id': 'mosdotTarbut1',
             'type': 'symbol',
             'source': 'mosdotTarbut-source1',
             'layout': {
@@ -725,9 +786,11 @@ function addMosdotTarbut(_callback){
       return
     }
     });
+  }
 
-//
-map.loadImage(mosdotTarbutIcon2, function(error, image) {
+  //
+  if(!map.hasImage('mosdotTarbutIcon2')){
+  map.loadImage(mosdotTarbutIcon2, function(error, image) {
   if (error) throw error;
   
   map.addImage('mosdotTarbutIcon2', image);
@@ -755,10 +818,12 @@ map.loadImage(mosdotTarbutIcon2, function(error, image) {
     return
   }
   });
+}
 
 
-//
-map.loadImage(mosdotTarbutIcon3, function(error, image) {
+  //
+  if(!map.hasImage('mosdotTarbutIcon3')){
+  map.loadImage(mosdotTarbutIcon3, function(error, image) {
   if (error) throw error;
   
   map.addImage('mosdotTarbutIcon3', image);
@@ -786,10 +851,11 @@ map.loadImage(mosdotTarbutIcon3, function(error, image) {
     return
   }
   });
+}
 
-
-//
-map.loadImage(mosdotTarbutIcon4, function(error, image) {
+  //
+  if(!map.hasImage('mosdotTarbutIcon4')){
+  map.loadImage(mosdotTarbutIcon4, function(error, image) {
   if (error) throw error;
   
   map.addImage('mosdotTarbutIcon4', image);
@@ -817,9 +883,11 @@ map.loadImage(mosdotTarbutIcon4, function(error, image) {
     return
   }
   });
+}
 
-//
-map.loadImage(mosdotTarbutIcon5, function(error, image) {
+  //
+  if(!map.hasImage('mosdotTarbutIcon5')){
+  map.loadImage(mosdotTarbutIcon5, function(error, image) {
   if (error) throw error;
   
   map.addImage('mosdotTarbutIcon5', image);
@@ -847,13 +915,37 @@ map.loadImage(mosdotTarbutIcon5, function(error, image) {
     return
   }
   });
-
-  _callback()
+}
+  var requiredSources = 5;
+  var loadedSources = 0;
+  sources = ['mosdotTarbut-source1','mosdotTarbut-source2','mosdotTarbut-source3','mosdotTarbut-source4','mosdotTarbut-source5']
+  for(var i=0;i<sources.length;i++){
+    if(!(map.getSource(sources[i]) === undefined)){
+      loadedSources+=1
+      if(loadedSources==requiredSources){
+        _callback();
+      }
+    }
+  }
+  
+  map.on('sourcedata',function(e){
+    if(e.sourceId == 'mosdotTarbut-source1' || 
+    e.sourceId == 'mosdotTarbut-source2' ||
+    e.sourceId == 'mosdotTarbut-source3' || 
+    e.sourceId == 'mosdotTarbut-source4' || 
+    e.sourceId == 'mosdotTarbut-source5' ){
+      loadedSources+=1
+      if(loadedSources==requiredSources){
+        _callback();
+      }
+    }
+  })
+  
 
 }
 
 function addButtons(){
-  var mapHeader = document.getElementsByClassName('gis-header')[0];
+  var mapHeader = document.getElementsByClassName('map-header')[0];
   var buttonSpan = document.createElement('span');
   buttonSpan.classList.add('buttons-span')
 
@@ -899,8 +991,10 @@ function addButtons(){
     addLibraries(()=>{
       if(this.checked){
         map.setLayoutProperty('libraries','visibility','visible')
+        map.setLayoutProperty('libraries2','visibility','visible')
       }else{
         map.setLayoutProperty('libraries','visibility','none')
+        map.setLayoutProperty('libraries2','visibility','none')
       }
     })
     
@@ -978,4 +1072,28 @@ function addButtons(){
   mapHeader.append(buttonSpan)
 
 }
+
+
+class MapHeader {
+  onAdd(map){
+    this.map = map;
+    this.container = document.createElement('div');
+    this.container.className = 'mapboxgl-ctrl map-header';
+    this.container.style.margin = 0;
+    this.container.innerHTML = '<div ng-if="\'True\' ==\'True\'" class="ShhunaReSize smallSize ng-scope">\
+                                <div class="ShhunaReSizeBtn "></div>\
+                                <div class="ShhunaReSizeTxt">פתח מפה במסך מלא</div>\
+                            </div>\
+                            <div ng-if="\'True\' ==\'True\'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="\'<b>מפת מרחב</b> הצג לפי:\'"><b>מפת מרחב</b> הצג לפי:</div>';
+    return this.container;
+  }
+  onRemove(){
+    this.container.parentNode.removeChild(this.container);
+    this.map = undefined;
+  }
+}
+const myCustomControl = new MapHeader();
+
+map.addControl(myCustomControl);
+map.addControl(new maplibregl.NavigationControl());
 addButtons()

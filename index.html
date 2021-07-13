@@ -14,19 +14,13 @@
     </style>
 </head>
 <body>
-    <div class="map-container shhuna">
-        <div class="gis-header" ng-style="{'background': gis.gisClient.backgroundColor }" style="background: rgb(255, 242, 227);">
-            <div ng-if="'True' =='True'" class="ShhunaReSize smallSize ng-scope">
-                <div class="ShhunaReSizeBtn "></div>
-                <div class="ShhunaReSizeTxt">פתח מפה במסך מלא</div>
-            </div>
-            <div ng-if="'True' =='True'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="'<b>מפת מרחב</b> הצג לפי:'"><b>מפת מרחב</b> הצג לפי:</div>
-            
-        </div>
-            <!-- ngIf: 'True' =='True' --><div ng-if="'True' =='True'" class="ShhunaReSize smallSize ng-scope"></div>
+    <div class="map-container shhuna">    
+        
         <div id="gis-map" class="gis-map">
+            
             <script src="js/desktop1_map.js"></script>
         </div>
+        
     </div>
 </body>
 </html>
