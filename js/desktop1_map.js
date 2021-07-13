@@ -408,6 +408,9 @@ if(search.length > 1){
         if("ne" in QS){
             var neighborhood_code = parseInt(QS.ne)
             neighborhood_url = `http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/511/query?where=oid_shchuna=${neighborhood_code}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
+        }else if("shemShchuna" in QS){
+          var neighborhood_name = QS.shemShchuna
+          neighborhood_url = `http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/511/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
         }else if("AreaName" in QS){
           var neighborhood_name = QS.AreaName
           neighborhood_url = `http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/567/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
