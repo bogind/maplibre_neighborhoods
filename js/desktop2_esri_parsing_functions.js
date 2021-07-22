@@ -42,6 +42,7 @@ function getMetadata(layer){
 function getLayerUrl(layer){
     baseUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]
     baseUrl += "/query?where=1%3D1&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson"
+    baseUrl += "&inSR=4326&geometryType=esriGeometryEnvelope&geometry="+turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))
     if('fields' in layer){
         fields = layer['fields']
         if('label_field' in layer){
@@ -51,6 +52,7 @@ function getLayerUrl(layer){
     }else{
         baseUrl += "&outFields="
     }
+    return baseUrl
 }
 
 function parseSimpleRenderer(geomType,renderer,layer){
