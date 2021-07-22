@@ -65,6 +65,16 @@ function parseSimpleRenderer(geomType,renderer,layer){
     }
 }
 
+function parseUniqueValueRenderer(geomType,renderer,layer){
+    if(geomType === "esriGeometryPoint"){
+        return parseUniqueValuePoint(renderer,layer)
+    }else if(geomType === "esriGeometryPolygon"){
+        return parseUniqueValuePolygon(renderer,layer)
+    }else{
+        console.log(geomType)
+    }
+}
+
 function parseSimplePoint(renderer,layer){
     // simple Picture Marker Symbol
     if(renderer.symbol && 
@@ -189,6 +199,117 @@ function parseSimplePolygon(renderer,layer){
         sourceName =  layer['name']+"-source";
         layerUrl = getLayerUrl(layer);
     }
+}
+
+function parseUniqueValuePoint(renderer,layer){
+    if(renderer.defaultSymbol.type &&
+     renderer.defaultSymbol.type === "esriPMS"){
+        loadMultipleImages(renderer,layer)
+     }
+}
+
+function loadMultipleImages(renderer,layer){
+    symbols = {}
+    renderer.defaultSymbol["iconName"] = layer["name"]+"-defaultIcon"
+    renderer.defaultSymbol.imageData = "data:image/png;base64,"+renderer.defaultSymbol.imageData
+    symbols["default"] = renderer.defaultSymbol
+    if(!map.hasImage(renderer.defaultSymbol["iconName"])){
+        
+        map.loadImage(renderer.defaultSymbol.imageData, function(error, image) {
+          if (error) throw error;
+          map.addImage(renderer.defaultSymbol["iconName"], image);
+        })
+    }
+    for(var i = 0; i< renderer.uniqueValueInfos.length;i++){
+        valueInfo = renderer.uniqueValueInfos[i]
+        valueInfo.symbol["iconName"] = layer["name"]+"-Icon"+(i+1)
+        valueInfo.symbol.imageData = "data:image/png;base64,"+valueInfo.symbol.imageData
+        symbols[valueInfo.value] = valueInfo.symbol
+        loadImage(valueInfo.symbol.iconName,valueInfo.symbol.imageData)
+            
+        
+    }
+
+    loadUniqueValuePMSPoint(renderer,layer,symbols)
+}
+function loadImage(iconName,imageData){
+    map.loadImage(imageData, function(error, image) {
+        if (error) throw error;
+        console.log(iconName,map.hasImage(iconName))
+        if(map.hasImage(iconName)){
+            
+        }else{
+            map.addImage(iconName, image);
+        }
+      })
+}
+
+function loadUniqueValuePMSPoint(renderer,layer,symbols){
+
+    sourceName =  layer['name']+"-source"
+    valueField = renderer.field1
+    layerUrl = getLayerUrl(layer)
+    iconImage = ["match",["get",valueField]]
+    values = Object.keys(symbols)
+    for(var i=0;i<values.length;i++){
+        iconImage.push([values[i]],symbols[values[i]].iconName)
+    }
+    iconImage.push(symbols["default"]["iconName"])
+    layerJson = {
+        'id': layer["name"],
+        'type': 'symbol',
+        'source': sourceName,
+        'layout': {
+          'icon-image':iconImage,
+          'visibility': 'visible'
+        },
+        'paint':{
+
+        }
+    }
+
+
+    if('label_field' in layer){
+        layerJson['layout']['text-field'] = ['get',layer['label_field'][0]]
+        layerJson['layout']['text-anchor'] = "bottom-left"
+        layerJson['layout']['text-radial-offset'] = 1
+        layerJson['layout']['text-justify'] = 'auto'
+        layerJson['layout']['text-size'] = 10
+        layerJson['layout']['text-font'] = ["Arial Regular"]
+        layerJson['layout']['text-anchor'] = "bottom-left"
+        layerJson['paint']['text-color'] = "rgb(0,0,0)"
+        layerJson['paint']['text-halo-color'] = "rgb(250,245,217)"
+        layerJson['paint']['text-halo-width'] = 1.33333
+    }
+
+    if(map.getSource(sourceName) === undefined){
+        map.addSource(sourceName, {
+          type: 'geojson',
+          data: layerUrl
+          });
+          if(map.getLayer(layer['name']) === undefined){
+            map.addLayer(layerJson);
+          }else{
+            return
+          }
+      }else{
+        return
+        
+      }
+}
+
+function addVectorLayer(layer){
+    fetch("http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]+"?f=json")
+    .then(response => response.json())
+    .then(data => {
+        fields = {}
+        for(var i =0;i< data["fields"].length;i++){
+            fieldName = data["fields"][i]["name"]
+            fields[fieldName] = data["fields"][i]
+        }
+        layer["metadata"] = fields
+
+    })
 }
 
 function addRasterLayer(layer){
