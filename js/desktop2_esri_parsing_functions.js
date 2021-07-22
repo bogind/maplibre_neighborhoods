@@ -11,6 +11,13 @@ layer2 = {
     "name_heb":"גנים ציבוריים",
     "opacity": 0.8
 }
+layer3 = {
+    "id":917,
+    "name":"inf_works",
+    "name_heb":"עבודות תשתית בתוקף-פנימי",
+    "fields":["*"],
+    "type":"raster"
+}
 button = {
     "layers":[553],
     "label":"מוסדות\nקהילה",
@@ -117,7 +124,7 @@ function parseSimplePoint(renderer,layer){
 function parseSimplePolygon(renderer,layer){
     // Simple Fill Symbol
     if(renderer.symbol && 
-        renderer.symbol.type === "esriSFS"){
+        renderer.symbol.style === "esriSLSSolid"){
             sourceName =  layer['name']+"-source";
             layerUrl = getLayerUrl(layer);
             fillColor = "rgb("+renderer.symbol.color.slice(0,3).join()+")";
@@ -176,6 +183,87 @@ function parseSimplePolygon(renderer,layer){
                 
               }
         }
+    if(renderer.symbol && renderer.symbol.style == "esriSFSBackwardDiagonal"){
+        sourceName =  layer['name']+"-source";
+        layerUrl = getLayerUrl(layer);
+    }
+}
+
+function addRasterLayer(layer){
+    fetch("http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]+"?f=json")
+    .then(response => response.json())
+    .then(data => {
+        fields = {}
+        for(var i =0;i< data["fields"].length;i++){
+            fieldName = data["fields"][i]["name"]
+            fields[fieldName] = data["fields"][i]
+        }
+        layer["metadata"] = fields
+    })
+    height = map.getCanvas().height
+    width = map.getCanvas().width
+    bounds = map.getBounds()
+    east = bounds.getEast()
+    west = bounds.getWest()
+    north = bounds.getNorth()
+    south = bounds.getSouth()
+    coords = [
+        [west, north],
+        [east, north],
+        [east, south],
+        [west, south]
+        ]
+    curUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/export?bbox="
+    curUrl += west.toFixed(4)+","+south.toFixed(4)+","+east.toFixed(4)+","+north.toFixed(4)
+    curUrl += "&bboxSR=4326&imageSR=3857&size="+width+","+height+"&transparent=true&layers=show:"+layer["id"]+"&f=image"
+    sourceName = layer['name']+'-source'
+    map.addSource(sourceName, {
+        type: 'image',
+        url: curUrl,
+        coordinates: coords
+    });
+    map.addLayer({
+        id: layer['name'],
+        'type': 'raster',
+        'source': sourceName,
+        'paint': {
+        'raster-fade-duration': 0
+        }
+    });
+    map.on('click', function(e) {
+        lngLat = e.lngLat
+        popUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]
+        popUrl += "/query?where=1=1&geometry="+lngLat.lng+","+lngLat.lat+"&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects"
+        popUrl += "&outFields=*&returnGeometry=false&f=geojson"
+
+        fetch(popUrl)
+            .then(response => response.json())
+            .then(data => {
+                
+                if(data.features.length > 0){
+                    popupContent = '<p dir="rtl">'
+                    feature = data.features[0]
+                    if('label_field' in layer){
+                        popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                    }
+                    if('fields' in layer){
+                        requiredFields = layer['fields']
+                        if(requiredFields.indexOf('*') > -1){
+                            requiredFields = Object.keys(feature.properties)
+                        }
+                        for(var i=0; i < requiredFields.length; i++){
+                            fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                            popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                        }
+                    }
+                    popupContent += "</p>"
+                    popup.setHTML(popupContent)
+                    popup.setLngLat(lngLat)
+                    popup.addTo(map)
+                    
+                }
+            })
+        });
 }
 
 // Convert 8bit value to normalized opacity
