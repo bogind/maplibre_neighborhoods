@@ -157,6 +157,10 @@ body {
     height: 100%;
     width: 100%;
 }
+.mapboxgl-popup-content{
+    direction: rtl;
+    overflow-x: scroll;
+}
 @media (min-width: 1200px){
     .map-container {
         width: 1100px;
