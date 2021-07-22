@@ -18,6 +18,13 @@ layer3 = {
     "fields":["*"],
     "type":"raster"
 }
+layer4 = {
+    "id":635,
+    "name":"library1",
+    "name_heb":"ספריות חוץ",
+    "fields":["sug","mikum","moadei_peilut","sheat_sippur","contact_person","merchav_kehila","achrayut"],
+    "label_field":["sug"]
+}
 button = {
     "layers":[553],
     "label":"מוסדות\nקהילה",
@@ -25,18 +32,25 @@ button = {
 }
 
 function getMetadata(layer){
-    url = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]+"?f=pjson"
-    fetch(url)
-    .then(response => response.json())
-    .then(data => function(data){
-        
-        geomType = data.geometryType
-        renderer = data.drawingInfo.renderer
-        console.log(renderer)
-        if(renderer.type === "simple"){
-          //parseSimpleRenderer(geomType,renderer,layer)
-        }
-    })
+    if(layer.type && layer.type === "raster"){
+        addRasterLayer(layer)
+    }else{
+        url = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]+"?f=pjson"
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            
+            geomType = data.geometryType
+            renderer = data.drawingInfo.renderer
+
+            if(renderer.type === "simple"){
+                parseSimpleRenderer(geomType,renderer,layer)
+            }else if(renderer.type === "uniqueValue"){
+                parseUniqueValueRenderer(geomType,renderer,layer)
+            }
+        })
+    }
+    
 }
 
 function getLayerUrl(layer){
