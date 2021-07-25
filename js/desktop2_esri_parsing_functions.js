@@ -30,7 +30,12 @@ button = {
     "label":"מוסדות\nקהילה",
     "icon":"icons/community_icon.svg"
 }
-
+function getLayer(id){
+    layer =  mapJson["layers"].filter(obj => {
+        return obj.id === id
+      })[0]
+    return layer
+}
 function getMetadata(layer){
     if(layer.type && layer.type === "raster"){
         addRasterLayer(layer)
@@ -39,7 +44,12 @@ function getMetadata(layer){
         fetch(url)
         .then(response => response.json())
         .then(data => {
-            
+            fields = {}
+            for(var i =0;i< data["fields"].length;i++){
+                fieldName = data["fields"][i]["name"]
+                fields[fieldName] = data["fields"][i]
+            }
+            layer["metadata"] = fields
             geomType = data.geometryType
             renderer = data.drawingInfo.renderer
 
@@ -71,9 +81,9 @@ function getLayerUrl(layer){
 
 function parseSimpleRenderer(geomType,renderer,layer){
     if(geomType === "esriGeometryPoint"){
-        return parseSimplePoint(renderer,layer)
+        return addSimplePointLayer(renderer,layer)
     }else if(geomType === "esriGeometryPolygon"){
-        return parseSimplePolygon(renderer,layer)
+        return addSimplePolygonLayer(renderer,layer)
     }else{
         console.log(geomType)
     }
@@ -89,12 +99,12 @@ function parseUniqueValueRenderer(geomType,renderer,layer){
     }
 }
 
-function parseSimplePoint(renderer,layer){
+function addSimplePointLayer(renderer,layer){
     // simple Picture Marker Symbol
     if(renderer.symbol && 
         renderer.symbol.type === "esriPMS"){
             icon = "data:image/png;base64,"+renderer.symbol.imageData
-            iconName = layer['name']+'Icon'
+            iconName = layer['name']+'-Icon'
             sourceName =  layer['name']+"-source"
             layerUrl = getLayerUrl(layer)
 
@@ -118,39 +128,113 @@ function parseSimplePoint(renderer,layer){
                 layerJson['layout']['text-anchor'] = "bottom-left"
                 layerJson['paint']['text-color'] = "rgb(0,0,0)"
                 layerJson['paint']['text-halo-color'] = "rgb(250,245,217)"
-                layerJson['paint']['text-halo-width'] = "1.33333"
+                layerJson['paint']['text-halo-width'] = 1.33
             }
 
             if(!map.hasImage(iconName)){
-                map.loadImage(icon, function(error, image) {
-                  if (error) throw error;
-                  
-                  map.addImage(iconName, image);
-                  if(map.getSource(sourceName) === undefined){
-                    map.addSource(sourceName, {
-                      type: 'geojson',
-                      data: layerUrl
-                      });
-                      if(map.getLayer(layer['name']) === undefined){
-                        map.addLayer(layerJson);
+                loadImage(iconName,icon,()=>{
+                    if(map.getSource(sourceName) === undefined){
+                        map.addSource(sourceName, {
+                          type: 'geojson',
+                          data: layerUrl
+                          });
+                          if(map.getLayer(layer['name']) === undefined){
+                            map.addLayer(layerJson);
+    
+                            map.on('click', layer['name'], function (e) {
+                                popupContent = '<p dir="rtl">'
+                                feature = e.features[0]
+                                if('label_field' in layer){
+                                    popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                                }
+                                if('fields' in layer){
+                                    requiredFields = layer['fields']
+                                    if(requiredFields.indexOf('*') > -1){
+                                        requiredFields = Object.keys(feature.properties)
+                                    }
+                                    for(var i=0; i < requiredFields.length; i++){
+                                        fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                    }
+                                }
+                                popupContent += "</p>"
+                                popup.setHTML(popupContent)
+                                popup.setLngLat(e.lngLat)
+                                popup.addTo(map)
+                            });
+                                
+                            // Change the cursor to a pointer when the mouse is over the states layer.
+                            map.on('mouseenter', layer['name'], function () {
+                                map.getCanvas().style.cursor = 'pointer';
+                            });
+                                
+                            // Change it back to a pointer when it leaves.
+                            map.on('mouseleave', layer['name'], function () {
+                            map.getCanvas().style.cursor = '';
+                                });
+                          }else{
+                            return
+                          }
                       }else{
                         return
                       }
-                  }else{
-                    return
-                    
-                  }
-              
-                  });
+                })
+
+                }else{
+                    if(map.getSource(sourceName) === undefined){
+                        map.addSource(sourceName, {
+                          type: 'geojson',
+                          data: layerUrl
+                          });
+                          if(map.getLayer(layer['name']) === undefined){
+                            map.addLayer(layerJson);
+    
+                            map.on('click', layer['name'], function (e) {
+                                popupContent = '<p dir="rtl">'
+                                feature = e.features[0]
+                                if('label_field' in layer){
+                                    popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                                }
+                                if('fields' in layer){
+                                    requiredFields = layer['fields']
+                                    if(requiredFields.indexOf('*') > -1){
+                                        requiredFields = Object.keys(feature.properties)
+                                    }
+                                    for(var i=0; i < requiredFields.length; i++){
+                                        fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                    }
+                                }
+                                popupContent += "</p>"
+                                popup.setHTML(popupContent)
+                                popup.setLngLat(e.lngLat)
+                                popup.addTo(map)
+                            });
+                                
+                            // Change the cursor to a pointer when the mouse is over the states layer.
+                            map.on('mouseenter', layer['name'], function () {
+                                map.getCanvas().style.cursor = 'pointer';
+                            });
+                                
+                            // Change it back to a pointer when it leaves.
+                            map.on('mouseleave', layer['name'], function () {
+                            map.getCanvas().style.cursor = '';
+                                });
+                          }else{
+                            return
+                          }
+                      }else{
+                        return
+                      }
                 }
 
     }
 }
 
-function parseSimplePolygon(renderer,layer){
+function addSimplePolygonLayer(renderer,layer){
     // Simple Fill Symbol
     if(renderer.symbol && 
-        renderer.symbol.style === "esriSLSSolid"){
+        renderer.symbol.style === "esriSFSSolid"){
             sourceName =  layer['name']+"-source";
             layerUrl = getLayerUrl(layer);
             fillColor = "rgb("+renderer.symbol.color.slice(0,3).join()+")";
@@ -198,6 +282,39 @@ function parseSimplePolygon(renderer,layer){
                   });
                   if(map.getLayer(layer['name']) === undefined){
                     map.addLayer(layerJson);
+
+                    map.on('click', layer['name'], function (e) {
+                        popupContent = '<p dir="rtl">'
+                        feature = e.features[0]
+                        if('label_field' in layer){
+                            popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                        }
+                        if('fields' in layer){
+                            requiredFields = layer['fields']
+                            if(requiredFields.indexOf('*') > -1){
+                                requiredFields = Object.keys(feature.properties)
+                            }
+                            for(var i=0; i < requiredFields.length; i++){
+                                fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                            }
+                        }
+                        popupContent += "</p>"
+                        popup.setHTML(popupContent)
+                        popup.setLngLat(e.lngLat)
+                        popup.addTo(map)
+                    });
+                        
+                    // Change the cursor to a pointer when the mouse is over the states layer.
+                    map.on('mouseenter', layer['name'], function () {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+                        
+                    // Change it back to a pointer when it leaves.
+                    map.on('mouseleave', layer['name'], function () {
+                    map.getCanvas().style.cursor = '';
+                        });
+
                     if(drawOutline && map.getLayer(strokeLayerName) === undefined){
                         map.addLayer(strokeLayerJson);
                       }
@@ -244,21 +361,24 @@ function loadMultipleImages(renderer,layer){
         
     }
 
-    loadUniqueValuePMSPoint(renderer,layer,symbols)
+    addUniqueValuePMSPointLayer(renderer,layer,symbols)
 }
-function loadImage(iconName,imageData){
+function loadImage(iconName,imageData,_callback){
     map.loadImage(imageData, function(error, image) {
         if (error) throw error;
-        console.log(iconName,map.hasImage(iconName))
+        
         if(map.hasImage(iconName)){
             
         }else{
             map.addImage(iconName, image);
         }
       })
+    if (_callback) {
+        _callback();
+    }
 }
 
-function loadUniqueValuePMSPoint(renderer,layer,symbols){
+function addUniqueValuePMSPointLayer(renderer,layer,symbols){
 
     sourceName =  layer['name']+"-source"
     valueField = renderer.field1
@@ -275,7 +395,7 @@ function loadUniqueValuePMSPoint(renderer,layer,symbols){
         'source': sourceName,
         'layout': {
           'icon-image':iconImage,
-          'visibility': 'visible'
+          'visibility': 'none'
         },
         'paint':{
 
@@ -303,6 +423,40 @@ function loadUniqueValuePMSPoint(renderer,layer,symbols){
           });
           if(map.getLayer(layer['name']) === undefined){
             map.addLayer(layerJson);
+
+            map.on('click', layer['name'], function (e) {
+                popupContent = '<p dir="rtl">'
+                feature = e.features[0]
+                if('label_field' in layer){
+                    popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                }
+                if('fields' in layer){
+                    requiredFields = layer['fields']
+                    if(requiredFields.indexOf('*') > -1){
+                        requiredFields = Object.keys(feature.properties)
+                    }
+                    
+                    for(var i=0; i < requiredFields.length; i++){
+                        
+                        fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                    }
+                }
+                popupContent += "</p>"
+                popup.setHTML(popupContent)
+                popup.setLngLat(e.lngLat)
+                popup.addTo(map)
+            });
+                
+            // Change the cursor to a pointer when the mouse is over the states layer.
+            map.on('mouseenter', layer['name'], function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+                
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', layer['name'], function () {
+            map.getCanvas().style.cursor = '';
+                });
           }else{
             return
           }
