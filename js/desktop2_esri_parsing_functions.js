@@ -832,7 +832,7 @@ function addRasterLayer(layer){
         'paint': {
         'raster-fade-duration': 0
         }
-    });
+    },'neighborhoods-stroke');
     map.on('click', function(e) {
         lngLat = e.lngLat
         popUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]
