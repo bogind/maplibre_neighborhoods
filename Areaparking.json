@@ -1,0 +1,77 @@
+{
+    "layers":[
+        {
+            "id":970,
+            "name":"parking1",
+            "name_heb":"חניוני אחוזות החוף",
+            "fields":["status_chenyon"],
+            "label_field":["shem_chenyon"]
+        },
+        {
+            "id":555,
+            "name":"parking2",
+            "name_heb":"חניונים פרטיים",
+            "fields":["shem_rechov"]
+        },
+        {
+            "id":556,
+            "name":"parking3",
+            "name_heb":"חניונים ציבוריים",
+            "fields":["name"]
+        },
+        {
+            "id":680,
+            "name":"closed_streets",
+            "name_heb":"רחובות סגורים",
+            "fields":["shem_rechov","me_rechov","add_rechov","tr_from","tr_to","t_sug","t_sgira","t_avodat_laila","teur_meshulav"]
+        },
+        {
+            "id":577,
+            "name":"bike_paths1",
+            "name_heb":"שבילי אופניים",
+            "fields":["shem_mikta"]
+        },
+        {
+            "id":633,
+            "name":"planned_light_rail_stations",
+            "name_heb":"תחנות מתוכננות לרכבת קלה",
+            "fields":["shem_tahana","t_sug_tahana"],
+            "label_field":["shem_tahana"]
+        },
+        {
+            "id":908,
+            "name":"strategic_plan_bike_2025",
+            "name_heb":"אסטרטגיה עירונית לאופניים 2025",
+            "fields":["type","make"],
+            "label_field":["type"],
+            "type":"raster"
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[970],
+            "label":"חניונים",
+            "icon":"icons/local_parking.svg"
+        },
+        {
+            "layers":[680],
+            "label":"רחובות\nסגורים לתנועה",
+            "icon":"icons/close directions icon.svg"
+        },
+        {
+            "layers":[577],
+            "label":"שבילי\nאופניים",
+            "icon":"icons/Bicycle paths icon .svg"
+        },
+        {
+            "layers":[633],
+            "label":"תחנות\nרכבת קלה",
+            "icon":"icons/Train Station icon.svg"
+        },
+        {
+            "layers":[908],
+            "label":"שבילי\nאופניים - ביצוע ותוכנית 2025",
+            "icon":"icons/Bicycle paths icon .svg"
+        }
+    ]
+}
