@@ -432,13 +432,31 @@ function parseUniqueValuePoint(renderer,layer){
 function parseUniqueValueLine(renderer,layer){
     
     sourceName =  layer['name']+"-source"
-    valueField = renderer.field1
     layerUrl = getLayerUrl(layer)
-    colorExpression = ["match",["get",valueField]]
-    opacityExpression = ["match",["get",valueField]]
-    widthExpression = ["match",["get",valueField]]
+    if(renderer.field2){
+        if(renderer.field3){
+            valueField1 = renderer.field1
+            valueField2 = renderer.field2
+            valueField3 = renderer.field3
+            deleimiter = renderer.fieldDelimiter
+            colorExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2],deleimiter,["get",valueField3]]]
+            opacityExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2],deleimiter,["get",valueField3]]]
+            widthExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2],deleimiter,["get",valueField3]]]
+        }else{
+            valueField1 = renderer.field1
+            valueField2 = renderer.field2
+            colorExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2]]]
+            opacityExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2]]]
+            widthExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2]]]
+        }
+    }else{
+        valueField = renderer.field1
+        colorExpression = ["match",["get",valueField]]
+        opacityExpression = ["match",["get",valueField]]
+        widthExpression = ["match",["get",valueField]]
+    }
 
-    symbols = []
+    
     for(var i=0;i<renderer.uniqueValueInfos.length;i++){
         value = renderer.uniqueValueInfos[i].value
         color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
@@ -450,9 +468,9 @@ function parseUniqueValueLine(renderer,layer){
 
     }
     if(renderer.defaultSymbol){
-        color = "rgb("+renderer.defaultSymbol.symbol.color.slice(0,3).join()+")";
-        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.defaultSymbol.symbol.color[3]);
-        width = renderer.defaultSymbol.symbol.width ? renderer.defaultSymbol.symbol.width : 1;
+        color = "rgb("+renderer.defaultSymbol.color.slice(0,3).join()+")";
+        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.defaultSymbol.color[3]);
+        width = renderer.defaultSymbol.width ? renderer.defaultSymbol.width : 1;
         colorExpression.push(color)
         opacityExpression.push(opacity)
         widthExpression.push(width)
@@ -547,8 +565,8 @@ function parseUniqueValuePolygon(renderer,layer){
 
     }
     if(renderer.defaultSymbol){
-        color = "rgb("+renderer.defaultSymbol.symbol.color.slice(0,3).join()+")";
-        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.defaultSymbol.symbol.color[3]);
+        color = "rgb("+renderer.defaultSymbol.color.slice(0,3).join()+")";
+        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.defaultSymbol.color[3]);
         colorExpression.push(color)
         opacityExpression.push(opacity)
     }else{
@@ -808,6 +826,9 @@ function addRasterLayer(layer){
         id: layer['name'],
         'type': 'raster',
         'source': sourceName,
+        'layout':{
+            'visibility':'none'
+        },
         'paint': {
         'raster-fade-duration': 0
         }
@@ -846,8 +867,39 @@ function addRasterLayer(layer){
                 }
             })
         });
+
+    map.on('moveend',function(e){
+        for(var i=0;i<mapJson['layers'].length;i++){
+            tempLayer = mapJson['layers'][i]
+            if(tempLayer.type && tempLayer.type === "raster"){
+                tempSourceName = tempLayer['name']+'-source'
+                updateRaster(tempSourceName)
+            }
+        }
+        
+    })
 }
 
+function updateRaster(sourceName){
+    height = map.getCanvas().height
+    width = map.getCanvas().width
+    bounds = map.getBounds()
+    east = bounds.getEast()
+    west = bounds.getWest()
+    north = bounds.getNorth()
+    south = bounds.getSouth()
+    coords = [
+        [west, north],
+        [east, north],
+        [east, south],
+        [west, south]
+        ]
+    curUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/export?bbox="
+    curUrl += west.toFixed(4)+","+south.toFixed(4)+","+east.toFixed(4)+","+north.toFixed(4)
+    curUrl += "&bboxSR=4326&imageSR=3857&size="+width+","+height+"&transparent=true&layers=show:"+layer["id"]+"&f=image"
+    
+    map.getSource(sourceName).updateImage({ url: curUrl, coordinates: coords});
+}
 // Convert 8bit value to normalized opacity
 function parseOpacity(inputOpacity){
     xMax = 1;
