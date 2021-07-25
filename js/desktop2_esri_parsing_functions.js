@@ -84,6 +84,8 @@ function parseSimpleRenderer(geomType,renderer,layer){
         return addSimplePointLayer(renderer,layer)
     }else if(geomType === "esriGeometryPolygon"){
         return addSimplePolygonLayer(renderer,layer)
+    }else if(geomType === "esriGeometryPolyline"){
+        return addSimpleLineLayer(renderer,layer)
     }else{
         console.log(geomType)
     }
@@ -94,6 +96,8 @@ function parseUniqueValueRenderer(geomType,renderer,layer){
         return parseUniqueValuePoint(renderer,layer)
     }else if(geomType === "esriGeometryPolygon"){
         return parseUniqueValuePolygon(renderer,layer)
+    }else if(geomType === "esriGeometryPolyline"){
+        return parseUniqueValueLine(renderer,layer)
     }else{
         console.log(geomType)
     }
@@ -114,6 +118,7 @@ function addSimplePointLayer(renderer,layer){
                 'source': sourceName,
                 'layout': {
                   'icon-image':iconName,
+                  'icon-allow-overlap':true,
                   'visibility': 'none'
                 },
                 "paint": { }
@@ -231,8 +236,90 @@ function addSimplePointLayer(renderer,layer){
     }
 }
 
+/*
+    simple line
+*/
+function addSimpleLineLayer(renderer,layer){
+    if(renderer.symbol && 
+        renderer.symbol.style === "esriSLSSolid"){
+            sourceName =  layer['name']+"-source";
+            layerUrl = getLayerUrl(layer);
+            lineColor = "rgb("+renderer.symbol.color.slice(0,3).join()+")";
+            lineOpacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.symbol.color[3]);
+            lineWidth = renderer.symbol.width
+            layerJson = {
+                'id': layer['name'],
+                'type': 'line',
+                'source': sourceName,
+                'layout': {
+                  'visibility': 'none'
+                },
+                'paint': {
+                'line-color': lineColor,
+                'line-opacity': lineOpacity,
+                'line-width':lineWidth
+                }
+            }
+
+            if(map.getSource(sourceName) === undefined){
+                map.addSource(sourceName, {
+                  type: 'geojson',
+                  data: layerUrl
+                  });
+                  if(map.getLayer(layer['name']) === undefined){
+                    map.addLayer(layerJson);
+
+                    map.on('click', layer['name'], function (e) {
+                        popupContent = '<p dir="rtl">'
+                        feature = e.features[0]
+                        if('label_field' in layer){
+                            popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                        }
+                        if('fields' in layer){
+                            requiredFields = layer['fields']
+                            if(requiredFields.indexOf('*') > -1){
+                                requiredFields = Object.keys(feature.properties)
+                            }
+                            for(var i=0; i < requiredFields.length; i++){
+                                fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                            }
+                        }
+                        popupContent += "</p>"
+                        popup.setHTML(popupContent)
+                        popup.setLngLat(e.lngLat)
+                        popup.addTo(map)
+                    });
+                        
+                    // Change the cursor to a pointer when the mouse is over the states layer.
+                    map.on('mouseenter', layer['name'], function () {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+                        
+                    // Change it back to a pointer when it leaves.
+                    map.on('mouseleave', layer['name'], function () {
+                    map.getCanvas().style.cursor = '';
+                        });
+
+                    
+                  }else{
+                    return
+                  }
+              }else{
+                return
+                
+              }
+
+
+        }
+}
+
+/*
+    simple fill polygon
+*/
+
 function addSimplePolygonLayer(renderer,layer){
-    // Simple Fill Symbol
+
     if(renderer.symbol && 
         renderer.symbol.style === "esriSFSSolid"){
             sourceName =  layer['name']+"-source";
@@ -339,6 +426,116 @@ function parseUniqueValuePoint(renderer,layer){
      }
 }
 
+/*
+    unique value lines
+*/
+function parseUniqueValueLine(renderer,layer){
+    
+    sourceName =  layer['name']+"-source"
+    valueField = renderer.field1
+    layerUrl = getLayerUrl(layer)
+    colorExpression = ["match",["get",valueField]]
+    opacityExpression = ["match",["get",valueField]]
+    widthExpression = ["match",["get",valueField]]
+
+    symbols = []
+    for(var i=0;i<renderer.uniqueValueInfos.length;i++){
+        value = renderer.uniqueValueInfos[i].value
+        color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
+        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.uniqueValueInfos[i].symbol.color[3]);
+        width = renderer.uniqueValueInfos[i].symbol.width ? renderer.uniqueValueInfos[i].symbol.width : 1;
+        colorExpression.push(value,color)
+        opacityExpression.push(value,opacity)
+        widthExpression.push(value,width)
+
+    }
+    if(renderer.defaultSymbol){
+        color = "rgb("+renderer.defaultSymbol.symbol.color.slice(0,3).join()+")";
+        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.defaultSymbol.symbol.color[3]);
+        width = renderer.defaultSymbol.symbol.width ? renderer.defaultSymbol.symbol.width : 1;
+        colorExpression.push(color)
+        opacityExpression.push(opacity)
+        widthExpression.push(width)
+    }else{
+        colorExpression.push("#000000")
+        opacityExpression.push(1)
+        widthExpression.push(1)
+    }
+    layerJson = {
+        'id': layer["name"],
+        'type': 'line',
+        'source': sourceName,
+        'layout': {
+          'visibility': 'none'
+        },
+        'paint':{
+            'line-color': colorExpression,
+            'line-opacity': opacityExpression,
+            'line-width':widthExpression
+        }
+    }
+
+    if(map.getSource(sourceName) === undefined){
+        map.addSource(sourceName, {
+          type: 'geojson',
+          data: layerUrl
+          });
+          if(map.getLayer(layer['name']) === undefined){
+            map.addLayer(layerJson);
+
+            map.on('click', layer['name'], function (e) {
+                popupContent = '<p dir="rtl">'
+                feature = e.features[0]
+                if('label_field' in layer){
+                    popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                }
+                if('fields' in layer){
+                    requiredFields = layer['fields']
+                    if(requiredFields.indexOf('*') > -1){
+                        requiredFields = Object.keys(feature.properties)
+                    }
+                    
+                    for(var i=0; i < requiredFields.length; i++){
+                        
+                        fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                    }
+                }
+                popupContent += "</p>"
+                popup.setHTML(popupContent)
+                popup.setLngLat(e.lngLat)
+                popup.addTo(map)
+            });
+                
+            // Change the cursor to a pointer when the mouse is over the states layer.
+            map.on('mouseenter', layer['name'], function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+                
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', layer['name'], function () {
+            map.getCanvas().style.cursor = '';
+                });
+          }else{
+            return
+          }
+      }else{
+        return
+        
+      }
+
+}
+
+/*
+    unique value polygons
+*/
+function parseUniqueValuePolygon(renderer,layer){
+    
+}
+
+/*
+    Load all images for layers that use multiple images before creating the layer
+*/
 function loadMultipleImages(renderer,layer){
     symbols = {}
     renderer.defaultSymbol["iconName"] = layer["name"]+"-defaultIcon"
@@ -363,6 +560,10 @@ function loadMultipleImages(renderer,layer){
 
     addUniqueValuePMSPointLayer(renderer,layer,symbols)
 }
+
+/*
+ separate function to load images for synchronous loading
+*/
 function loadImage(iconName,imageData,_callback){
     map.loadImage(imageData, function(error, image) {
         if (error) throw error;
@@ -378,6 +579,9 @@ function loadImage(iconName,imageData,_callback){
     }
 }
 
+/*
+    create source and layer for point layer using unique value renderer (classes) and image markers
+*/
 function addUniqueValuePMSPointLayer(renderer,layer,symbols){
 
     sourceName =  layer['name']+"-source"
@@ -395,6 +599,7 @@ function addUniqueValuePMSPointLayer(renderer,layer,symbols){
         'source': sourceName,
         'layout': {
           'icon-image':iconImage,
+          'icon-allow-overlap':true,
           'visibility': 'none'
         },
         'paint':{
