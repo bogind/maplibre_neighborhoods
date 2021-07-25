@@ -530,7 +530,93 @@ function parseUniqueValueLine(renderer,layer){
     unique value polygons
 */
 function parseUniqueValuePolygon(renderer,layer){
-    
+        
+    sourceName =  layer['name']+"-source"
+    valueField = renderer.field1
+    layerUrl = getLayerUrl(layer)
+    colorExpression = ["match",["get",valueField]]
+    opacityExpression = ["match",["get",valueField]]
+
+    symbols = []
+    for(var i=0;i<renderer.uniqueValueInfos.length;i++){
+        value = renderer.uniqueValueInfos[i].value
+        color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
+        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.uniqueValueInfos[i].symbol.color[3]);
+        colorExpression.push(value,color)
+        opacityExpression.push(value,opacity)
+
+    }
+    if(renderer.defaultSymbol){
+        color = "rgb("+renderer.defaultSymbol.symbol.color.slice(0,3).join()+")";
+        opacity = layer["opacity"] ? layer["opacity"] : parseOpacity(renderer.defaultSymbol.symbol.color[3]);
+        colorExpression.push(color)
+        opacityExpression.push(opacity)
+    }else{
+        colorExpression.push("#000000")
+        opacityExpression.push(1)
+    }
+    layerJson = {
+        'id': layer["name"],
+        'type': 'fill',
+        'source': sourceName,
+        'layout': {
+          'visibility': 'none'
+        },
+        'paint':{
+            'fill-color': colorExpression,
+            'fill-opacity': opacityExpression,
+        }
+    }
+
+    if(map.getSource(sourceName) === undefined){
+        map.addSource(sourceName, {
+          type: 'geojson',
+          data: layerUrl
+          });
+          if(map.getLayer(layer['name']) === undefined){
+            map.addLayer(layerJson);
+
+            map.on('click', layer['name'], function (e) {
+                popupContent = '<p dir="rtl">'
+                feature = e.features[0]
+                if('label_field' in layer){
+                    popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
+                }
+                if('fields' in layer){
+                    requiredFields = layer['fields']
+                    if(requiredFields.indexOf('*') > -1){
+                        requiredFields = Object.keys(feature.properties)
+                    }
+                    
+                    for(var i=0; i < requiredFields.length; i++){
+                        
+                        fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                    }
+                }
+                popupContent += "</p>"
+                popup.setHTML(popupContent)
+                popup.setLngLat(e.lngLat)
+                popup.addTo(map)
+            });
+                
+            // Change the cursor to a pointer when the mouse is over the states layer.
+            map.on('mouseenter', layer['name'], function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+                
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', layer['name'], function () {
+            map.getCanvas().style.cursor = '';
+                });
+          }else{
+            return
+          }
+      }else{
+        return
+        
+      }
+
 }
 
 /*
