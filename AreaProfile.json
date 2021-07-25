@@ -1,0 +1,97 @@
+{
+    "layers":[
+        {
+            "id":842,
+            "name":"parks1",
+            "name_heb":"גנים ציבוריים",
+            "fields":["shem_gan"],
+            "opacity": 0.8
+        },
+        {
+            "id":551,
+            "name":"parks2",
+            "name_heb":"שטחים ירוקים וגנים ציבוריים",
+            "fields":["shem_gan"],
+            "opacity": 0
+        },
+        {
+            "id":635,
+            "name":"library1",
+            "name_heb":"ספריות חוץ",
+            "fields":["sug","mikum","moadei_peilut","sheat_sippur","contact_person","merchav_kehila","achrayut"],
+            "label_field":["sug"]
+        },
+        {
+            "id":570,
+            "name":"library2",
+            "name_heb":"ספריות",
+            "fields":["shem","shem_binyan","shem_rechov","ms_bait","knisa","opening_hour","ms_tel1","k_negishut","negishut_reiya","negishut_shmia","negishut_physit"],
+            "label_field":["shem"]
+        },
+        {
+            "id":552,
+            "name":"mosdotTarbut1",
+            "name_heb":"מרכזי מחול",
+            "fields":["shem","shem_rechov","ms_bait","knisa","ms_tel1","ms_tel2"],
+            "label_field":["shem"]
+        },
+        {
+            "id":572,
+            "name":"mosdotTarbut2",
+            "name_heb":"מוזאונים",
+            "fields":["shem","t_sug","shem_rechov","ms_bait","knisa","ms_tel"],
+            "label_field":["shem"]
+        },
+        {
+            "id":573,
+            "name":"mosdotTarbut3",
+            "name_heb":"תיאטרון",
+            "fields":["shem","shem_rechov","ms_bait","knisa","ms_tel1","ms_tel2"],
+            "label_field":["shem"]
+        },
+        {
+            "id":574,
+            "name":"mosdotTarbut4",
+            "name_heb":"בתי קולנוע",
+            "fields":["shem","shem_rechov","ms_bait","knisa","ms_ulamot","ms_tel"],
+            "label_field":["shem"]
+        },
+        {
+            "id":569,
+            "name":"mosdotTarbut5",
+            "name_heb":"מרכזי מוסיקה",
+            "fields":["shem","shem_rechov","ms_bait","knisa"],
+            "label_field":["shem"]
+        },
+        {
+            "id":553,
+            "name":"mosdot_kehila",
+            "name_heb":"מוסדות קהילה",
+            "fields":["shem"],
+            "label_field":["shem"]
+        }
+        
+    ],
+    "buttons":[
+        {
+            "layers":[842,551],
+            "label":"גנים\nופארקים",
+            "icon":"icons/garden icon.svg"
+        },
+        {
+            "layers":[635,570],
+            "label":"ספריות",
+            "icon":"icons/library icon.svg"
+        },
+        {
+            "layers":[553],
+            "label":"מוסדות\nקהילה",
+            "icon":"icons/community_icon.svg"
+        },
+        {
+            "layers":[552,572,573,574,569],
+            "label":"מוסדות\nתרבות",
+            "icon":"icons/Cultural_institutions_icon.svg"
+        }
+    ]
+}
