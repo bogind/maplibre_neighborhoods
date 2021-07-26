@@ -1,0 +1,80 @@
+{
+    "layers":[
+        {
+            "id":596,
+            "name":"youth_orgs",
+            "name_heb":"תנועות נוער",
+            "fields":["shem","sug","address","shem_rechov","ms_bait","telephone","email","hearot"]
+        },
+        {
+            "id":936,
+            "name":"stadiums1",
+            "name_heb":"אצטדיונים והיכלי ספורט",
+            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","achrayut"]
+        },
+        {
+            "id":938,
+            "name":"stadiums2",
+            "name_heb":"אולמות ספורט",
+            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","achrayut"]
+        },
+        {
+            "id":943,
+            "name":"stadiums3",
+            "name_heb":"מגרשי ספורט",
+            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","achrayut"]
+        },
+        {
+            "id":553,
+            "name":"mosdot_kehila",
+            "name_heb":"מוסדות קהילה",
+            "fields":["shem","website","shem_rechov","ms_bait","knisa","t_sug_rashi","t_sug_mishni","play_room","hearot"],
+            "label_field":["shem"]
+        },
+        {
+            "id":581,
+            "name":"senior_centers1",
+            "name_heb":"מרכז יום לקשיש",
+            "fields":["shem","shem_rechov","ms_bait","uchlosiat_yaad","contact_man","ms_telephon","hearot"]
+        },
+        {
+            "id":600,
+            "name":"senior_centers2",
+            "name_heb":"מועדוני קשישים",
+            "fields":["shem ","shem_rechov","ms_bait","knisa","t_sug","contact_man","ms_telephon","responsibility","hearot"]
+        },
+        {
+            "id":939,
+            "name":"swimming_pools",
+            "name_heb":"בריכות שחיה",
+            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil"]
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[596],
+            "label":"תנועות\nנוער",
+            "icon":"icons/Community gardens icon.svg"
+        },
+        {
+            "layers":[936,938,943],
+            "label":"אולמות\nומגרשי ספורט",
+            "icon":"icons/sport_icon.svg"
+        },
+        {
+            "layers":[553],
+            "label":"מוסדות\nקהילה",
+            "icon":"icons/community_icon.svg"
+        },
+        {
+            "layers":[581,600],
+            "label":"מרכזי\nאזרחים ותיקים",
+            "icon":"icons/Seniors Community icon.svg"
+        },
+        {
+            "layers":[939],
+            "label":"בריכות",
+            "icon":"icons/Pool Icon.svg"
+        }
+    ]
+}
