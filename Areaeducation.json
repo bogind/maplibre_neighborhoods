@@ -1,0 +1,43 @@
+{
+    "layers":[
+        {
+            "id":598,
+            "name":"kindergarten_2021",
+            "name_heb":"גני ילדים תשפא",
+            "fields":["shem_mosad","shem_rechov","ms_bait","knisa","t_shlav_chinuch","me_kita","ad_kita",
+            "t_zerem","t_migzar","t_sug_chinuch","zaharon","t_baalut","t_mikum","t_zerem_tichnun","prati_ganenet","telefon_ganenet",
+            "telefon_kitat_gan","prati_menahel","telefon_menahel","telefon_mosad","shem_rakezet"]
+        },
+        {
+            "id":624,
+            "name":"childcare1",
+            "name_heb":"מעונות מוכרים לגיל הרך",
+            "fields":["name","address","street_address","phone_number","registration_phone","kitot","potential_ichlus"]
+        },
+        {
+            "id":599,
+            "name":"schools1",
+            "name_heb":"בתי ספר תשפא",
+            "fields":["shem_mosad","shem_rechov","ms_bait","knisa","t_shlav_chinuch","me_kita","ad_kita",
+                "t_zerem","t_migzar","t_sug_chinuch","zaharon","t_baalut","t_mikum","prati_ganenet","telefon_ganenet","telefon_kitat_gan",
+                "prati_menahel","telefon_menahel","telefon_mosad","shem_rakezet"]
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[598],
+            "label":"גני\nילדים",
+            "icon":"icons/Children_icon.svg"
+        },
+        {
+            "layers":[624],
+            "label":"מעונות\nילדים",
+            "icon":"icons/child-care icon.svg"
+        },
+        {
+            "layers":[599],
+            "label":"בית\nספר",
+            "icon":"icons/library icon.svg"
+        }
+    ]
+}
