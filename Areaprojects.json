@@ -1,0 +1,44 @@
+{
+    "layers":[
+        {
+            "id":858,
+            "name":"night_works",
+            "name_heb":"עבודות לילה - דרכים",
+            "fields":["ms_rish","shem_rechov","tr_night_me","tr_night_ad","me_shaa","ad_shaa","me_rechov","add_rechov","natzig"]
+        },
+        {
+            "id":917,
+            "name":"inf_works",
+            "name_heb":"עבודות תשתית בתוקף-פנימי",
+            "fields":["status","minshar","ishur_laila","kablan","tr_tokef_me","tr_tokef_ad","shlav","natzig"],
+            "type":"raster"
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[],
+            "label":"סימוני\nכביש ודרך",
+            "icon":"icons/Road markings icon.svg"
+        },
+        {
+            "layers":[858],
+            "label":"עבודות\nלילה",
+            "icon":"icons/nights icon.svg"
+        },
+        {
+            "layers":[917],
+            "label":"עבודות\nתשתית",
+            "icon":"icons/nights icon.svg"
+        },
+        {
+            "layers":[],
+            "label":"פרויקטי\nשפ\"ע",
+            "icon":"icons/Community gardens icon.svg"
+        },
+        {
+            "layers":[],
+            "label":"תושבים\nעושים עיר",
+            "icon":"icons/Residents make a city.svg"
+        }
+    ]
+}
