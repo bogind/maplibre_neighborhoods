@@ -436,10 +436,17 @@ function addSimplePolygonLayer(renderer,layer){
 }
 
 function parseUniqueValuePoint(renderer,layer){
-    if(renderer.defaultSymbol.type &&
-     renderer.defaultSymbol.type === "esriPMS"){
-        loadMultipleImages(renderer,layer)
-     }
+    if(renderer.defaultSymbol){
+        if(renderer.defaultSymbol.type &&
+            renderer.defaultSymbol.type === "esriPMS"){
+               loadMultipleImages(renderer,layer)
+            }
+    }else if(renderer.uniqueValueInfos.length > 1 &&
+        renderer.uniqueValueInfos[0].symbol &&
+        renderer.uniqueValueInfos[0].symbol.type == "esriPMS"){
+            loadMultipleImages(renderer,layer)
+    }
+    
 }
 
 /*
@@ -684,24 +691,26 @@ function parseUniqueValuePolygon(renderer,layer){
 */
 function loadMultipleImages(renderer,layer){
     symbols = {}
-    renderer.defaultSymbol["iconName"] = layer["name"]+"-defaultIcon"
-    renderer.defaultSymbol.imageData = "data:image/png;base64,"+renderer.defaultSymbol.imageData
-    symbols["default"] = renderer.defaultSymbol
-    if(!map.hasImage(renderer.defaultSymbol["iconName"])){
-        
-        map.loadImage(renderer.defaultSymbol.imageData, function(error, image) {
-          if (error) throw error;
-          map.addImage(renderer.defaultSymbol["iconName"], image);
-        })
-    }
     for(var i = 0; i< renderer.uniqueValueInfos.length;i++){
         valueInfo = renderer.uniqueValueInfos[i]
         valueInfo.symbol["iconName"] = layer["name"]+"-Icon"+(i+1)
         valueInfo.symbol.imageData = "data:image/png;base64,"+valueInfo.symbol.imageData
         symbols[valueInfo.value] = valueInfo.symbol
         loadImage(valueInfo.symbol.iconName,valueInfo.symbol.imageData)
-            
+    }
+    if(renderer.defaultSymbol){
+        renderer.defaultSymbol["iconName"] = layer["name"]+"-defaultIcon"
+        renderer.defaultSymbol.imageData = "data:image/png;base64,"+renderer.defaultSymbol.imageData
+        symbols["default"] = renderer.defaultSymbol
+        if(!map.hasImage(renderer.defaultSymbol["iconName"])){
         
+            map.loadImage(renderer.defaultSymbol.imageData, function(error, image) {
+              if (error) throw error;
+              map.addImage(renderer.defaultSymbol["iconName"], image);
+            })
+        }
+    }else{
+        symbols["default"] = symbols[Object.keys(symbols)[0]]
     }
 
     addUniqueValuePMSPointLayer(renderer,layer,symbols)
