@@ -1,17 +1,20 @@
+// the plugin adds support for RTL labels 
 maplibregl.setRTLTextPlugin(
   'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
   null,
   true // Lazy load the plugin
   );
 
+let baseUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
 let map;
 let mapJson;
 let popup = new maplibregl.Popup()
 let neighborhood_url;
 let neighborhhod_bounds;
 
-var search = location.search.substring(1);
+let search = location.search.substring(1);
 
+// load 
 fetch("js/IView_style.json")
 .then(response => response.json())
 .then(style => {
@@ -33,10 +36,12 @@ function onMapLoad(){
       var QS = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
       if("ne" in QS){
           var neighborhood_code = parseInt(QS.ne)
-          neighborhood_url = `http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/511/query?where=oid_shchuna=${neighborhood_code}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
+          neighborhood_url = baseUrl+"511/query?where=oid_shchuna="
+		  neighborhood_url += neighborhood_code+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
       }else if("shemShchuna" in QS){
         var neighborhood_name = QS.shemShchuna
-        neighborhood_url = `http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/511/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
+        neighborhood_url =  baseUrl+"511/query?text="
+		neighborhood_url += neighborhood_name+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
       }else if("AreaName" in QS){
         var neighborhood_name = QS.AreaName
         neighborhood_url = `http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/567/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
@@ -106,9 +111,8 @@ function onMapLoad(){
       
 
   }
-  map.addControl(myCustomControl);
+  map.addControl(mapHeaderControl);
   map.addControl(new maplibregl.NavigationControl());
-  //addButtonsOld()
 }
 
 
@@ -180,10 +184,10 @@ function addButtonLayer(layerIDs,_callback){
   for(var i=0;i<layerIDs.length;i++){
       id = layerIDs[i]
       
-      layer = getLayer(id)
+      layer = utils.getLayer(id)
       
       if(map.getLayer(layer['name']) === undefined){
-          getMetadata(layer)
+		esriRenderer.getMetadata(layer)
       }
   }
   if (_callback) {
@@ -191,23 +195,5 @@ function addButtonLayer(layerIDs,_callback){
   }
 }
 
-class MapHeader {
-  onAdd(map){
-    this.map = map;
-    this.container = document.createElement('div');
-    this.container.className = 'mapboxgl-ctrl map-header';
-    this.container.style.margin = 0;
-    this.container.innerHTML = '<div ng-if="\'True\' ==\'True\'" class="ShhunaReSize smallSize ng-scope">\
-                                <div class="ShhunaReSizeBtn "></div>\
-                                <div class="ShhunaReSizeTxt">פתח מפה במסך מלא</div>\
-                            </div>\
-                            <div ng-if="\'True\' ==\'True\'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="\'<b>מפת מרחב</b> הצג לפי:\'"><b>מפת מרחב</b> הצג לפי:</div>';
-    return this.container;
-  }
-  onRemove(){
-    this.container.parentNode.removeChild(this.container);
-    this.map = undefined;
-  }
-}
-const myCustomControl = new MapHeader();
+const mapHeaderControl = new MapHeader();
 
