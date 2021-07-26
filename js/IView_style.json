@@ -5,7 +5,8 @@
     "sources": {
       "esri": {
         "type": "vector",
-        "tiles": ["https://gisportal02.tlv.gov.il/arcgis/rest/services/Hosted/TelAvivCacheMapHeb/VectorTileServer/tile/{z}/{y}/{x}.pbf"]
+        "tiles": ["https://gisportal02.tlv.gov.il/arcgis/rest/services/Hosted/TelAvivCacheMapHeb/VectorTileServer/tile/{z}/{y}/{x}.pbf"],
+        "maxzoom": 16
       },
       "raster-tiles": {
         "type": "raster",
