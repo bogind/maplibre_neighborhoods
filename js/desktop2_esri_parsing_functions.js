@@ -159,7 +159,11 @@ function addSimplePointLayer(renderer,layer){
                                     }
                                     for(var i=0; i < requiredFields.length; i++){
                                         fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                        if(feature.properties[requiredFields[i]] && 
+                                            feature.properties[requiredFields[i]].length > 0 &&
+                                            feature.properties[requiredFields[i]] != "null"){
+                                            popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                        }
                                     }
                                 }
                                 popupContent += "</p>"
@@ -207,7 +211,11 @@ function addSimplePointLayer(renderer,layer){
                                     }
                                     for(var i=0; i < requiredFields.length; i++){
                                         fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                        if(feature.properties[requiredFields[i]] && 
+                                            feature.properties[requiredFields[i]].length > 0 &&
+                                            feature.properties[requiredFields[i]] != "null"){
+                                            popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                        }
                                     }
                                 }
                                 popupContent += "</p>"
@@ -282,7 +290,11 @@ function addSimpleLineLayer(renderer,layer){
                             }
                             for(var i=0; i < requiredFields.length; i++){
                                 fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                if(feature.properties[requiredFields[i]] && 
+                                    feature.properties[requiredFields[i]].length > 0 &&
+                                    feature.properties[requiredFields[i]] != "null"){
+                                    popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                }v
                             }
                         }
                         popupContent += "</p>"
@@ -383,7 +395,11 @@ function addSimplePolygonLayer(renderer,layer){
                             }
                             for(var i=0; i < requiredFields.length; i++){
                                 fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                if(feature.properties[requiredFields[i]] && 
+                                    feature.properties[requiredFields[i]].length > 0 &&
+                                    feature.properties[requiredFields[i]] != "null"){
+                                    popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                                }
                             }
                         }
                         popupContent += "</p>"
@@ -516,7 +532,11 @@ function parseUniqueValueLine(renderer,layer){
                     for(var i=0; i < requiredFields.length; i++){
                         
                         fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                        if(feature.properties[requiredFields[i]] && 
+                            feature.properties[requiredFields[i]].length > 0 &&
+                            feature.properties[requiredFields[i]] != "null"){
+                            popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                        }
                     }
                 }
                 popupContent += "</p>"
@@ -550,7 +570,7 @@ function parseUniqueValueLine(renderer,layer){
 function parseUniqueValuePolygon(renderer,layer){
         
     sourceName =  layer['name']+"-source"
-    valueField = renderer.field1
+    layerUrl = getLayerUrl(layer)
     if(renderer.field2){
         if(renderer.field3){
             valueField1 = renderer.field1
@@ -613,6 +633,7 @@ function parseUniqueValuePolygon(renderer,layer){
             map.on('click', layer['name'], function (e) {
                 popupContent = '<p dir="rtl">'
                 feature = e.features[0]
+                console.log(e)
                 if('label_field' in layer){
                     popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
                 }
@@ -625,7 +646,12 @@ function parseUniqueValuePolygon(renderer,layer){
                     for(var i=0; i < requiredFields.length; i++){
                         
                         fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                        if(feature.properties[requiredFields[i]] && 
+                            feature.properties[requiredFields[i]].length > 0 &&
+                            feature.properties[requiredFields[i]] != "null"){
+                            popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                        }
+                        
                     }
                 }
                 popupContent += "</p>"
@@ -764,7 +790,11 @@ function addUniqueValuePMSPointLayer(renderer,layer,symbols){
                     for(var i=0; i < requiredFields.length; i++){
                         
                         fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                        if(feature.properties[requiredFields[i]] && 
+                            feature.properties[requiredFields[i]].length > 0 &&
+                            feature.properties[requiredFields[i]] != "null"){
+                            popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                        }
                     }
                 }
                 popupContent += "</p>"
@@ -791,19 +821,6 @@ function addUniqueValuePMSPointLayer(renderer,layer,symbols){
       }
 }
 
-function addVectorLayer(layer){
-    fetch("http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]+"?f=json")
-    .then(response => response.json())
-    .then(data => {
-        fields = {}
-        for(var i =0;i< data["fields"].length;i++){
-            fieldName = data["fields"][i]["name"]
-            fields[fieldName] = data["fields"][i]
-        }
-        layer["metadata"] = fields
-
-    })
-}
 
 function addRasterLayer(layer){
     fetch("http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]+"?f=json")
@@ -872,7 +889,11 @@ function addRasterLayer(layer){
                         }
                         for(var i=0; i < requiredFields.length; i++){
                             fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                            popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                            if(feature.properties[requiredFields[i]] && 
+                                feature.properties[requiredFields[i]].length > 0 &&
+                                feature.properties[requiredFields[i]] != "null"){
+                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
+                            }
                         }
                     }
                     popupContent += "</p>"
