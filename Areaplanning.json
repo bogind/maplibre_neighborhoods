@@ -1,0 +1,33 @@
+{
+    "layers":[
+        {
+            "id":772,
+            "name":"building_permits",
+            "name_heb":"בקשות והיתרי בניה",
+            "fields":["request_num","building_stage","permission_date","permission_num","expiry_date",
+                "sw_tama_38","tr_hathalat_bniya","occupation","url_hadmaya","yechidot_diyur","ms_tik_binyan","addresses"]
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[772],
+            "label":"בקשות\nוהיתרי בנייה",
+            "icon":"icons/Building permit icon.svg"
+        },
+        {
+            "layers":[],
+            "label":"פרויקטים\nמבני ציבור",
+            "icon":"icons/Public Buildings icon.svg"
+        },
+        {
+            "layers":[],
+            "label":"פרויקטים\nמנהל קהילה",
+            "icon":"icons/community_icon.svg"
+        },
+        {
+            "layers":[],
+            "label":"פרויקטים\nשירותים חברתיים",
+            "icon":"icons/SHELTER_icon.svg"
+        }
+    ]
+}
