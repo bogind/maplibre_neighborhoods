@@ -551,9 +551,25 @@ function parseUniqueValuePolygon(renderer,layer){
         
     sourceName =  layer['name']+"-source"
     valueField = renderer.field1
-    layerUrl = getLayerUrl(layer)
-    colorExpression = ["match",["get",valueField]]
-    opacityExpression = ["match",["get",valueField]]
+    if(renderer.field2){
+        if(renderer.field3){
+            valueField1 = renderer.field1
+            valueField2 = renderer.field2
+            valueField3 = renderer.field3
+            deleimiter = renderer.fieldDelimiter
+            colorExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2],deleimiter,["get",valueField3]]]
+            opacityExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2],deleimiter,["get",valueField3]]]
+        }else{
+            valueField1 = renderer.field1
+            valueField2 = renderer.field2
+            colorExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2]]]
+            opacityExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2]]]
+        }
+    }else{
+        valueField = renderer.field1
+        colorExpression = ["match",["get",valueField]]
+        opacityExpression = ["match",["get",valueField]]
+    }
 
     symbols = []
     for(var i=0;i<renderer.uniqueValueInfos.length;i++){
