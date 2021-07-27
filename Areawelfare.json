@@ -1,0 +1,45 @@
+{
+    "layers":[
+        {
+            "id":561,
+            "name":"public_health",
+            "name_heb":"בריאות המשפחה",
+            "fields":["shem_thana","is_open","shem_schuna ","shem_rechov","ms_bait","knisa","ms_telephone","thana_lecherun"]
+        },
+        {
+            "id":583,
+            "name":"welfare_departments",
+            "name_heb":"בריאות המשפחה",
+            "fields":["shem","shem_rechov","ms_bait","knisa","shem_agaf","ms_telephone","ms_fax","shem_menahel"]
+        },
+        {
+            "id":581,
+            "name":"senior_centers1",
+            "name_heb":"מרכז יום לקשיש",
+            "fields":["shem","shem_rechov","ms_bait","uchlosiat_yaad","contact_man","ms_telephon","hearot"]
+        },
+        {
+            "id":600,
+            "name":"senior_centers2",
+            "name_heb":"מועדוני קשישים",
+            "fields":["shem","shem_rechov","ms_bait","knisa","t_sug","contact_man","ms_telephon","responsibility","hearot"]
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[561],
+            "label":"טיפות\nחלב",
+            "icon":"icons/child-care icon.svg"
+        },
+        {
+            "layers":[583],
+            "label":"מוסדות\nרווחה",
+            "icon":"icons/social-service-icon .svg"
+        },
+        {
+            "layers":[581,600],
+            "label":"מרכזי\nאזרחים ותיקים",
+            "icon":"icons/Seniors Community icon.svg"
+        }
+    ]
+}
