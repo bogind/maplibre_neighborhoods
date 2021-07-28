@@ -143,15 +143,8 @@ esriRenderer = (function(){
                                     popup.addTo(map)
                                 });
                                     
-                                // Change the cursor to a pointer when the mouse is over the states layer.
-                                map.on('mouseenter', layer['name'], function () {
-                                    map.getCanvas().style.cursor = 'pointer';
-                                });
-                                    
-                                // Change it back to a pointer when it leaves.
-                                map.on('mouseleave', layer['name'], function () {
-                                map.getCanvas().style.cursor = '';
-                                    });
+                                addMapHoverEvents(layer)
+
                             }else{
                                 return
                             }
@@ -195,15 +188,8 @@ esriRenderer = (function(){
                                     popup.addTo(map)
                                 });
                                     
-                                // Change the cursor to a pointer when the mouse is over the states layer.
-                                map.on('mouseenter', layer['name'], function () {
-                                    map.getCanvas().style.cursor = 'pointer';
-                                });
-                                    
-                                // Change it back to a pointer when it leaves.
-                                map.on('mouseleave', layer['name'], function () {
-                                map.getCanvas().style.cursor = '';
-                                    });
+                                addMapHoverEvents(layer)
+                                
                             }else{
                                 return
                             }
@@ -274,15 +260,7 @@ esriRenderer = (function(){
                             popup.addTo(map)
                         });
                             
-                        // Change the cursor to a pointer when the mouse is over the states layer.
-                        map.on('mouseenter', layer['name'], function () {
-                            map.getCanvas().style.cursor = 'pointer';
-                        });
-                            
-                        // Change it back to a pointer when it leaves.
-                        map.on('mouseleave', layer['name'], function () {
-                        map.getCanvas().style.cursor = '';
-                            });
+                        addMapHoverEvents(layer)
 
                         
                     }else{
@@ -378,15 +356,7 @@ esriRenderer = (function(){
                             popup.addTo(map)
                         });
                             
-                        // Change the cursor to a pointer when the mouse is over the states layer.
-                        map.on('mouseenter', layer['name'], function () {
-                            map.getCanvas().style.cursor = 'pointer';
-                        });
-                            
-                        // Change it back to a pointer when it leaves.
-                        map.on('mouseleave', layer['name'], function () {
-                        map.getCanvas().style.cursor = '';
-                            });
+                        addMapHoverEvents(layer)
 
                         if(drawOutline && map.getLayer(strokeLayerName) === undefined){
                             map.addLayer(strokeLayerJson);
@@ -550,15 +520,8 @@ esriRenderer = (function(){
                     popup.addTo(map)
                 });
                     
-                // Change the cursor to a pointer when the mouse is over the states layer.
-                map.on('mouseenter', layer['name'], function () {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                    
-                // Change it back to a pointer when it leaves.
-                map.on('mouseleave', layer['name'], function () {
-                map.getCanvas().style.cursor = '';
-                    });
+                addMapHoverEvents(layer)
+
             }else{
                 return
             }
@@ -671,15 +634,8 @@ esriRenderer = (function(){
                     popup.addTo(map)
                 });
                     
-                // Change the cursor to a pointer when the mouse is over the states layer.
-                map.on('mouseenter', layer['name'], function () {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                    
-                // Change it back to a pointer when it leaves.
-                map.on('mouseleave', layer['name'], function () {
-                map.getCanvas().style.cursor = '';
-                    });
+                addMapHoverEvents(layer)
+
             }else{
                 return
             }
@@ -786,15 +742,8 @@ esriRenderer = (function(){
                     popup.addTo(map)
                 });
                     
-                // Change the cursor to a pointer when the mouse is over the states layer.
-                map.on('mouseenter', layer['name'], function () {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                    
-                // Change it back to a pointer when it leaves.
-                map.on('mouseleave', layer['name'], function () {
-                map.getCanvas().style.cursor = '';
-                    });
+                addMapHoverEvents(layer)
+
             }else{
                 return
             }
@@ -925,6 +874,18 @@ esriRenderer = (function(){
         curUrl += "&bboxSR=4326&imageSR=3857&size="+width+","+height+"&transparent=true&layers=show:"+layer["id"]+"&f=image"
         
         map.getSource(sourceName).updateImage({ url: curUrl, coordinates: coords});
+    }
+
+    function addMapHoverEvents(layer){
+        // Change the cursor to a pointer when the mouse is over the states layer.
+        map.on('mouseenter', layer['name'], function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+            
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', layer['name'], function () {
+            map.getCanvas().style.cursor = '';
+        });
     }
 
 })();
