@@ -138,34 +138,10 @@ esriRenderer = (function(){
                             if(map.getLayer(layer['name']) === undefined){
                                 map.addLayer(layerJson);
         
-                                map.on('click', layer['name'], function (e) {
-                                    popupContent = '<p dir="rtl">'
-                                    feature = e.features[0]
-                                    if('label_field' in layer){
-                                        popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                                    }
-                                    if('fields' in layer){
-                                        requiredFields = layer['fields']
-                                        if(requiredFields.indexOf('*') > -1){
-                                            requiredFields = Object.keys(feature.properties)
-                                        }
-                                        for(var i=0; i < requiredFields.length; i++){
-                                            fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                            if(feature.properties[requiredFields[i]] && 
-                                                feature.properties[requiredFields[i]].length > 0 &&
-                                                feature.properties[requiredFields[i]] != "null"){
-                                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                                            }
-                                        }
-                                    }
-                                    popupContent += "</p>"
-                                    popup.setHTML(popupContent)
-                                    popup.setLngLat(e.lngLat)
-                                    popup.addTo(map)
-                                });
+                                addPopupEvent(layer)
                                     
                                 addMapHoverEvents(layer)
-                                
+
                             }else{
                                 return
                             }
@@ -649,44 +625,8 @@ esriRenderer = (function(){
             'raster-fade-duration': 0
             }
         },'neighborhoods-stroke');
-        map.on('click', function(e) {
-            lngLat = e.lngLat
-            popUrl = baseUrl+layer["id"]
-            popUrl += "/query?where=1=1&geometry="+lngLat.lng+","+lngLat.lat+"&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects"
-            popUrl += "&outFields=*&returnGeometry=false&f=geojson"
-
-            fetch(popUrl)
-                .then(response => response.json())
-                .then(data => {
-                    
-                    if(data.features.length > 0){
-                        popupContent = '<p dir="rtl">'
-                        feature = data.features[0]
-                        if('label_field' in layer){
-                            popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                        }
-                        if('fields' in layer){
-                            requiredFields = layer['fields']
-                            if(requiredFields.indexOf('*') > -1){
-                                requiredFields = Object.keys(feature.properties)
-                            }
-                            for(var i=0; i < requiredFields.length; i++){
-                                fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                if(feature.properties[requiredFields[i]] && 
-                                    feature.properties[requiredFields[i]].length > 0 &&
-                                    feature.properties[requiredFields[i]] != "null"){
-                                    popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                                }
-                            }
-                        }
-                        popupContent += "</p>"
-                        popup.setHTML(popupContent)
-                        popup.setLngLat(lngLat)
-                        popup.addTo(map)
-                        
-                    }
-                })
-            });
+        
+        addRasterPopupEvent(layer)
 
         map.on('moveend',function(e){
             for(var i=0;i<mapJson['layers'].length;i++){
@@ -779,6 +719,66 @@ esriRenderer = (function(){
         });
 
     }
+
+    /*
+        create popup event for raster layers
+    */
+   function addRasterPopupEvent(layer){
+    map.on('click', function(e) {
+        if(map.getLayoutProperty(layer['name'],'visibility') === "visible"){
+            var lngLat = e.lngLat
+            var point = turf.point([lngLat.lng,lngLat.lat])
+            var buffered = turf.buffer(point, 10, {units: 'meters',steps:4});
+            var geom = {"rings":buffered.geometry.coordinates}
+            var popUrl = baseUrl+layer["id"]
+            popUrl += "/query?where=1=1&geometry="+JSON.stringify(geom)+"&geometryType=esriGeometryPolygon&inSR=4326&spatialRel=esriSpatialRelIntersects"
+            popUrl += "&outFields=*&returnGeometry=false&f=geojson"
+
+            fetch(popUrl)
+                .then(response => response.json())
+                .then(data => {
+                    
+                    if(data.features &&
+                        data.features.length > 0){
+                        var popupContent = '<p dir="rtl">'
+                        var feature = data.features[0]
+                        if('label_field' in layer){
+                            popupContent += '<table class="popup-table">'
+                            popupContent += '<tr><th colspan="2">'+feature.properties[layer['label_field']]+"</th></tr>"
+                            popupContent += "<tr><th>שם שדה</th><th>ערך</th></tr>"
+                        }else{
+                            popupContent += '<table class="popup-table">'
+                            popupContent += "<tr><th>שם שדה</th><th>ערך</th></tr>"
+                        }
+                        if('fields' in layer){
+                            requiredFields = layer['fields']
+                            if(requiredFields.indexOf('*') > -1){
+                                requiredFields = Object.keys(feature.properties)
+                            }
+                            for(var i=0; i < requiredFields.length; i++){
+                                fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                                if(feature.properties[requiredFields[i]] && 
+                                    (feature.properties[requiredFields[i]].length > 0 
+                                    && (typeof feature.properties[requiredFields[i]] === "string")   &&
+                                        feature.properties[requiredFields[i]].trim().length > 0)&&
+                                    feature.properties[requiredFields[i]] != "null"){
+                                    popupContent += "<tr><td>"+fieldName+"</td><td>"+feature.properties[requiredFields[i]]+"</td></tr>"
+                                }
+                            }
+                            popupContent += "</table>"
+                        }
+                        popupContent += "</p>"
+                        popup.setHTML(popupContent)
+                        popup.setLngLat(lngLat)
+                        popup.addTo(map)
+                        
+                    }
+                })
+
+            }
+        
+        });
+   }
 
 })();
 
