@@ -18,50 +18,43 @@
             "id":635,
             "name":"library1",
             "name_heb":"ספריות חוץ",
-            "fields":["sug","mikum","moadei_peilut","sheat_sippur","contact_person","merchav_kehila","achrayut"],
-            "label_field":["sug"]
+            "fields":["sug","mikum","moadei_peilut","sheat_sippur","contact_person","merchav_kehila","achrayut"]
         },
         {
             "id":570,
             "name":"library2",
             "name_heb":"ספריות",
-            "fields":["shem","shem_binyan","shem_rechov","ms_bait","knisa","opening_hour","ms_tel1","k_negishut","negishut_reiya","negishut_shmia","negishut_physit"],
-            "label_field":["shem"]
+            "fields":["shem","shem_binyan","shem_rechov","ms_bait","knisa","opening_hour","ms_tel1","k_negishut","negishut_reiya","negishut_shmia","negishut_physit"]
         },
         {
             "id":552,
             "name":"mosdotTarbut1",
             "name_heb":"מרכזי מחול",
-            "fields":["shem","shem_rechov","ms_bait","knisa","ms_tel1","ms_tel2"],
-            "label_field":["shem"]
+            "fields":["shem","shem_rechov","ms_bait","knisa","ms_tel1","ms_tel2"]
         },
         {
             "id":572,
             "name":"mosdotTarbut2",
             "name_heb":"מוזאונים",
-            "fields":["shem","t_sug","shem_rechov","ms_bait","knisa","ms_tel"],
-            "label_field":["shem"]
+            "fields":["shem","t_sug","shem_rechov","ms_bait","knisa","ms_tel"]
         },
         {
             "id":573,
             "name":"mosdotTarbut3",
             "name_heb":"תיאטרון",
-            "fields":["shem","shem_rechov","ms_bait","knisa","ms_tel1","ms_tel2"],
-            "label_field":["shem"]
+            "fields":["shem","shem_rechov","ms_bait","knisa","ms_tel1","ms_tel2"]
         },
         {
             "id":574,
             "name":"mosdotTarbut4",
             "name_heb":"בתי קולנוע",
-            "fields":["shem","shem_rechov","ms_bait","knisa","ms_ulamot","ms_tel"],
-            "label_field":["shem"]
+            "fields":["shem","shem_rechov","ms_bait","knisa","ms_ulamot","ms_tel"]
         },
         {
             "id":569,
             "name":"mosdotTarbut5",
             "name_heb":"מרכזי מוסיקה",
-            "fields":["shem","shem_rechov","ms_bait","knisa"],
-            "label_field":["shem"]
+            "fields":["shem","shem_rechov","ms_bait","knisa"]
         },
         {
             "id":553,
@@ -74,7 +67,7 @@
     ],
     "buttons":[
         {
-            "layers":[842,551],
+            "layers":[551],
             "label":"גנים\nופארקים",
             "icon":"icons/garden icon.svg"
         },
