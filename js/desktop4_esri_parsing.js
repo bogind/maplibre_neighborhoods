@@ -117,31 +117,7 @@ esriRenderer = (function(){
                             if(map.getLayer(layer['name']) === undefined){
                                 map.addLayer(layerJson);
         
-                                map.on('click', layer['name'], function (e) {
-                                    popupContent = '<p dir="rtl">'
-                                    feature = e.features[0]
-                                    if('label_field' in layer){
-                                        popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                                    }
-                                    if('fields' in layer){
-                                        requiredFields = layer['fields']
-                                        if(requiredFields.indexOf('*') > -1){
-                                            requiredFields = Object.keys(feature.properties)
-                                        }
-                                        for(var i=0; i < requiredFields.length; i++){
-                                            fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                            if(feature.properties[requiredFields[i]] && 
-                                                feature.properties[requiredFields[i]].length > 0 &&
-                                                feature.properties[requiredFields[i]] != "null"){
-                                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                                            }
-                                        }
-                                    }
-                                    popupContent += "</p>"
-                                    popup.setHTML(popupContent)
-                                    popup.setLngLat(e.lngLat)
-                                    popup.addTo(map)
-                                });
+                                addPopupEvent(layer)
                                     
                                 addMapHoverEvents(layer)
 
@@ -234,31 +210,7 @@ esriRenderer = (function(){
                     if(map.getLayer(layer['name']) === undefined){
                         map.addLayer(layerJson);
 
-                        map.on('click', layer['name'], function (e) {
-                            popupContent = '<p dir="rtl">'
-                            feature = e.features[0]
-                            if('label_field' in layer){
-                                popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                            }
-                            if('fields' in layer){
-                                requiredFields = layer['fields']
-                                if(requiredFields.indexOf('*') > -1){
-                                    requiredFields = Object.keys(feature.properties)
-                                }
-                                for(var i=0; i < requiredFields.length; i++){
-                                    fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                    if(feature.properties[requiredFields[i]] && 
-                                        feature.properties[requiredFields[i]].length > 0 &&
-                                        feature.properties[requiredFields[i]] != "null"){
-                                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                                    }v
-                                }
-                            }
-                            popupContent += "</p>"
-                            popup.setHTML(popupContent)
-                            popup.setLngLat(e.lngLat)
-                            popup.addTo(map)
-                        });
+                        addPopupEvent(layer)
                             
                         addMapHoverEvents(layer)
 
@@ -330,31 +282,7 @@ esriRenderer = (function(){
                     if(map.getLayer(layer['name']) === undefined){
                         map.addLayer(layerJson);
 
-                        map.on('click', layer['name'], function (e) {
-                            popupContent = '<p dir="rtl">'
-                            feature = e.features[0]
-                            if('label_field' in layer){
-                                popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                            }
-                            if('fields' in layer){
-                                requiredFields = layer['fields']
-                                if(requiredFields.indexOf('*') > -1){
-                                    requiredFields = Object.keys(feature.properties)
-                                }
-                                for(var i=0; i < requiredFields.length; i++){
-                                    fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                                    if(feature.properties[requiredFields[i]] && 
-                                        feature.properties[requiredFields[i]].length > 0 &&
-                                        feature.properties[requiredFields[i]] != "null"){
-                                        popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                                    }
-                                }
-                            }
-                            popupContent += "</p>"
-                            popup.setHTML(popupContent)
-                            popup.setLngLat(e.lngLat)
-                            popup.addTo(map)
-                        });
+                        addPopupEvent(layer)
                             
                         addMapHoverEvents(layer)
 
@@ -492,33 +420,7 @@ esriRenderer = (function(){
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
 
-                map.on('click', layer['name'], function (e) {
-                    popupContent = '<p dir="rtl">'
-                    feature = e.features[0]
-                    if('label_field' in layer){
-                        popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                    }
-                    if('fields' in layer){
-                        requiredFields = layer['fields']
-                        if(requiredFields.indexOf('*') > -1){
-                            requiredFields = Object.keys(feature.properties)
-                        }
-                        
-                        for(var i=0; i < requiredFields.length; i++){
-                            
-                            fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                            if(feature.properties[requiredFields[i]] && 
-                                feature.properties[requiredFields[i]].length > 0 &&
-                                feature.properties[requiredFields[i]] != "null"){
-                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                            }
-                        }
-                    }
-                    popupContent += "</p>"
-                    popup.setHTML(popupContent)
-                    popup.setLngLat(e.lngLat)
-                    popup.addTo(map)
-                });
+                addPopupEvent(layer)
                     
                 addMapHoverEvents(layer)
 
@@ -606,33 +508,7 @@ esriRenderer = (function(){
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
 
-                map.on('click', layer['name'], function (e) {
-                    popupContent = '<p dir="rtl">'
-                    feature = e.features[0]
-                    if('label_field' in layer){
-                        popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                    }
-                    if('fields' in layer){
-                        requiredFields = layer['fields']
-                        if(requiredFields.indexOf('*') > -1){
-                            requiredFields = Object.keys(feature.properties)
-                        }
-                        
-                        for(var i=0; i < requiredFields.length; i++){
-                            
-                            fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                            if(feature.properties[requiredFields[i]] && 
-                                feature.properties[requiredFields[i]].length > 0 &&
-                                feature.properties[requiredFields[i]] != "null"){
-                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                            }
-                        }
-                    }
-                    popupContent += "</p>"
-                    popup.setHTML(popupContent)
-                    popup.setLngLat(e.lngLat)
-                    popup.addTo(map)
-                });
+                addPopupEvent(layer)
                     
                 addMapHoverEvents(layer)
 
@@ -712,35 +588,7 @@ esriRenderer = (function(){
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
 
-                map.on('click', layer['name'], function (e) {
-                    popupContent = '<p dir="rtl">'
-                    feature = e.features[0]
-                    console.log(e)
-                    if('label_field' in layer){
-                        popupContent += "<h3>"+feature.properties[layer['label_field']]+"</h3>"
-                    }
-                    if('fields' in layer){
-                        requiredFields = layer['fields']
-                        if(requiredFields.indexOf('*') > -1){
-                            requiredFields = Object.keys(feature.properties)
-                        }
-                        
-                        for(var i=0; i < requiredFields.length; i++){
-                            
-                            fieldName = layer["metadata"][requiredFields[i]]["alias"]
-                            if(feature.properties[requiredFields[i]] && 
-                                feature.properties[requiredFields[i]].length > 0 &&
-                                feature.properties[requiredFields[i]] != "null"){
-                                popupContent += "<b><u>"+fieldName+"</u></b>: "+feature.properties[requiredFields[i]]+"<br>"
-                            }
-                            
-                        }
-                    }
-                    popupContent += "</p>"
-                    popup.setHTML(popupContent)
-                    popup.setLngLat(e.lngLat)
-                    popup.addTo(map)
-                });
+                addPopupEvent(layer)
                     
                 addMapHoverEvents(layer)
 
@@ -876,6 +724,9 @@ esriRenderer = (function(){
         map.getSource(sourceName).updateImage({ url: curUrl, coordinates: coords});
     }
 
+    /*
+        create map events for mouse enter and leave for a specific layer
+    */
     function addMapHoverEvents(layer){
         // Change the cursor to a pointer when the mouse is over the states layer.
         map.on('mouseenter', layer['name'], function () {
@@ -886,6 +737,47 @@ esriRenderer = (function(){
         map.on('mouseleave', layer['name'], function () {
             map.getCanvas().style.cursor = '';
         });
+    }
+
+    /*
+        create map events for popup creation
+    */
+    function addPopupEvent(layer){
+
+        map.on('click', layer['name'], function (e) {
+            popupContent = '<p dir="rtl">'
+            feature = e.features[0]
+            if('label_field' in layer){
+                popupContent += '<table class="popup-table">'
+                popupContent += '<tr><th colspan="2">'+feature.properties[layer['label_field']]+"</th></tr>"
+                popupContent += "<tr><th>שם שדה</th><th>ערך</th></tr>"
+            }else{
+                popupContent += '<table class="popup-table">'
+                popupContent += "<tr><th>שם שדה</th><th>ערך</th></tr>"
+            }
+            if('fields' in layer){
+                requiredFields = layer['fields']
+                if(requiredFields.indexOf('*') > -1){
+                    requiredFields = Object.keys(feature.properties)
+                }
+                for(var i=0; i < requiredFields.length; i++){
+                    fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                    if(feature.properties[requiredFields[i]] && 
+                        (feature.properties[requiredFields[i]].length > 0 
+                        && (typeof feature.properties[requiredFields[i]] === "string")   &&
+                            feature.properties[requiredFields[i]].trim().length > 0)&&
+                        feature.properties[requiredFields[i]] != "null"){
+                        popupContent += "<tr><td>"+fieldName+"</td><td>"+feature.properties[requiredFields[i]]+"</td></tr>"
+                    }
+                }
+                popupContent += "</table>"
+            }
+            popupContent += "</p>"
+            popup.setHTML(popupContent)
+            popup.setLngLat(e.lngLat)
+            popup.addTo(map)
+        });
+
     }
 
 })();

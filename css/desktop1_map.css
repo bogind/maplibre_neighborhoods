@@ -161,6 +161,31 @@ body {
     direction: rtl;
     overflow-x: scroll;
 }
+.popup-table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+.popup-table td, .popup-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.popup-table tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+.popup-table tr:hover {
+    background-color: #ddd;
+}
+
+.popup-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #04AA6D;
+    color: white;
+}
 @media (min-width: 1200px){
     .map-container {
         width: 1100px;
