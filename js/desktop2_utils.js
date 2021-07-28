@@ -16,19 +16,19 @@ utils = (function(){
 
     // get URL for retreiving a GeoJson contained by a buffer of the neighborhood
     function getLayerUrl(layer){
-        baseUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"+layer["id"]
-        baseUrl += "/query?where=1%3D1&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson"
-        baseUrl += "&inSR=4326&geometryType=esriGeometryEnvelope&geometry="+turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))
+        url = baseUrl+layer["id"]
+        url += "/query?where=1%3D1&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson"
+        url += "&inSR=4326&geometryType=esriGeometryEnvelope&geometry="+turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))
         if('fields' in layer){
             fields = layer['fields']
             if('label_field' in layer){
                 fields = fields.concat(layer['label_field'])
             }
-            baseUrl += "&outFields="+fields.join()
+            url += "&outFields="+fields.join()
         }else{
-            baseUrl += "&outFields="
+            url += "&outFields="
         }
-        return baseUrl
+        return url
     }
 
     // Convert 8bit value to normalized opacity

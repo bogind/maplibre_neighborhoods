@@ -5,7 +5,7 @@ maplibregl.setRTLTextPlugin(
   true // Lazy load the plugin
   );
 
-let baseUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
+const baseUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
 let map;
 let mapJson;
 let popup = new maplibregl.Popup()
