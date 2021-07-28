@@ -4,7 +4,7 @@
             "id":561,
             "name":"public_health",
             "name_heb":"בריאות המשפחה",
-            "fields":["shem_thana","is_open","shem_schuna ","shem_rechov","ms_bait","knisa","ms_telephone","thana_lecherun"]
+            "fields":["shem_thana","is_open","shem_schuna","shem_rechov","ms_bait","knisa","ms_telephone","thana_lecherun"]
         },
         {
             "id":583,
