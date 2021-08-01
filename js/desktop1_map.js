@@ -6,6 +6,7 @@ maplibregl.setRTLTextPlugin(
   );
 
 const baseUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
+let baseStyle;
 let map;
 let mapJson;
 let popup = new maplibregl.Popup()
@@ -14,12 +15,14 @@ let neighborhhod_bounds;
 
 let search = location.search.substring(1);
 
-// load 
+// load style for basemap
 fetch("js/IView_style.json")
 .then(response => response.json())
 .then(style => {
-  loadMap(style)
+  baseStyle = style;
+    loadMap(baseStyle)
 })
+
 function loadMap(loadedStyle){
   map = new maplibregl.Map({
       container: 'gis-map', // container id

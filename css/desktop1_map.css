@@ -59,6 +59,12 @@ body {
     max-height: 60vh;
     overflow-y: scroll;
 }
+.map-legend::-webkit-scrollbar {
+    width: 0.3em;
+}
+.map-legend::-webkit-scrollbar-thumb {
+    background: #aaa;
+}
 .map-legend ul{
     list-style: none;
     padding-inline-start: 10px;
