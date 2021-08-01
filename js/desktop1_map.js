@@ -6,12 +6,15 @@ maplibregl.setRTLTextPlugin(
   );
 
 const baseUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
+const cityBorderUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/WM/IView2WM/MapServer/890/query?where=1%3D1&outFields=Shape&geometryPrecision=6&outSR=4326&returnExtentOnly=true&f=geojson"
 let baseStyle;
 let map;
 let mapJson;
 let popup = new maplibregl.Popup()
 let neighborhood_url;
 let neighborhhod_bounds;
+let current_bounds;
+let city_bounds;
 
 let search = location.search.substring(1);
 
@@ -55,6 +58,7 @@ function onMapLoad(){
               .then(response => response.json())
               .then(data => {
                   neighborhhod_bounds = data;
+                  current_bounds = neighborhhod_bounds;
                   topHeight = document.getElementsByClassName('map-header')[0].clientHeight
                   topPadding = topHeight+30
                   map.fitBounds(turf.bbox(neighborhhod_bounds), {
@@ -107,6 +111,11 @@ function onMapLoad(){
   
               });
               
+            fetch(cityBorderUrl)
+            .then(response => response.json())
+            .then(data => {
+                city_bounds = data;
+            })
               
               
           });
@@ -117,6 +126,10 @@ function onMapLoad(){
   map.addControl(mapHeaderControl);
   map.addControl(new maplibregl.NavigationControl());
   map.addControl(legendAdd)
+  /*
+  still needs a way to reload all layers for the new extent.
+  map.addControl(changeBounds)
+  */
 }
 
 
@@ -202,4 +215,6 @@ function addButtonLayer(layerIDs,_callback){
 
 const mapHeaderControl = new MapHeader();
 const legendAdd = new MapLegendButton();
+const legend = new MapLegend();
+const changeBounds = new MapChangeBoundsButton();
 

@@ -18,7 +18,7 @@ utils = (function(){
     function getLayerUrl(layer){
         url = baseUrl+layer["id"]
         url += "/query?where=1%3D1&returnGeometry=true&geometryPrecision=6&outSR=4326&f=geojson"
-        url += "&inSR=4326&geometryType=esriGeometryEnvelope&geometry="+turf.bbox(turf.buffer(neighborhhod_bounds,100,{units: 'meters'}))
+        url += "&inSR=4326&geometryType=esriGeometryEnvelope&geometry="+turf.bbox(turf.buffer(current_bounds,100,{units: 'meters'}))
         if('fields' in layer){
             fields = layer['fields']
             if('label_field' in layer){
