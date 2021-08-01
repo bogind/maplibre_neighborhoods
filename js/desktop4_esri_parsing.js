@@ -69,6 +69,7 @@ esriRenderer = (function(){
                     }
                     if(data.drawingInfo && data.drawingInfo.renderer){
                         renderer = data.drawingInfo.renderer
+                        layer["renderer"] = renderer
                     }else{
                         console.log(layer)
                     }
@@ -133,7 +134,10 @@ esriRenderer = (function(){
                 iconName = layer['name']+'-Icon'
                 sourceName =  layer['name']+"-source"
                 layerUrl = utils.getLayerUrl(layer)
-
+                layer["symbols"] = [{
+                    "value":"default",
+                    "imageData":icon
+                }]
                 layerJson = {
                     'id': layer['name'],
                     'type': 'symbol',
@@ -219,6 +223,13 @@ esriRenderer = (function(){
                     'line-width':lineWidth
                     }
                 }
+                layer["symbols"] = [
+                        {
+                        "value":"default",
+                        "lineColor":lineColor,
+                        "lineOpacity":lineOpacity
+                    }
+                ]
                 if('labelingInfo' in layer){
                     layerJson = addLabels(layer,renderer,layerJson)
                 }
@@ -260,12 +271,22 @@ esriRenderer = (function(){
                 fillColor = "rgb("+renderer.symbol.color.slice(0,3).join()+")";
                 fillOpacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.symbol.color[3]);
                 strokeLayerName = layer['name']+'-stroke'
+                layer["symbols"] = [
+                    {   
+                        "value":"default",
+                        "fillColor":fillColor,
+                        "fillOpacity":fillOpacity
+                    }
+                ]
                 if(renderer.symbol.outline.width < 0.1 || renderer.symbol.outline.color[3] < 1){
                     drawOutline = true;
                     
                     strokeColor = "rgb("+renderer.symbol.outline.color.slice(0,3).join()+")";
                     strokeOpacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.symbol.outline.color[3]);
                     strokeWidth = renderer.symbol.outline.width
+                    layer["symbols"][0]["strokeColor"] = strokeColor
+                    layer["symbols"][0]["strokeOpacity"] = strokeOpacity
+                    layer["symbols"][0]["strokeWidth"] = strokeWidth
                     strokeLayerJson = {
                             'id': strokeLayerName,
                             'type': 'line',
@@ -404,8 +425,10 @@ esriRenderer = (function(){
         layerUrl = utils.getLayerUrl(layer)
         iconImage = ["match",["get",valueField]]
         values = Object.keys(symbols)
+        layer["symbols"] = []
         for(var i=0;i<values.length;i++){
             iconImage.push([values[i]],symbols[values[i]].iconName)
+            layer["symbols"].push({"value":values[i],"imageData":symbols[values[i]].imageData})
         }
         iconImage.push(symbols["default"]["iconName"])
         layerJson = {
@@ -426,18 +449,6 @@ esriRenderer = (function(){
         }
 
 
-        if('label_field' in layer){
-            layerJson['layout']['text-field'] = ['get',layer['label_field'][0]]
-            layerJson['layout']['text-anchor'] = "bottom-left"
-            layerJson['layout']['text-radial-offset'] = 1
-            layerJson['layout']['text-justify'] = 'auto'
-            layerJson['layout']['text-size'] = 10
-            layerJson['layout']['text-font'] = ["Arial Regular"]
-            layerJson['layout']['text-anchor'] = "bottom-left"
-            layerJson['paint']['text-color'] = "rgb(0,0,0)"
-            layerJson['paint']['text-halo-color'] = "rgb(250,245,217)"
-            layerJson['paint']['text-halo-width'] = 1.33333
-        }
 
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
@@ -490,7 +501,7 @@ esriRenderer = (function(){
             widthExpression = ["match",["get",valueField]]
         }
 
-        
+        layer["symbols"] = []
         for(var i=0;i<renderer.uniqueValueInfos.length;i++){
             value = renderer.uniqueValueInfos[i].value
             color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
@@ -499,6 +510,11 @@ esriRenderer = (function(){
             colorExpression.push(value,color)
             opacityExpression.push(value,opacity)
             widthExpression.push(value,width)
+            layer["symbols"].push({
+                "value":value,
+                "strokeColor":color,
+                "strokeOpacity":opacity
+            })
 
         }
         if(renderer.defaultSymbol){
@@ -579,13 +595,40 @@ esriRenderer = (function(){
             opacityExpression = ["match",["get",valueField]]
         }
 
-        symbols = []
+        layer["symbols"] = []
         for(var i=0;i<renderer.uniqueValueInfos.length;i++){
-            value = renderer.uniqueValueInfos[i].value
-            color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
-            opacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.uniqueValueInfos[i].symbol.color[3]);
+            var value = renderer.uniqueValueInfos[i].value
+            var color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
+            var opacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.uniqueValueInfos[i].symbol.color[3]);
             colorExpression.push(value,color)
             opacityExpression.push(value,opacity)
+            var symbol = {
+                "value":value,
+                "fillColor":color,
+                "fillOpacity":opacity
+            }
+            if(renderer.uniqueValueInfos[i].symbol.outline.width < 0.1 || renderer.uniqueValueInfos[i].symbol.outline.color[3] < 1){
+                var strokeColor = "rgb("+renderer.uniqueValueInfos[i].symbol.outline.color.slice(0,3).join()+")";
+                var strokeOpacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.uniqueValueInfos[i].symbol.outline.color[3]);
+                var strokeWidth = renderer.uniqueValueInfos[i].symbol.outline.width
+                symbol["strokeColor"] = strokeColor
+                symbol["strokeOpacity"] = strokeOpacity
+                symbol["strokeWidth"] = strokeWidth
+                strokeLayerJson = {
+                        'id': strokeLayerName,
+                        'type': 'line',
+                        'source': sourceName,
+                        'layout': {
+                        'visibility': 'none'
+                        },
+                        'paint': {
+                        'line-color': strokeColor,
+                        'line-opacity': strokeOpacity,
+                        'line-width':strokeWidth
+                        }
+                    }
+            }
+            layer["symbols"].push(symbol)
 
         }
         if(renderer.defaultSymbol){

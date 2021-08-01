@@ -113,6 +113,7 @@ function onMapLoad(){
   }
   map.addControl(mapHeaderControl);
   map.addControl(new maplibregl.NavigationControl());
+  map.addControl(legendAdd)
 }
 
 
@@ -167,6 +168,7 @@ function addButtons(mapJson){
                       map.setLayoutProperty(layer["name"],'visibility','none')    
                   }
               }
+              LegendBuilder.updateLegend(mapJson)
           })
       }
       newButtonIcon.src = currentButtonDef['icon']
@@ -196,4 +198,5 @@ function addButtonLayer(layerIDs,_callback){
 }
 
 const mapHeaderControl = new MapHeader();
+const legendAdd = new MapLegendButton();
 

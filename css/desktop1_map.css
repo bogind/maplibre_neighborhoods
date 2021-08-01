@@ -40,6 +40,28 @@ body {
     padding-bottom: 30px;
     padding-top: 10px;
 }
+.map-legend-button{
+    background-color: #fff;
+}
+.map-legend-button button{
+    background-color: #fff;
+    font-size: 15px;
+}
+.map-legend {
+    background-color: #fff;
+    display: block;
+    padding: 5px;
+    outline: none;
+    border: 0;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 2px rgba(0,0,0,.1);
+    max-height: 60vh;
+    overflow-y: scroll;
+}
+.map-legend ul{
+    list-style: none;
+    padding-inline-start: 10px;
+}
 #gis-map { 
     position: absolute; 
     bottom: 0; 
