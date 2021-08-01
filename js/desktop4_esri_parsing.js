@@ -889,77 +889,75 @@ esriRenderer = (function(){
    /* 
         adjust offset in case no offset is added
    */
-  function adjustOffset(labelPosition,offsetX,offsetY){
-    try{
-        var offsetArray;
-        console.log(labelPosition,offsetX,offsetY)
-        if(labelPosition === "center"){
-            offsetArray = [offsetX,offsetY]
-        }else{
-            if(offsetY == 0){
-                if(labelPosition.startsWith("bottom")){
-                    offsetY = -1
-                }else if(labelPosition.startsWith("top")){
-                    offsetY = 1
-                }
-            }
-            if(offsetX == 0){
-                if(labelPosition.startsWith("right") || labelPosition.endsWith("right")){
-                    offsetX = -1
-                }else if(labelPosition.startsWith("left") || labelPosition.endsWith("left")){
-                    offsetX = 1
-                }
-            }
-            offsetArray = [offsetX,offsetY]
-        }
-        console.log(offsetArray)
-        return offsetArray
-    }
-    catch (err) {
-        console.log(arguments.callee.toString(), err);
-    }
-  }
-
-
-  /*
-    convert esri expression to mapbox label expression
-  */
-  function getLabelExpression(labelingInfo){
+    function adjustOffset(labelPosition,offsetX,offsetY){
         try{
-            var labelExpression = labelingInfo["labelExpression"];
-            var parts = labelExpression.split("CONCAT");
-            var baseExpression;
-            if(parts.length === 1){
-                var fieldName = parts[0].substring(1,parts[0].length-1);
-                baseExpression = ['get',fieldName];
+            var offsetArray;
+            if(labelPosition === "center"){
+                offsetArray = [offsetX,offsetY]
             }else{
-                parts = parts.map(x => x.trim())
-                baseExpression = ["concat"];
-                for(var i=0;i<parts.length;i++){
-                    var part = parts[i];
-                    if(part.startsWith("[") && part.endsWith("]")){
-                        var fieldName = part.substring(1,part.length-1);
-                        baseExpression.push( ['get',fieldName]);
-                    }else if(part === "NEWLINE"){
-                        baseExpression.push("\\n");
-                    }else if(part.startsWith("ROUND")){
-                        var roundparts = part.split(',')
-                        if(roundparts.length > 1){
-                            part = roundparts[0].split("ROUND(")[1]
-                            var fieldName = part.substring(1,part.length-1);
-                            baseExpression.push( ["round",['get',fieldName]]);
-                        }
-                    }else{
-                        baseExpression.push(part);
+                if(offsetY == 0){
+                    if(labelPosition.startsWith("bottom")){
+                        offsetY = -1
+                    }else if(labelPosition.startsWith("top")){
+                        offsetY = 1
                     }
                 }
+                if(offsetX == 0){
+                    if(labelPosition.startsWith("right") || labelPosition.endsWith("right")){
+                        offsetX = -1
+                    }else if(labelPosition.startsWith("left") || labelPosition.endsWith("left")){
+                        offsetX = 1
+                    }
+                }
+                offsetArray = [offsetX,offsetY]
             }
-            return baseExpression;
+            return offsetArray
         }
         catch (err) {
             console.log(arguments.callee.toString(), err);
         }
-   }
+    }
+
+
+    /*
+        convert esri expression to mapbox label expression
+    */
+    function getLabelExpression(labelingInfo){
+            try{
+                var labelExpression = labelingInfo["labelExpression"];
+                var parts = labelExpression.split("CONCAT");
+                var baseExpression;
+                if(parts.length === 1){
+                    var fieldName = parts[0].substring(1,parts[0].length-1);
+                    baseExpression = ['get',fieldName];
+                }else{
+                    parts = parts.map(x => x.trim())
+                    baseExpression = ["concat"];
+                    for(var i=0;i<parts.length;i++){
+                        var part = parts[i];
+                        if(part.startsWith("[") && part.endsWith("]")){
+                            var fieldName = part.substring(1,part.length-1);
+                            baseExpression.push( ['get',fieldName]);
+                        }else if(part === "NEWLINE"){
+                            baseExpression.push("\\n");
+                        }else if(part.startsWith("ROUND")){
+                            var roundparts = part.split(',')
+                            if(roundparts.length > 1){
+                                part = roundparts[0].split("ROUND(")[1]
+                                var fieldName = part.substring(1,part.length-1);
+                                baseExpression.push( ["round",['get',fieldName]]);
+                            }
+                        }else{
+                            baseExpression.push(part);
+                        }
+                    }
+                }
+                return baseExpression;
+            }
+            catch (err) {
+                console.log(arguments.callee.toString(), err);
+            }
+    }
 
 })();
 
