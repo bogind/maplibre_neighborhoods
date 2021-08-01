@@ -6,6 +6,8 @@ maplibregl.setRTLTextPlugin(
   );
 
 const baseUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
+// innerUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"
+// outerUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
 const cityBorderUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/WM/IView2WM/MapServer/890/query?where=1%3D1&outFields=Shape&geometryPrecision=6&outSR=4326&returnExtentOnly=true&f=geojson"
 let baseStyle;
 let map;
@@ -30,6 +32,7 @@ function loadMap(loadedStyle){
   map = new maplibregl.Map({
       container: 'gis-map', // container id
       style: loadedStyle,
+      dragRotate: false,
       animate: false,
       center: [34.789071,32.085432], // starting position
       zoom: 12 // starting zoom

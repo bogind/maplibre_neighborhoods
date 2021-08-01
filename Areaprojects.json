@@ -7,10 +7,10 @@
             "fields":["ms_rish","shem_rechov","tr_night_me","tr_night_ad","me_shaa","ad_shaa","me_rechov","add_rechov","natzig"]
         },
         {
-            "id":917,
+            "id":857,
             "name":"inf_works",
-            "name_heb":"עבודות תשתית בתוקף-פנימי",
-            "fields":["status","minshar","ishur_laila","kablan","tr_tokef_me","tr_tokef_ad","shlav","natzig"],
+            "name_heb":"עבודות תשתית בתוקף",
+            "fields":["status","kablan","tr_tokef_me","tr_tokef_ad","shlav","natzig"],
             "type":"raster"
         }
     ],
@@ -26,9 +26,9 @@
             "icon":"icons/nights icon.svg"
         },
         {
-            "layers":[917],
+            "layers":[857],
             "label":"עבודות\nתשתית",
-            "icon":"icons/nights icon.svg"
+            "icon":"icons/Infrastructure works icon.svg"
         },
         {
             "layers":[],
