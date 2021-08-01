@@ -1,3 +1,36 @@
+const labelingPositions = {
+    "esriGeometryPoint" :{
+        "esriServerPointLabelPlacementAboveCenter":"bottom",
+        "esriServerPointLabelPlacementAboveLeft":"bottom-right",
+        "esriServerPointLabelPlacementAboveRight":"bottom-left",
+        "esriServerPointLabelPlacementBelowCenter":"top",
+        "esriServerPointLabelPlacementBelowLeft":"top-right",
+        "esriServerPointLabelPlacementBelowRight":"top-left",
+        "esriServerPointLabelPlacementCenterCenter":"center",
+        "esriServerPointLabelPlacementCenterLeft":"right",
+        "esriServerPointLabelPlacementCenterRight":"left"
+    },
+    "esriGeometryPolyline": {
+        "esriServerLinePlacementAboveAfter":"bottom",
+        "esriServerLinePlacementAboveAlong":"bottom",
+        "esriServerLinePlacementAboveBefore":"bottom",
+        "esriServerLinePlacementAboveStart":"bottom",
+        "esriServerLinePlacementAboveEnd":"bottom",
+        "esriServerLinePlacementBelowAfter":"top",
+        "esriServerLinePlacementBelowAlong":"top",
+        "esriServerLinePlacementBelowBefore":"top",
+        "esriServerLinePlacementBelowStart":"top",
+        "esriServerLinePlacementBelowEnd":"top",
+        "esriServerLinePlacementCenterAfter":"center",
+        "esriServerLinePlacementCenterAlong":"center",
+        "esriServerLinePlacementCenterBefore":"center",
+        "esriServerLinePlacementCenterStart":"center",
+        "esriServerLinePlacementCenterEnd":"center"
+    },
+    "esriGeometryPolygon": {
+        "esriServerPolygonPlacementAlwaysHorizontal":"center"
+    }
+}
 esriRenderer = (function(){
 
     return {
@@ -12,62 +45,80 @@ esriRenderer = (function(){
         get layer metadata (if vector) and start parsing draw info details in the renderer
     */
     function getMetadata(layer){
-        if(layer.type && layer.type === "raster"){
-            addRasterLayer(layer)
-        }else{
-            url = baseUrl+layer["id"]+"?f=pjson"
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                fields = {}
-                if(data.fields && data.fields.length > 0){
-                    for(var i =0;i< data["fields"].length;i++){
-                        fieldName = data["fields"][i]["name"]
-                        fields[fieldName] = data["fields"][i]
+        try{
+            if(layer.type && layer.type === "raster"){
+                addRasterLayer(layer)
+            }else{
+                url = baseUrl+layer["id"]+"?f=pjson"
+                fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    fields = {}
+                    if(data.fields && data.fields.length > 0){
+                        for(var i =0;i< data["fields"].length;i++){
+                            fieldName = data["fields"][i]["name"]
+                            fields[fieldName] = data["fields"][i]
+                        }
+                    }else{
+                        console.log(data)
                     }
-                }else{
-                    console.log(data)
-                }
-                layer["metadata"] = fields
-                geomType = data.geometryType
-                renderer = data.drawingInfo.renderer
-    
-                if(renderer.type === "simple"){
-                    parseSimpleRenderer(geomType,renderer,layer)
-                }else if(renderer.type === "uniqueValue"){
-                    parseUniqueValueRenderer(geomType,renderer,layer)
-                }
-            })
+                    layer["metadata"] = fields
+                    layer["geomType"] = data.geometryType
+                    if(layer["label_field"]){
+                        layer["labelingInfo"] = data.drawingInfo.labelingInfo[0]
+                    }
+                    if(data.drawingInfo && data.drawingInfo.renderer){
+                        renderer = data.drawingInfo.renderer
+                    }else{
+                        console.log(layer)
+                    }
+                    
+        
+                    if(renderer.type === "simple"){
+                        parseSimpleRenderer(renderer,layer)
+                    }else if(renderer.type === "uniqueValue"){
+                        parseUniqueValueRenderer(renderer,layer)
+                    }
+                })
+            }
+        }
+        catch (err) {
+            console.log(arguments.callee.toString(), err);
         }
     }
 
     /*
         activate specific simple renderer function
     */
-    function parseSimpleRenderer(geomType,renderer,layer){
-        if(geomType === "esriGeometryPoint"){
-            return addSimplePointLayer(renderer,layer)
-        }else if(geomType === "esriGeometryPolygon"){
-            return addSimplePolygonLayer(renderer,layer)
-        }else if(geomType === "esriGeometryPolyline"){
-            return addSimpleLineLayer(renderer,layer)
-        }else{
-            console.log(geomType)
+    function parseSimpleRenderer(renderer,layer){
+        try{    
+            if(layer["geomType"] === "esriGeometryPoint"){
+                return addSimplePointLayer(renderer,layer)
+            }else if(layer["geomType"] === "esriGeometryPolygon"){
+                return addSimplePolygonLayer(renderer,layer)
+            }else if(layer["geomType"] === "esriGeometryPolyline"){
+                return addSimpleLineLayer(renderer,layer)
+            }else{
+                console.log(layer["geomType"])
+            }
+        }
+        catch (err) {
+            console.log(arguments.callee.toString(), err);
         }
     }
 
     /*
         activate specific unique value renderer function
     */
-    function parseUniqueValueRenderer(geomType,renderer,layer){
-        if(geomType === "esriGeometryPoint"){
+    function parseUniqueValueRenderer(renderer,layer){
+        if(layer["geomType"] === "esriGeometryPoint"){
             return parseUniqueValuePoint(renderer,layer)
-        }else if(geomType === "esriGeometryPolygon"){
+        }else if(layer["geomType"] === "esriGeometryPolygon"){
             return parseUniqueValuePolygon(renderer,layer)
-        }else if(geomType === "esriGeometryPolyline"){
+        }else if(layer["geomType"] === "esriGeometryPolyline"){
             return parseUniqueValueLine(renderer,layer)
         }else{
-            console.log(geomType)
+            console.log(layer["geomType"])
         }
     }
 
@@ -94,17 +145,8 @@ esriRenderer = (function(){
                     },
                     "paint": { }
                 }
-                if('label_field' in layer){
-                    layerJson['layout']['text-field'] = ['get',layer['label_field'][0]]
-                    layerJson['layout']['text-anchor'] = "bottom-left"
-                    layerJson['layout']['text-radial-offset'] = 1
-                    layerJson['layout']['text-justify'] = 'auto'
-                    layerJson['layout']['text-size'] = 10
-                    layerJson['layout']['text-font'] = ["Arial Regular"]
-                    layerJson['layout']['text-anchor'] = "bottom-left"
-                    layerJson['paint']['text-color'] = "rgb(0,0,0)"
-                    layerJson['paint']['text-halo-color'] = "rgb(250,245,217)"
-                    layerJson['paint']['text-halo-width'] = 1.33
+                if('labelingInfo' in layer){
+                    layerJson = addLabels(layer,renderer,layerJson)
                 }
 
                 if(!map.hasImage(iconName)){
@@ -177,6 +219,9 @@ esriRenderer = (function(){
                     'line-width':lineWidth
                     }
                 }
+                if('labelingInfo' in layer){
+                    layerJson = addLabels(layer,renderer,layerJson)
+                }
 
                 if(map.getSource(sourceName) === undefined){
                     map.addSource(sourceName, {
@@ -248,6 +293,9 @@ esriRenderer = (function(){
                     'fill-color': fillColor,
                     'fill-opacity': fillOpacity
                     }
+                }
+                if('labelingInfo' in layer){
+                    layerJson = addLabels(layer,renderer,layerJson)
                 }
 
                 if(map.getSource(sourceName) === undefined){
@@ -373,6 +421,9 @@ esriRenderer = (function(){
 
             }
         }
+        if('labelingInfo' in layer){
+            layerJson = addLabels(layer,renderer,layerJson)
+        }
 
 
         if('label_field' in layer){
@@ -475,6 +526,9 @@ esriRenderer = (function(){
                 'line-width':widthExpression
             }
         }
+        if('labelingInfo' in layer){
+            layerJson = addLabels(layer,renderer,layerJson)
+        }
 
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
@@ -554,6 +608,9 @@ esriRenderer = (function(){
                 'fill-color': colorExpression,
                 'fill-opacity': opacityExpression,
             }
+        }
+        if('labelingInfo' in layer){
+            layerJson = addLabels(layer,renderer,layerJson)
         }
 
         if(map.getSource(sourceName) === undefined){
@@ -778,6 +835,130 @@ esriRenderer = (function(){
             }
         
         });
+   }
+
+   /*
+   */
+   function addLabels(layer,renderer,layerJson){
+       try{
+        var labelingInfo = layer["labelingInfo"]
+        var offsetX = labelingInfo["symbol"]["xoffset"] ? labelingInfo["symbol"]["xoffset"] : 0;
+        var offsetY = labelingInfo["symbol"]["yoffset"] ? labelingInfo["symbol"]["yoffset"] : 0;
+        var fontSize = labelingInfo["symbol"]["font"]["size"] ? labelingInfo["symbol"]["font"]["size"] : 10;
+        var textColor = labelingInfo["symbol"]["color"] ? "rgb("+labelingInfo["symbol"]["color"].slice(0,3).join()+")" : "#000000";
+        var labelPosition = getLabelTextPosition(layer,labelingInfo)
+        //utils.parseOpacity(renderer.defaultSymbol.color[3])
+
+        layerJson['layout']['text-field'] = getLabelExpression(labelingInfo)
+        layerJson['layout']['text-anchor'] = labelPosition;
+        layerJson['layout']['text-offset'] = adjustOffset(labelPosition,offsetX,offsetY)
+        layerJson['layout']['text-justify'] = 'auto'
+        layerJson['layout']['text-size'] = fontSize
+        layerJson['layout']['text-font'] = ["Arial Regular"]
+        layerJson['paint']['text-color'] = textColor
+
+        if(labelingInfo["symbol"]["haloColor"]){
+            var haloColor = labelingInfo["symbol"]["haloColor"] ? "rgb("+labelingInfo["symbol"]["haloColor"].slice(0,3).join()+")" : "#ffffff";
+            var haloWidth = labelingInfo["symbol"]["haloSize"] ? labelingInfo["symbol"]["haloSize"] : 1;
+            layerJson['paint']['text-halo-color'] = haloColor;
+            layerJson['paint']['text-halo-width'] = haloWidth;
+        }
+    
+        return layerJson
+       }
+       catch (err) {
+        console.log(layer)
+        console.log(arguments.callee.toString(), err);
+    }
+        
+   }
+
+   /*
+        convert esri position name to mapbox position name
+   */
+   function getLabelTextPosition(layer,labelingInfo){
+       try{
+            return labelingPositions[layer["geomType"]][labelingInfo["labelPlacement"]]
+       }
+       catch (err) {
+            console.log(arguments.callee.toString(), err);
+    }
+        
+   }
+
+   /* 
+        adjust offset in case no offset is added
+   */
+  function adjustOffset(labelPosition,offsetX,offsetY){
+    try{
+        var offsetArray;
+        console.log(labelPosition,offsetX,offsetY)
+        if(labelPosition === "center"){
+            offsetArray = [offsetX,offsetY]
+        }else{
+            if(offsetY == 0){
+                if(labelPosition.startsWith("bottom")){
+                    offsetY = -1
+                }else if(labelPosition.startsWith("top")){
+                    offsetY = 1
+                }
+            }
+            if(offsetX == 0){
+                if(labelPosition.startsWith("right") || labelPosition.endsWith("right")){
+                    offsetX = -1
+                }else if(labelPosition.startsWith("left") || labelPosition.endsWith("left")){
+                    offsetX = 1
+                }
+            }
+            offsetArray = [offsetX,offsetY]
+        }
+        console.log(offsetArray)
+        return offsetArray
+    }
+    catch (err) {
+        console.log(arguments.callee.toString(), err);
+    }
+  }
+
+
+  /*
+    convert esri expression to mapbox label expression
+  */
+  function getLabelExpression(labelingInfo){
+        try{
+            var labelExpression = labelingInfo["labelExpression"];
+            var parts = labelExpression.split("CONCAT");
+            var baseExpression;
+            if(parts.length === 1){
+                var fieldName = parts[0].substring(1,parts[0].length-1);
+                baseExpression = ['get',fieldName];
+            }else{
+                parts = parts.map(x => x.trim())
+                baseExpression = ["concat"];
+                for(var i=0;i<parts.length;i++){
+                    var part = parts[i];
+                    if(part.startsWith("[") && part.endsWith("]")){
+                        var fieldName = part.substring(1,part.length-1);
+                        baseExpression.push( ['get',fieldName]);
+                    }else if(part === "NEWLINE"){
+                        baseExpression.push("\\n");
+                    }else if(part.startsWith("ROUND")){
+                        var roundparts = part.split(',')
+                        if(roundparts.length > 1){
+                            part = roundparts[0].split("ROUND(")[1]
+                            var fieldName = part.substring(1,part.length-1);
+                            baseExpression.push( ["round",['get',fieldName]]);
+                        }
+                    }else{
+                        baseExpression.push(part);
+                    }
+                }
+            }
+            return baseExpression;
+        }
+        catch (err) {
+            console.log(arguments.callee.toString(), err);
+        }
    }
 
 })();
