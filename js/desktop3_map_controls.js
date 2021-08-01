@@ -41,8 +41,9 @@ class MapLegend {
     this.container.id = "map-legend"
     this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group map-legend';
     this.container.innerHTML = '';
-
-    this.container.onclick = LegendBuilder.addLegend
+    this.container.onclick = function(e){
+      e.stopPropagation()
+    }
     return this.container;
   }
   onRemove(){
@@ -60,8 +61,9 @@ let LegendBuilder = (function(){
       updateLegend:updateLegend
     }
 
-    function addLegend(){
+    function addLegend(e){
       try{
+        e.stopPropagation()
         var legendAddControl = document.getElementById("add-map-legend-button")
         var mapLegendDiv = document.getElementById("map-legend")
         if(map.hasControl(legend)){

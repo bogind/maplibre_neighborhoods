@@ -58,6 +58,7 @@ body {
     box-shadow: 0 0 0 2px rgba(0,0,0,.1);
     max-height: 60vh;
     overflow-y: scroll;
+    cursor: default;
 }
 .map-legend::-webkit-scrollbar {
     width: 0.3em;
