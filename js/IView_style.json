@@ -3,7 +3,7 @@
     "sprite": "https://gisportal02.tlv.gov.il/arcgis/rest/services/Hosted/TelAvivCacheRekaHeb/VectorTileServer/resources/sprites/sprite",
     "glyphs": "https://gisportal02.tlv.gov.il/arcgis/rest/services/Hosted/TelAvivCacheMapHeb/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf",
     "sources": {
-      "esri": {
+      "Iview": {
         "type": "vector",
         "tiles": ["https://gisportal02.tlv.gov.il/arcgis/rest/services/Hosted/TelAvivCacheMapHeb/VectorTileServer/tile/{z}/{y}/{x}.pbf"],
         "maxzoom": 16
@@ -23,7 +23,7 @@
       {
         "id": "גבול העיר/1",
         "type": "fill",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "גבול העיר",
         "layout": {},
         "paint": {
@@ -33,7 +33,7 @@
       {
         "id": "גבול העיר/0",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "גבול העיר",
         "layout": {
           "line-join": "round"
@@ -50,7 +50,7 @@
       {
         "id": "נחלים",
         "type": "fill",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "נחלים",
         "layout": {},
         "paint": {
@@ -61,7 +61,7 @@
       {
         "id": "cl_akolt_buff:2",
         "type": "fill",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "cl_akolt_buff:2",
         "layout": {},
         "paint": {
@@ -71,7 +71,7 @@
       {
         "id": "cl_akolt_buftoop",
         "type": "fill",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "cl_akolt_buftoop",
         "layout": {},
         "paint": {
@@ -81,7 +81,7 @@
       {
         "id": "cl_akolt_buff:1",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "cl_akolt_buff:1",
         "layout": {
           "line-cap": "round",
@@ -95,7 +95,7 @@
       {
         "id": "שטחים ירוקים",
         "type": "fill",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "שטחים ירוקים",
         "layout": {},
         "paint": {
@@ -105,7 +105,7 @@
       {
         "id": "הצללת מבנים",
         "type": "fill",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "הצללת מבנים",
         "minzoom": 15.85,
         "layout": {},
@@ -116,7 +116,7 @@
       {
         "id": "מבנים",
         "type": "fill",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "מבנים",
         "minzoom": 15.85,
         "layout": {},
@@ -128,7 +128,7 @@
       {
         "id": "מנהרות/1",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "מנהרות",
         "minzoom": 14.85,
         "layout": {
@@ -146,7 +146,7 @@
       {
         "id": "מנהרות/0",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "מנהרות",
         "minzoom": 14.85,
         "layout": {
@@ -160,7 +160,7 @@
       {
         "id": "צירי רחוב 2/1",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "צירי רחוב 2",
         "minzoom": 13.42,
         "maxzoom": 15.42,
@@ -175,7 +175,7 @@
       {
         "id": "צירי רחוב 2/0",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "צירי רחוב 2",
         "minzoom": 13.42,
         "maxzoom": 15.42,
@@ -190,7 +190,7 @@
       {
         "id": "צירי רחוב",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "צירי רחוב",
         "maxzoom": 13.42,
         "layout": {
@@ -204,7 +204,7 @@
       {
         "id": "צירי רחובות ראשיים/0",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "צירי רחובות ראשיים",
         "maxzoom": 14.85,
         "layout": {
@@ -219,7 +219,7 @@
       {
         "id": "מסילת ברזל",
         "type": "line",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "מסילת ברזל",
         "layout": {
           "line-join": "round"
@@ -232,7 +232,7 @@
       {
         "id": "מנהרות/label/ברירת מחדל",
         "type": "symbol",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "מנהרות/label",
         "minzoom": 14.85,
         "layout": {
@@ -254,7 +254,7 @@
       {
         "id": "שמות רחובות/label/ברירת מחדל",
         "type": "symbol",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "שמות רחובות/label",
         "minzoom": 14.37,
         "layout": {
@@ -276,7 +276,7 @@
       {
         "id": "שמות רחובות ראשיים/label/ברירת מחדל",
         "type": "symbol",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "שמות רחובות ראשיים/label",
         "minzoom": 12.42,
         "maxzoom": 14.47,
@@ -299,7 +299,7 @@
       {
         "id": "שמות מקומות",
         "type": "symbol",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "שמות מקומות",
         "minzoom": 14.85,
         "layout": {
@@ -322,7 +322,7 @@
       {
         "id": "כתובות",
         "type": "symbol",
-        "source": "esri",
+        "source": "Iview",
         "source-layer": "כתובות",
         "minzoom": 15.85,
         "layout": {
