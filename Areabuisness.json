@@ -1,0 +1,40 @@
+{
+    "layers":[
+        {
+            "id":774,
+            "name":"shabat_qouta_areas",
+            "name_heb":"אזורי מכסות למרכולים בשבת",
+            "fields":["rova_no","name","permits"]
+        },
+        {
+            "id":575,
+            "name":"biluy_areas_policy",
+            "name_heb":"מדיניות לילה אזורי בילוי",
+            "fields":["shem","t_sug"],
+            "type":"raster"
+        },
+        {
+            "id":964,
+            "name":"licensed_businesses",
+            "name_heb":"מאגר עסקים ברשיון או בהיתר",
+            "fields":["t_shem_esek","t_hesber_mahut_esek","t_categoria","t_ktovet","ms_koma","taarich_kabalat_rishayon","t_sug","taarich_tokef","mahuiot"]
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[774],
+            "label":"אזורי\nמכסות מרכולים בשבת",
+            "icon":"icons/Supermarket areas on Shabat icon.svg"
+        },
+        {
+            "layers":[575],
+            "label":"עסקים\nלפי היתרי לילה",
+            "icon":"icons/nights icon.svg"
+        },
+        {
+            "layers":[964],
+            "label":"עסקים\nברישיון או בהיתר",
+            "icon":"icons/Building permit icon.svg"
+        }
+    ]
+}
