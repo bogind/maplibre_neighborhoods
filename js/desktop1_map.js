@@ -147,29 +147,32 @@ function addButtons(mapJson){
   buttonDefs = mapJson['buttons']
   for(var i=0;i<buttonDefs.length;i++){
       
-      buttonID = 'button-'+i
+      var buttonID = 'button-'+i
       mapJson['buttons'][i]['id'] = buttonID
-      currentButtonDef = buttonDefs[i]
-      layerIDs = currentButtonDef['layers']
+      var currentButtonDef = buttonDefs[i]
+      var layerIDs = currentButtonDef['layers']
       addButtonLayer(layerIDs)
       
 
-      newSpan = document.createElement('span');
-      newButton = document.createElement('input');
-      newButtonIcon = document.createElement('img');
-      newButtonText = document.createElement('span');
+      var newSpan = document.createElement('span');
+      var newButton = document.createElement('button');
+      var newButtonIcon = document.createElement('img');
+      var newButtonText = document.createElement('span');
+      newButton.className = "button"
       newButton.id = buttonID
 
-      newSpan.classList.add('button-span')
-      newButton.type = "checkbox"
-      newButton.onchange = function(){
-
+      newSpan.classList.add('button-span');
+      newButton.type = "button";
+      newButton.value = 0;
+      newButton.onclick = function(){
           currentButtonDef = mapJson["buttons"].filter(obj => {
               return obj.id === this.id
             })[0]
           layerIDs = currentButtonDef['layers']
           addButtonLayer(layerIDs,()=>{
-              if(this.checked){
+              if(this.value === "0"){
+                this.value = "1"
+                this.className = "button-on"
                   for(layerI in layerIDs){
                       layerID = layerIDs[layerI]
                       layer = mapJson["layers"].filter(obj => {
@@ -187,6 +190,8 @@ function addButtons(mapJson){
                   }
                   
               }else{
+                this.value = "0"
+                this.className = "button"
                   for(layerI in layerIDs){
                       layerID = layerIDs[layerI]
                       layer = mapJson["layers"].filter(obj => {
@@ -206,11 +211,14 @@ function addButtons(mapJson){
               LegendBuilder.updateLegend(mapJson)
           })
       }
+      var b = document.createElement('b')
+      b.innerText = currentButtonDef['label']+" "
       newButtonIcon.src = currentButtonDef['icon']
       newButtonIcon.classList.add('icon')
       newButtonText.innerText = currentButtonDef['label']
       newButtonText.classList.add('button-text')
-      newSpan.append(newButton,newButtonIcon,newButtonText)
+      newButton.append(newButtonText,newButtonIcon)
+      newSpan.append(newButton)
       buttonSpan.append(newSpan)
   }
   mapHeader.append(buttonSpan)

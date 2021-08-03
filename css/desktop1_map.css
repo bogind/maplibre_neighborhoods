@@ -88,7 +88,7 @@ body {
     margin-left: 15px;
 }
 .icon {
-    margin-left: 10px;
+    /*margin-left: 10px;*/
     border: none;
     display: inline-block;
     vertical-align: middle;
@@ -99,7 +99,67 @@ body {
     color: #2b393f;
     background-color: transparent;
 }
+.button {
+    background-color: #f3f3f3; 
+    color: black;
+    padding: 7px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+}
+.button > span{
+    margin-left:3px;
+    color: black;
+}
+.button:hover{
+    background-color: rgb(48, 48, 48); 
+    color: white;
+    
+}
+.button:hover > span{
+    margin-left:3px;
+    color: white;
+}
+.button:hover > img{
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(186deg) brightness(118%) contrast(119%);
+}
+.mapboxgl-ctrl .button:not(:disabled):hover{
+    background-color: rgb(48, 48, 48); 
+    color: white;
+}
 
+.button-on {
+    background-color: rgb(48, 48, 48); 
+    color: white;
+    padding: 7px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+}
+.button-on > span{
+    margin-left:3px;
+    color: white;
+}
+.button-on > img{
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(186deg) brightness(118%) contrast(119%);
+}
+.button-on:hover {
+    background-color: #f3f3f3; 
+    color: black;
+}
+.button-on:hover > span{
+    margin-left:3px;
+    color: black;
+}
+.button-on:hover > img{
+    filter: none;
+}
+.mapboxgl-ctrl .button-on:not(:disabled):hover{
+    background-color: #f3f3f3; 
+    color: black;
+}
 .button-text {
     display: inline-block;
     vertical-align: middle;
