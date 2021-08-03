@@ -64,9 +64,10 @@ esriRenderer = (function(){
                     }
                     layer["metadata"] = fields
                     layer["geomType"] = data.geometryType
-                    if(layer["label_field"]){
+                    if(data.drawingInfo.labelingInfo && data.drawingInfo.labelingInfo.length > 0){
                         layer["labelingInfo"] = data.drawingInfo.labelingInfo[0]
                     }
+                        
                     if(data.drawingInfo && data.drawingInfo.renderer){
                         renderer = data.drawingInfo.renderer
                         layer["renderer"] = renderer
@@ -226,8 +227,8 @@ esriRenderer = (function(){
                 layer["symbols"] = [
                         {
                         "value":"default",
-                        "lineColor":lineColor,
-                        "lineOpacity":lineOpacity
+                        "strokeColor":lineColor,
+                        "strokeOpacity":lineOpacity
                     }
                 ]
                 if('labelingInfo' in layer){
@@ -373,6 +374,7 @@ esriRenderer = (function(){
         for(var i = 0; i< renderer.uniqueValueInfos.length;i++){
             valueInfo = renderer.uniqueValueInfos[i]
             valueInfo.symbol["iconName"] = layer["name"]+"-Icon"+(i+1)
+            valueInfo.symbol["label"] = valueInfo["label"]
             valueInfo.symbol.imageData = "data:image/png;base64,"+valueInfo.symbol.imageData
             symbols[valueInfo.value] = valueInfo.symbol
             loadImage(valueInfo.symbol.iconName,valueInfo.symbol.imageData)
@@ -428,7 +430,7 @@ esriRenderer = (function(){
         layer["symbols"] = []
         for(var i=0;i<values.length;i++){
             iconImage.push([values[i]],symbols[values[i]].iconName)
-            layer["symbols"].push({"value":values[i],"imageData":symbols[values[i]].imageData})
+            layer["symbols"].push({"value":values[i],"imageData":symbols[values[i]].imageData,"label":symbols[values[i]].label})
         }
         iconImage.push(symbols["default"]["iconName"])
         layerJson = {
@@ -504,6 +506,7 @@ esriRenderer = (function(){
         layer["symbols"] = []
         for(var i=0;i<renderer.uniqueValueInfos.length;i++){
             value = renderer.uniqueValueInfos[i].value
+            label = renderer.uniqueValueInfos[i].label
             color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
             opacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.uniqueValueInfos[i].symbol.color[3]);
             width = renderer.uniqueValueInfos[i].symbol.width ? renderer.uniqueValueInfos[i].symbol.width : 1;
@@ -511,6 +514,7 @@ esriRenderer = (function(){
             opacityExpression.push(value,opacity)
             widthExpression.push(value,width)
             layer["symbols"].push({
+                "label":label,
                 "value":value,
                 "strokeColor":color,
                 "strokeOpacity":opacity
@@ -598,11 +602,13 @@ esriRenderer = (function(){
         layer["symbols"] = []
         for(var i=0;i<renderer.uniqueValueInfos.length;i++){
             var value = renderer.uniqueValueInfos[i].value
+            var label = renderer.uniqueValueInfos[i].label
             var color = "rgb("+renderer.uniqueValueInfos[i].symbol.color.slice(0,3).join()+")";
             var opacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.uniqueValueInfos[i].symbol.color[3]);
             colorExpression.push(value,color)
             opacityExpression.push(value,opacity)
             var symbol = {
+                "label":label,
                 "value":value,
                 "fillColor":color,
                 "fillOpacity":opacity
@@ -653,7 +659,7 @@ esriRenderer = (function(){
             }
         }
         if('labelingInfo' in layer){
-            layerJson = addLabels(layer,renderer,layerJson)
+            //layerJson = addLabels(layer,renderer,layerJson)
         }
 
         if(map.getSource(sourceName) === undefined){
@@ -691,6 +697,7 @@ esriRenderer = (function(){
                 fields[fieldName] = data["fields"][i]
             }
             layer["metadata"] = fields
+            getRasterLegend(layer)
         })
         height = map.getCanvas().height
         width = map.getCanvas().width
@@ -762,6 +769,28 @@ esriRenderer = (function(){
         curUrl += "&bboxSR=4326&imageSR=3857&size="+width+","+height+"&transparent=true&layers=show:"+layer["id"]+"&f=image"
         
         map.getSource(sourceName).updateImage({ url: curUrl, coordinates: coords});
+    }
+
+    /*
+        Get Legend Icons for Raster Layer
+    */
+    function getRasterLegend(layer){
+        var legendUrl = baseUrl+ 'legend?dynamicLayers=[{"id":1,"source":{"type":"mapLayer","mapLayerId":'+layer["id"]+'}}]&f=json'
+        var symbols = []
+        fetch(legendUrl)
+        .then(response => response.json())
+        .then(data => {
+            var legend = data["layers"][0]["legend"];
+            for(var i=0;i<legend.length;i++){
+                symbol = {
+                    "label": legend[i].label,
+                    "imageData":"data:image/png;base64,"+legend[i].imageData,
+                    "value":legend[i].values ? legend[i].values[0] : "default"
+                };
+                symbols.push(symbol);
+            }
+            layer["symbols"] = symbols;
+        })
     }
 
     /*

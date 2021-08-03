@@ -85,7 +85,25 @@ let LegendBuilder = (function(){
 
         for(var i=0;i<layer.symbols.length;i++){
 
-          if(layer.geomType === "esriGeometryPolygon"){
+          if(layer.type && layer.type === "raster"){
+            var symbolListItem = document.createElement('li');
+            var symbol = layer.symbols[i]
+            var icon = buildPointIcon(symbol)
+            var iconText = " - ";
+            if(symbol.value && symbol.value === "default"){
+              if(layer.symbols.length === 1){
+                iconText += "כל השכבה"
+              }else{
+                iconText += symbol.label ? symbol.label : "אחר";
+              }
+            }else{
+              iconText += symbol.label
+            }
+            symbolListItem.append(icon,iconText)
+            layerList.append(symbolListItem)
+          }
+
+          if(layer.geomType && layer.geomType === "esriGeometryPolygon"){
 
             var symbolListItem = document.createElement('li');
             var symbol = layer.symbols[i]
@@ -105,13 +123,13 @@ let LegendBuilder = (function(){
               }
               
             }else{
-              iconText += symbol.value
+              iconText += symbol.label
             }
             symbolListItem.append(icon,iconText)
             layerList.append(symbolListItem)
 
           }
-          else if(layer.geomType === "esriGeometryPolyline"){
+          else if(layer.geomType && layer.geomType === "esriGeometryPolyline"){
 
             var symbolListItem = document.createElement('li');
             var symbol = layer.symbols[i]
@@ -130,13 +148,13 @@ let LegendBuilder = (function(){
                 iconText += layer["renderer"]["defaultLabel"] ? layer["renderer"]["defaultLabel"] : "אחר";
               }
             }else{
-              iconText += symbol.value
+              iconText += symbol.label
             }
             symbolListItem.append(icon,iconText)
             layerList.append(symbolListItem)
 
           }
-          else if(layer.geomType === "esriGeometryPoint"){
+          else if(layer.geomType && layer.geomType === "esriGeometryPoint"){
 
             var symbolListItem = document.createElement('li');
             var symbol = layer.symbols[i]
@@ -149,7 +167,7 @@ let LegendBuilder = (function(){
                 iconText += layer["renderer"]["defaultLabel"] ? layer["renderer"]["defaultLabel"] : "אחר";
               }
             }else{
-              iconText += symbol.value
+              iconText += symbol.label
             }
             symbolListItem.append(icon,iconText)
             layerList.append(symbolListItem)
