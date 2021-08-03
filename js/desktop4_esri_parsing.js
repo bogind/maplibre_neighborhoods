@@ -482,23 +482,39 @@ esriRenderer = (function(){
     */
     function addUniqueValuePMSPointLayer(renderer,layer,symbols){
 
-        sourceName =  layer['name']+"-source"
-        valueField = renderer.field1
+        var sourceName =  layer['name']+"-source"
+        if(renderer.field2){
+            if(renderer.field3){
+                var valueField1 = renderer.field1
+                var valueField2 = renderer.field2
+                var valueField3 = renderer.field3
+                var deleimiter = renderer.fieldDelimiter
+                var iconExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2],deleimiter,["get",valueField3]]]
+            }else{
+                var valueField1 = renderer.field1
+                var valueField2 = renderer.field2
+                var deleimiter = renderer.fieldDelimiter
+                var iconExpression = ["match",["concat",["get",valueField1],deleimiter,["get",valueField2]]]
+            }
+        }else{
+            var valueField = renderer.field1
+            var iconExpression = ["match",["get",valueField]]
+        }
         layerUrl = utils.getLayerUrl(layer)
-        iconImage = ["match",["get",valueField]]
+        //iconImage = ["match",["get",valueField]]
         values = Object.keys(symbols)
         layer["symbols"] = []
         for(var i=0;i<values.length;i++){
-            iconImage.push([values[i]],symbols[values[i]].iconName)
+            iconExpression.push([values[i]],symbols[values[i]].iconName)
             layer["symbols"].push({"value":values[i],"imageData":symbols[values[i]].imageData,"label":symbols[values[i]].label})
         }
-        iconImage.push(symbols["default"]["iconName"])
+        iconExpression.push(symbols["default"]["iconName"])
         layerJson = {
             'id': layer["name"],
             'type': 'symbol',
             'source': sourceName,
             'layout': {
-            'icon-image':iconImage,
+            'icon-image':iconExpression,
             'icon-allow-overlap':true,
             'visibility': 'none'
             },
@@ -907,9 +923,6 @@ esriRenderer = (function(){
                 for(var i=0; i < requiredFields.length; i++){
                     fieldName = layer["metadata"][requiredFields[i]]["alias"]
                     if(feature.properties[requiredFields[i]] && 
-                        (feature.properties[requiredFields[i]].length > 0 
-                        && (typeof feature.properties[requiredFields[i]] === "string")   &&
-                            feature.properties[requiredFields[i]].trim().length > 0)&&
                         feature.properties[requiredFields[i]] != "null"){
                         popupContent += "<tr><td>"+fieldName+"</td><td>"+feature.properties[requiredFields[i]]+"</td></tr>"
                     }
