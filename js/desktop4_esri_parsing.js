@@ -283,7 +283,7 @@ esriRenderer = (function(){
                         "fillOpacity":fillOpacity
                     }
                 ]
-                if(renderer.symbol.outline.width < 0.1 || renderer.symbol.outline.color[3] < 1){
+                if(renderer.symbol.outline.width > 0.1 || renderer.symbol.outline.color[3] < 1){
                     drawOutline = true;
                     
                     strokeColor = "rgb("+renderer.symbol.outline.color.slice(0,3).join()+")";
@@ -1079,6 +1079,7 @@ esriRenderer = (function(){
                     baseExpression = ['get',fieldName];
                 }else{
                     parts = parts.map(x => x.trim())
+                    parts = parts.map(x => x.replaceAll('"',''))
                     baseExpression = ["concat"];
                     for(var i=0;i<parts.length;i++){
                         var part = parts[i];
@@ -1086,7 +1087,7 @@ esriRenderer = (function(){
                             var fieldName = part.substring(1,part.length-1);
                             baseExpression.push( ['get',fieldName]);
                         }else if(part === "NEWLINE"){
-                            baseExpression.push("\\n");
+                            baseExpression.push("\n");
                         }else if(part.startsWith("ROUND")){
                             var roundparts = part.split(',')
                             if(roundparts.length > 1){
