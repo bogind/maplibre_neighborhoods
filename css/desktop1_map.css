@@ -108,6 +108,7 @@ body {
     display: inline-block;
     font-size: 14px;
     height: 46px;
+    border-radius: 3px;
 }
 .button > span{
     margin-left:3px;
@@ -139,6 +140,7 @@ body {
     display: inline-block;
     font-size: 14px;
     height: 46px;
+    border-radius: 3px;
 }
 .button-on > span{
     margin-left:3px;
