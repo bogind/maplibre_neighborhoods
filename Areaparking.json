@@ -4,8 +4,7 @@
             "id":970,
             "name":"parking1",
             "name_heb":"חניוני אחוזות החוף",
-            "fields":["status_chenyon"],
-            "label_field":["shem_chenyon"]
+            "fields":["status_chenyon"]
         },
         {
             "id":555,
