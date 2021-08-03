@@ -1,0 +1,38 @@
+{
+    "layers":[
+        {
+            "id":592,
+            "name":"public_shelters1",
+            "name_heb":"מקלטים",
+            "fields":["shem","t_sug","pail","shem_recho","ms_bait","knisa","shetach_mr","opening_times","hearot","shem_baalim","maneger_name","celolar","email"]
+        },
+        {
+            "id":584,
+            "name":"emergency_horns",
+            "name_heb":"צופרי אזעקה",
+            "fields":["shem_atar","t_sug","shem_makom","shem_rechov","ms_bait","ezor_prisa","ish_kesher","ms_shnat_hatkana"]
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[592],
+            "label":"מקלטים",
+            "icon":"icons/SHELTER_icon.svg"
+        },
+        {
+            "layers":[584],
+            "label":"צופרי\nאזעקה",
+            "icon":"icons/emergency icon.svg"
+        },
+        {
+            "layers":[],
+            "label":"מחסני\nחירום",
+            "icon":"icons/store icon.svg"
+        },
+        {
+            "layers":[],
+            "label":"מחסני\nחירום",
+            "icon":"icons/Community gardens icon.svg"
+        }
+    ]
+}
