@@ -267,11 +267,15 @@ esriRenderer = (function(){
 
         if(renderer.symbol && 
             renderer.symbol.style === "esriSFSSolid"){
-                sourceName =  layer['name']+"-source";
-                layerUrl = utils.getLayerUrl(layer);
-                fillColor = "rgb("+renderer.symbol.color.slice(0,3).join()+")";
-                fillOpacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.symbol.color[3]);
-                strokeLayerName = layer['name']+'-stroke'
+                var sourceName =  layer['name']+"-source";
+                var layerUrl = utils.getLayerUrl(layer);
+                var fillColor = "rgb("+renderer.symbol.color.slice(0,3).join()+")";
+                var fillOpacity = layer["opacity"] ? layer["opacity"] : utils.parseOpacity(renderer.symbol.color[3]);
+                var strokeLayerName = layer['name']+'-stroke'
+                var labelLayerName = layer['name']+'-labels'
+                var labelSourceName = layer['name']+"-labels-source";
+                var drawOutline = false;
+                var drawPolygonLabels = false;
                 layer["symbols"] = [
                     {   
                         "value":"default",
@@ -288,7 +292,7 @@ esriRenderer = (function(){
                     layer["symbols"][0]["strokeColor"] = strokeColor
                     layer["symbols"][0]["strokeOpacity"] = strokeOpacity
                     layer["symbols"][0]["strokeWidth"] = strokeWidth
-                    strokeLayerJson = {
+                    var strokeLayerJson = {
                             'id': strokeLayerName,
                             'type': 'line',
                             'source': sourceName,
@@ -304,7 +308,7 @@ esriRenderer = (function(){
                 }else{
                     drawOutline = false;
                 }
-                layerJson = {
+                var layerJson = {
                     'id': layer['name'],
                     'type': 'fill',
                     'source': sourceName,
@@ -316,8 +320,12 @@ esriRenderer = (function(){
                     'fill-opacity': fillOpacity
                     }
                 }
+                /*
+                Add labels source and layer if needed
+                */
                 if('labelingInfo' in layer){
-                    layerJson = addLabels(layer,renderer,layerJson)
+                    //layerJson = addLabels(layer,renderer,layerJson);
+                    drawPolygonLabels = true;
                 }
 
                 if(map.getSource(sourceName) === undefined){
@@ -335,6 +343,9 @@ esriRenderer = (function(){
                         if(drawOutline && map.getLayer(strokeLayerName) === undefined){
                             map.addLayer(strokeLayerJson);
                         }
+                        if(drawPolygonLabels && map.getLayer(labelLayerName) === undefined){
+                            addPolygonLabels(layer,renderer,layerUrl,labelLayerName,labelSourceName)
+                        }
                     }else{
                         return
                     }
@@ -347,6 +358,55 @@ esriRenderer = (function(){
             sourceName =  layer['name']+"-source";
             layerUrl = utils.getLayerUrl(layer);
         }
+    }
+
+    /*
+        add separate source for polygon labels
+    */
+    function addPolygonLabels(layer,renderer,layerUrl,labelLayerName,labelSourceName){
+        var sourceGeoJson = {
+            type: "FeatureCollection",
+            features: []
+        }
+        fetch(layerUrl)
+        .then(response => response.json())
+        .then(data => {
+            sourceGeoJson.crs = data.crs;
+            var features = data.features;
+            for(var i=0;i<features.length;i++){
+                var feature = features[i]
+                var newFeature = turf.centroid(feature,{properties:feature.properties})
+                sourceGeoJson.features.push(newFeature)
+            }
+            if(map.getSource(labelSourceName) === undefined){
+                map.addSource(labelSourceName, {
+                type: 'geojson',
+                data: sourceGeoJson
+                });
+                var labelLayerJson = {
+                    "id": labelLayerName,
+                    "type": "symbol",
+                    "source": labelSourceName,
+                    "layout": {
+                      "icon-image": "שמות מקומות",
+                      
+                      "text-font": ["Arial Regular"],
+                      "text-size": 10.6667,
+
+                      "text-padding":4,
+                      "visibility": "none"
+                    },
+                    "paint": {
+                      "icon-color": "rgba(0,0,0,0)",
+                      "text-color": "#732600"
+                    }
+                  }
+                labelLayerJson = addLabels(layer,renderer,labelLayerJson);
+
+                map.addLayer(labelLayerJson);
+            }
+
+        })
     }
 
     /*
@@ -577,8 +637,13 @@ esriRenderer = (function(){
     */
     function parseUniqueValuePolygon(renderer,layer){
             
-        sourceName =  layer['name']+"-source"
-        layerUrl = utils.getLayerUrl(layer)
+        var sourceName =  layer['name']+"-source"
+        var layerUrl = utils.getLayerUrl(layer)
+        var strokeLayerName = layer['name']+'-stroke'
+        var labelLayerName = layer['name']+'-labels'
+        var labelSourceName = layer['name']+"-labels-source";
+        var drawOutline = false;
+        var drawPolygonLabels = false;
         if(renderer.field2){
             if(renderer.field3){
                 valueField1 = renderer.field1
@@ -658,8 +723,12 @@ esriRenderer = (function(){
                 'fill-opacity': opacityExpression,
             }
         }
+        /*
+        Add labels source and layer if needed
+        */
         if('labelingInfo' in layer){
-            //layerJson = addLabels(layer,renderer,layerJson)
+            //layerJson = addLabels(layer,renderer,layerJson);
+            drawPolygonLabels = true;
         }
 
         if(map.getSource(sourceName) === undefined){
@@ -673,6 +742,12 @@ esriRenderer = (function(){
                 addPopupEvent(layer)
                     
                 addMapHoverEvents(layer)
+                if(drawOutline && map.getLayer(strokeLayerName) === undefined){
+                    map.addLayer(strokeLayerJson);
+                }
+                if(drawPolygonLabels && map.getLayer(labelLayerName) === undefined){
+                    addPolygonLabels(layer,renderer,layerUrl,labelLayerName,labelSourceName)
+                }
 
             }else{
                 return

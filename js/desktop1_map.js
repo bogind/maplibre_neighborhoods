@@ -175,7 +175,15 @@ function addButtons(mapJson){
                       layer = mapJson["layers"].filter(obj => {
                           return obj.id === layerID
                         })[0]
-                      map.setLayoutProperty(layer["name"],'visibility','visible')    
+                      map.setLayoutProperty(layer["name"],'visibility','visible')  
+                      strokeLayerName = layer['name']+'-stroke'
+                      labelLayerName = layer['name']+'-labels'
+                      if(map.getLayer(strokeLayerName) !== undefined){
+                        map.setLayoutProperty(strokeLayerName,'visibility','visible')  
+                      }  
+                      if(map.getLayer(labelLayerName) !== undefined){
+                        map.setLayoutProperty(labelLayerName,'visibility','visible')  
+                      }
                   }
                   
               }else{
@@ -184,7 +192,15 @@ function addButtons(mapJson){
                       layer = mapJson["layers"].filter(obj => {
                           return obj.id === layerID
                         })[0]
-                      map.setLayoutProperty(layer["name"],'visibility','none')    
+                      map.setLayoutProperty(layer["name"],'visibility','none')  
+                      strokeLayerName = layer['name']+'-stroke'
+                      labelLayerName = layer['name']+'-labels'
+                      if(map.getLayer(strokeLayerName) !== undefined){
+                        map.setLayoutProperty(strokeLayerName,'visibility','none')  
+                      }  
+                      if(map.getLayer(labelLayerName) !== undefined){
+                        map.setLayoutProperty(labelLayerName,'visibility','none')  
+                      }  
                   }
               }
               LegendBuilder.updateLegend(mapJson)
