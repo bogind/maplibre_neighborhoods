@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="20px" viewBox="0 0 22 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Road markings icon</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="map-icons_fill" transform="translate(-155.000000, -1069.000000)" fill="#2B393F">
+            <g id="סימוני-כביש-ודרך-אייקון-" transform="translate(143.036621, 1056.000000)">
+                <g id="Road-markings-icon" transform="translate(12.893280, 13.000000)">
+                    <path d="M8.99287894,0 L8.42012323,5.02965508 L11.9067544,5.02965508 L11.2773758,0 L15.1000979,0 L20.2134398,20 L13.8256013,20 L13.2553408,15.1997159 L6.84984357,15.1997159 L6.16441774,20 L5.32907052e-15,20 L4.89107277,0 L8.99287894,0 Z M12.0470642,7.64045375 L8.14180694,7.64045375 L7.3563792,12.5622373 L12.6674216,12.5622373 L12.0470642,7.64045375 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

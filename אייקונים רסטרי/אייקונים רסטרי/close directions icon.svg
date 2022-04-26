@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="21px" viewBox="0 0 22 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>close directions icon</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="map-icons_fill" transform="translate(-159.000000, -733.000000)" fill="#2B393F">
+            <g id="רחובות-סגורים-לתנועה-אייקון" transform="translate(147.036621, 720.371094)">
+                <g id="close-directions-icon" transform="translate(12.750000, 13.497500)">
+                    <path d="M9.3,0.29 C9.69,-0.1 10.32,-0.1 10.71,0.29 L10.71,0.29 L19.71,9.29 C20.1,9.69 20.1,10.32 19.71,10.7 L19.71,10.7 L10.71,19.7 C10.32,20.09 9.69,20.09 9.3,19.7 L9.3,19.7 L0.3,10.7 C-0.09,10.31 -0.09,9.68 0.3,9.29 L0.3,9.29 Z M12,5.5 L12,8 L7,8 C6.45,8 6,8.45 6,9 L6,9 L6,13 L8,13 L8,10 L12,10 L12,12.5 L15.5,9 L12,5.5 Z" id="Combined-Shape" fill-rule="nonzero"></path>
+                    <polygon id="Path-30" points="0.0075 3 17.5273438 18.9897461 18.5273438 17.7943704 1 1.8696875"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

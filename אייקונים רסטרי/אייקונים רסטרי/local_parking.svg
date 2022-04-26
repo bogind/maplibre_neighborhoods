@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="18px" viewBox="0 0 14 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>local_parking</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="map-icons_fill" transform="translate(-63.000000, -854.000000)" fill="#2B393F" fill-rule="nonzero">
+            <g id="חנייה-ציבורית-אייקון" transform="translate(47.000000, 840.000000)">
+                <g id="Group-14" transform="translate(16.500000, 14.000000)">
+                    <path d="M7,0 C10.31,0 13,2.69 13,6 C13,9.31 10.31,12 7,12 L7,12 L4,12 L4,18 L0,18 L0,0 Z M7.2,4 L4,4 L4,8 L7.2,8 C8.3,8 9.2,7.1 9.2,6 C9.2,4.9 8.3,4 7.2,4 L7.2,4 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
