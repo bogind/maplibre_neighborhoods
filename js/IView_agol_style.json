@@ -1,0 +1,383 @@
+{
+  "version": 8,
+  "sprite": "https://tiles.arcgis.com/tiles/PcGFyTym9yKZBRgz/arcgis/rest/services/basis2/VectorTileServer/resources/sprites/sprite",
+  "glyphs": "https://tiles.arcgis.com/tiles/PcGFyTym9yKZBRgz/arcgis/rest/services/basis2/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "esri": {
+      "type": "vector",
+      "tiles": [
+        "https://tiles.arcgis.com/tiles/PcGFyTym9yKZBRgz/arcgis/rest/services/basis2/VectorTileServer/tile/{z}/{y}/{x}.pbf"
+      ]
+    },
+    "raster-tiles": {
+      "type": "raster",
+      "tiles": [
+        "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 256
+    }
+  },
+  "layers": [
+    {
+      "id": "osm",
+      "type": "raster",
+      "source": "raster-tiles",
+      "minzoom": 0,
+      "maxzoom": 18
+    },
+    {
+      "id": "Reka/גבולות מוניציפלים",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "גבולות מוניציפלים",
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#CCC2AD",
+        "line-width": 1.06667
+      }
+    },
+    {
+      "id": "Reka/גבול העיר",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "גבול העיר",
+      "layout": {},
+      "paint": {
+        "fill-color": "#E6E4E2",
+        "fill-outline-color": "#FF5500"
+      }
+    },
+    {
+      "id": "Reka/נחלים",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "נחלים",
+      "layout": {},
+      "paint": {
+        "fill-color": "#ABD6FF",
+        "fill-outline-color": "#9EBBD7"
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/שטחים ירוקים:2",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "שטחים ירוקים:2",
+      "layout": {},
+      "paint": {
+        "fill-color": "#C7D79E"
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/cl_akolt_buff:2",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "cl_akolt_buff:2",
+      "minzoom": 14.85,
+      "layout": {},
+      "paint": {
+        "fill-color": "#FFFFFF"
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/cl_akolt_buftoop",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "cl_akolt_buftoop",
+      "minzoom": 14.85,
+      "layout": {},
+      "paint": {
+        "fill-color": "#FFEBBE"
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/cl_akolt_buff:1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "cl_akolt_buff:1",
+      "minzoom": 14.85,
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#CCCCCC",
+        "line-width": 0.533333
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/שטחים ירוקים:1",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "שטחים ירוקים:1",
+      "layout": {},
+      "paint": {
+        "fill-color": "#C7D79E"
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/קבוצת מבנים/הצללת מבנים",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "הצללת מבנים",
+      "minzoom": 15.27,
+      "layout": {},
+      "paint": {
+        "fill-color": "#CCCCCC"
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/קבוצת מבנים/מבנים",
+      "type": "fill",
+      "source": "esri",
+      "source-layer": "מבנים",
+      "minzoom": 15.27,
+      "layout": {},
+      "paint": {
+        "fill-color": "#F5F5F5",
+        "fill-outline-color": "#CCCCCC"
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/מנהרות/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "מנהרות",
+      "minzoom": 14.85,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#CCCCCC",
+        "line-width": 8.8,
+        "line-dasharray": [
+          0.454545,
+          0.30303
+        ]
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/מנהרות/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "מנהרות",
+      "minzoom": 14.85,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#FFFFFF",
+        "line-width": 3.46667
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/צירי רחוב 2/1",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "צירי רחוב 2",
+      "minzoom": 13.27,
+      "maxzoom": 14.85,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#CCCCCC",
+        "line-width": 6.13333
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/צירי רחוב 2/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "צירי רחוב 2",
+      "minzoom": 13.27,
+      "maxzoom": 14.85,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#FFFFFF",
+        "line-width": 3.46667
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/צירי רחוב",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "צירי רחוב",
+      "maxzoom": 13.27,
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#FFFFFF",
+        "line-width": 0.533333
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/צירי רחובות ראשיים/0",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "צירי רחובות ראשיים",
+      "maxzoom": 14.85,
+      "layout": {
+        "line-cap": "square",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#FFD37F",
+        "line-width": 3.46658
+      }
+    },
+    {
+      "id": "Basis/מסילת ברזל",
+      "type": "line",
+      "source": "esri",
+      "source-layer": "מסילת ברזל",
+      "layout": {
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#9C9C9C",
+        "line-width": 1.06667
+      }
+    },
+    {
+      "id": "Reka/גבולות מוניציפלים/label/ברירת מחדל",
+      "type": "symbol",
+      "source": "esri",
+      "source-layer": "גבולות מוניציפלים/label",
+      "layout": {
+        "text-font": [
+          "Arial Italic"
+        ],
+        "text-size": 13.3333,
+        "text-max-width": 8,
+        "text-field": "{_name}",
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "#000000",
+        "text-halo-color": "rgba(255,255,255,0.99)",
+        "text-halo-width": 1.33333
+      }
+    },
+    {
+      "id": "Basis/קבוצת צירי רחובות/מנהרות/label/ברירת מחדל",
+      "type": "symbol",
+      "source": "esri",
+      "source-layer": "מנהרות/label",
+      "minzoom": 14.85,
+      "layout": {
+        "symbol-placement": "line",
+        "text-font": [
+          "Arial Italic"
+        ],
+        "text-size": 17.3333,
+        "text-max-width": 8,
+        "text-field": "{_name}",
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "#000000",
+        "text-halo-color": "#FEFEFE",
+        "text-halo-width": 1.33333
+      }
+    },
+    {
+      "id": "Basis/קבוצת שמות רחוב/שמות רחובות/label/ברירת מחדל",
+      "type": "symbol",
+      "source": "esri",
+      "source-layer": "שמות רחובות/label",
+      "minzoom": 14.27,
+      "maxzoom": 18.17,
+      "layout": {
+        "symbol-placement": "line",
+        "text-font": [
+          "Arial Bold"
+        ],
+        "text-size": 14.6667,
+        "text-max-width": 8,
+        "text-field": "{_name}",
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "#686868",
+        "text-halo-color": "#FEFEFE",
+        "text-halo-width": 0.666667
+      }
+    },
+    {
+      "id": "Basis/קבוצת שמות רחוב/שמות רחובות ראשיים/label/ברירת מחדל",
+      "type": "symbol",
+      "source": "esri",
+      "source-layer": "שמות רחובות ראשיים/label",
+      "minzoom": 12,
+      "maxzoom": 15,
+      "layout": {
+        "symbol-placement": "line",
+        "text-font": [
+          "Arial Bold Italic"
+        ],
+        "text-size": 14.6667,
+        "text-max-width": 8,
+        "text-field": "{_name}",
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "#686868",
+        "text-halo-color": "#FEFEFE",
+        "text-halo-width": 1.33333
+      }
+    },
+    {
+      "id": "Basis/שמות מקומות",
+      "type": "symbol",
+      "source": "esri",
+      "source-layer": "שמות מקומות",
+      "minzoom": 14.85,
+      "layout": {
+        "icon-image": "Basis/שמות מקומות",
+        "icon-allow-overlap": true,
+        "text-font": [
+          "Arial Regular"
+        ],
+        "text-size": 10.6667,
+        "text-anchor": "center",
+        "text-max-width": 8,
+        "text-field": "{_name}",
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "#732600"
+      }
+    },
+    {
+      "id": "Basis/כתובות",
+      "type": "symbol",
+      "source": "esri",
+      "source-layer": "כתובות",
+      "minzoom": 16.85,
+      "layout": {
+        "icon-image": "Basis/כתובות",
+        "icon-allow-overlap": true,
+        "text-font": [
+          "Arial Regular"
+        ],
+        "text-size": 12,
+        "text-anchor": "center",
+        "text-letter-spacing": 0.01,
+        "text-max-width": 8,
+        "text-field": "{_name}",
+        "text-optional": true
+      },
+      "paint": {
+        "text-color": "#686868"
+      }
+    }
+  ]
+}
