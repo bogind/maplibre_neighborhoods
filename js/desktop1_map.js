@@ -188,6 +188,11 @@ function addButtons(mapJson){
                       if(map.getLayer(labelLayerName) !== undefined){
                         map.setLayoutProperty(labelLayerName,'visibility','visible')  
                       }
+                      if(layer["type"] && layer["type"] === "raster"){
+                        sourceName = layer['name']+'-source'
+                        esriRenderer.updateRaster(sourceName)
+                        
+                      }
                   }
                   
               }else{

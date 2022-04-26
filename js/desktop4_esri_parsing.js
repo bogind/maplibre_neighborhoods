@@ -790,8 +790,9 @@ esriRenderer = (function(){
             layer["metadata"] = fields
             getRasterLegend(layer)
         })
-        height = map.getCanvas().height
-        width = map.getCanvas().width
+        canvas = map.getCanvas()
+        height = canvas.height
+        width = canvas.width
         bounds = map.getBounds()
         east = bounds.getEast()
         west = bounds.getWest()
