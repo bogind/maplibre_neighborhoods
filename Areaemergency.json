@@ -4,13 +4,13 @@
             "id":592,
             "name":"public_shelters1",
             "name_heb":"מקלטים",
-            "fields":["shem","t_sug","pail","shem_recho","ms_bait","knisa","shetach_mr","opening_times","hearot","shem_baalim","maneger_name","celolar","email"]
+            "fields":["t_sug","shem","shem_recho","ms_bait","knisa","opening_times","pail","shetach_mr","hearot","is_open","date_import"]
         },
         {
             "id":584,
             "name":"emergency_horns",
             "name_heb":"צופרי אזעקה",
-            "fields":["shem_atar","t_sug","shem_makom","shem_rechov","ms_bait","ezor_prisa","ish_kesher","ms_shnat_hatkana"]
+            "fields":["shem_atar","shem_makom","shem_rechov","ms_bait","ish_kesher","date_import"]
         }
     ],
     "buttons":[

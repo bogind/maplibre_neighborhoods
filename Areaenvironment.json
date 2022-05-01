@@ -4,13 +4,13 @@
             "id":606,
             "name":"outdoor_statues1",
             "name_heb":"פסלי חוצות",
-            "fields":["shem_pesel","shem_oman","shana","technika","mikum_pesel","shem_rechov","ms_bait"]
+            "fields":["shem_pesel","shem_oman","ms_pesel","shana","technika","mikum_pesel","shem_rechov","ms_bait","shem_tmona","date_import"]
         },
         {
             "id":961,
             "name":"community_gardens1",
             "name_heb":"גינות קהילתיות",
-            "fields":["StreetName","HouseNum","Area1","pail_movil","Email","phone_number"]
+            "fields":["StreetName","pail_movil","Email","phone_number","date_import"]
         },
         {
             "id":696,
@@ -22,13 +22,13 @@
             "id":586,
             "name":"dog_gardens",
             "name_heb":"גינות כלבים",
-            "fields":["shem_gina","shem_rechov","ms_bait","teur_mikum","shaot"]
+            "fields":["shem_gina","teur_mikum","shem_rechov","ms_bait","date_import","shaot"]
         },
         {
             "id":834,
             "name":"fitness_accessories",
             "name_heb":"מתקני כושר בגינות",
-            "fields":["shem","ktovet","shchuna","rova"]
+            "fields":["shem","sug","ktovet","shchuna","rova","date_import"]
         },
         {
             "id":842,
@@ -48,7 +48,7 @@
             "id":787,
             "name":"recycling1",
             "name_heb":"מתקני מיחזור",
-            "fields":["t_sug","ms_mechalim","shem_rechov","ms_bait","knisa"]
+            "fields":["t_sug","shem_rechov","ms_bait","knisa","date_import"]
         }
     ],
     "buttons":[

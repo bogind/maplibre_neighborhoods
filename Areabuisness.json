@@ -4,20 +4,20 @@
             "id":774,
             "name":"shabat_qouta_areas",
             "name_heb":"אזורי מכסות למרכולים בשבת",
-            "fields":["rova_no","name","permits"]
+            "fields":["permits","date_import","name","rova_no"]
         },
         {
             "id":575,
             "name":"biluy_areas_policy",
             "name_heb":"מדיניות לילה אזורי בילוי",
-            "fields":["shem","t_sug"],
+            "fields":["shem","t_sug","date_import"],
             "type":"raster"
         },
         {
             "id":964,
             "name":"licensed_businesses",
             "name_heb":"מאגר עסקים ברשיון או בהיתר",
-            "fields":["t_shem_esek","t_hesber_mahut_esek","t_categoria","t_ktovet","ms_koma","taarich_kabalat_rishayon","t_sug","taarich_tokef","mahuiot"]
+            "fields":["t_shem_esek","t_categoria","t_hesber_mahut_esek","t_ktovet","ms_koma","t_sug","taarich_kabalat_rishayon","taarich_tokef","taarich_tashlum","mahuiot","date_import"]
         }
     ],
     "buttons":[

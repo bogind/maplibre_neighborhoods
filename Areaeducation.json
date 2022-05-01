@@ -1,31 +1,31 @@
 {
     "layers":[
         {
-            "id":598,
+            "id":460,
             "name":"kindergarten_2021",
-            "name_heb":"גני ילדים תשפא",
-            "fields":["shem_mosad","shem_rechov","ms_bait","knisa","t_shlav_chinuch","me_kita","ad_kita",
-            "t_zerem","t_migzar","t_sug_chinuch","zaharon","t_baalut","t_mikum","t_zerem_tichnun","prati_ganenet","telefon_ganenet",
-            "telefon_kitat_gan","prati_menahel","telefon_menahel","telefon_mosad","shem_rakezet"]
+            "name_heb":"גני ילדים תשפג",
+            "fields":["shem_mosad","shem_rechov","ms_bait","knisa","t_shlav_chinuch",
+            "t_zerem","t_zerem_tichnun","t_migzar","t_sug_chinuch","t_baalut","t_peilut","prati_ganenet","telefon_kitat_gan",
+            "shem_rakezet","shem_tahana","shem_rechov_s","ms_bait_s"]
         },
         {
             "id":624,
             "name":"childcare1",
             "name_heb":"מעונות מוכרים לגיל הרך",
-            "fields":["name","address","street_address","phone_number","registration_phone","kitot","potential_ichlus"]
+            "fields":["type","name","address","phone_number","registration_phone","date_import"]
         },
         {
-            "id":599,
+            "id":461,
             "name":"schools1",
-            "name_heb":"בתי ספר תשפא",
-            "fields":["shem_mosad","shem_rechov","ms_bait","knisa","t_shlav_chinuch","me_kita","ad_kita",
-                "t_zerem","t_migzar","t_sug_chinuch","zaharon","t_baalut","t_mikum","prati_ganenet","telefon_ganenet","telefon_kitat_gan",
-                "prati_menahel","telefon_menahel","telefon_mosad","shem_rakezet"]
+            "name_heb":"בתי ספר תשפג",
+            "fields":["shem_mosad","shem_rechov","ms_bait","knisa","t_shlav_chinuch",
+                "t_zerem","t_zerem_tichnun","t_migzar","t_sug_chinuch","t_baalut","t_peilut",
+                "telefon_mosad","shem_tahana","shem_rechov_s","ms_bait_s","k_shapach"]
         }
     ],
     "buttons":[
         {
-            "layers":[598],
+            "layers":[460],
             "label":"גני\nילדים",
             "icon":"icons/Children_icon.svg"
         },
@@ -35,7 +35,7 @@
             "icon":"icons/child-care icon.svg"
         },
         {
-            "layers":[599],
+            "layers":[461],
             "label":"בית\nספר",
             "icon":"icons/library icon.svg"
         }

@@ -4,38 +4,38 @@
             "id":970,
             "name":"parking1",
             "name_heb":"חניוני אחוזות החוף",
-            "fields":["status_chenyon"]
+            "fields":["ktovet","shem_chenyon","status_chenyon"]
         },
         {
             "id":555,
             "name":"parking2",
             "name_heb":"חניונים פרטיים",
-            "fields":["shem_rechov"]
+            "fields":["shem_rechov","ms_bait","t_shimush","num_cley_rechev","shetach_arnona","date_import"]
         },
         {
             "id":556,
             "name":"parking3",
             "name_heb":"חניונים ציבוריים",
-            "fields":["name"]
+            "fields":["address","name","description","rishui_address","ms_rishui","num_vehicles","num_disabled","expiry_date","lot_area","license_date","achuzot","covered","date_import"]
         },
         {
             "id":680,
             "name":"closed_streets",
             "name_heb":"רחובות סגורים",
-            "fields":["shem_rechov","me_rechov","add_rechov","tr_from","tr_to","t_sug","t_sgira","t_avodat_laila","teur_meshulav"]
+            "fields":["shem_rechov","k_rechov","me_rechov","add_rechov","me_k_rechov","ad_k_rechov","me_ms_bayit","ad_ms_bayit","ktovet","tr_from","tr_to","t_sug","t_sgira","t_avodat_laila","teur_meshulav","date_import"]
         },
         {
             "id":577,
             "name":"bike_paths1",
             "name_heb":"שבילי אופניים",
-            "fields":["shem_mikta"]
+            "fields":["ms_orech","width","direction","shem_mikta","bitzua","date_import"]
         },
         {
             "id":633,
             "name":"planned_light_rail_stations",
             "name_heb":"תחנות מתוכננות לרכבת קלה",
             "fields":["shem_tahana","t_sug_tahana"],
-            "label_field":["shem_tahana"]
+            "label_field":["shem_tahana","t_sug_tahana","date_import"]
         },
         {
             "id":908,

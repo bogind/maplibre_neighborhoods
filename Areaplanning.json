@@ -4,8 +4,9 @@
             "id":772,
             "name":"building_permits",
             "name_heb":"בקשות והיתרי בניה",
-            "fields":["request_num","building_stage","permission_date","permission_num","expiry_date",
-                "sw_tama_38","tr_hathalat_bniya","occupation","url_hadmaya","yechidot_diyur","ms_tik_binyan","addresses"]
+            "fields":["request_num","permission_num","permission_date","expiry_date","open_request","url_hadmaya","building_num","sw_tama_38","sug_bakasha","tochen_bakasha","finished","occupation","tr_hathalat_bniya",
+            "protected","building_stage","koteret","progress","maslul_rishuy","date_import","yechidot_diyur","ms_klali","heara_teudat_gmar","sivug_makor","request_stage",
+            "ms_tik_binyan","addresses","hakala_tosefet_achuz_shetach","hakala_yd_hagdala_achuz","hakala_yd_mevukash","hakala_yd_mutar","hakala_melel","hakala_nimuk","sw_tama_38_chadash","sw_tama_38_tosefet"]
         }
     ],
     "buttons":[

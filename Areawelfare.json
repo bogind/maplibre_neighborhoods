@@ -16,13 +16,13 @@
             "id":581,
             "name":"senior_centers1",
             "name_heb":"מרכז יום לקשיש",
-            "fields":["shem","shem_rechov","ms_bait","uchlosiat_yaad","contact_man","ms_telephon","hearot"]
+            "fields":["shem","shem_rechov","ms_bait","ms_telephon","contact_man","hearot","uchlosiat_yaad","date_import"]
         },
         {
             "id":600,
             "name":"senior_centers2",
             "name_heb":"מועדוני קשישים",
-            "fields":["shem","shem_rechov","ms_bait","knisa","t_sug","contact_man","ms_telephon","responsibility","hearot"]
+            "fields":["shem ","t_sug","shem_rechov","ms_bait","knisa","ms_telephon","contact_man","hearot","date_import"]
         }
     ],
     "buttons":[

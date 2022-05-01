@@ -10,44 +10,44 @@
             "id":936,
             "name":"stadiums1",
             "name_heb":"אצטדיונים והיכלי ספורט",
-            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","achrayut"]
+            "fields":["sug_mitkan","shem_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","date_import"]
         },
         {
             "id":938,
             "name":"stadiums2",
             "name_heb":"אולמות ספורט",
-            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","achrayut"]
+            "fields":["sug_mitkan","shem_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","date_import"]
         },
         {
             "id":943,
             "name":"stadiums3",
             "name_heb":"מגרשי ספורט",
-            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","achrayut"]
+            "fields":["sug_mitkan","shem_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","date_import"]
         },
         {
             "id":553,
             "name":"mosdot_kehila",
             "name_heb":"מוסדות קהילה",
-            "fields":["shem","website","shem_rechov","ms_bait","knisa","t_sug_rashi","t_sug_mishni","play_room","hearot"],
+            "fields":["t_sug_rashi","shem","shem_rechov","ms_bait","knisa","website","hearot","play_room","date_import"],
             "label_field":["shem"]
         },
         {
             "id":581,
             "name":"senior_centers1",
             "name_heb":"מרכז יום לקשיש",
-            "fields":["shem","shem_rechov","ms_bait","uchlosiat_yaad","contact_man","ms_telephon","hearot"]
+            "fields":["shem","shem_rechov","ms_bait","ms_telephon","contact_man","hearot","uchlosiat_yaad","date_import"]
         },
         {
             "id":600,
             "name":"senior_centers2",
             "name_heb":"מועדוני קשישים",
-            "fields":["shem ","shem_rechov","ms_bait","knisa","t_sug","contact_man","ms_telephon","responsibility","hearot"]
+            "fields":["shem ","t_sug","shem_rechov","ms_bait","knisa","ms_telephon","contact_man","hearot","date_import"]
         },
         {
             "id":939,
             "name":"swimming_pools",
             "name_heb":"בריכות שחיה",
-            "fields":["shem_mitkan","sug_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil"]
+            "fields":["sug_mitkan","shem_mitkan","schuna","street_name","ms_bait","ms_mivnim","guf_mafil","date_import"]
         }
     ],
     "buttons":[

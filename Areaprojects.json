@@ -4,13 +4,13 @@
             "id":858,
             "name":"night_works",
             "name_heb":"עבודות לילה - דרכים",
-            "fields":["ms_rish","shem_rechov","tr_night_me","tr_night_ad","me_shaa","ad_shaa","me_rechov","add_rechov","natzig"]
+            "fields":["shem_rechov","me_rechov","add_rechov","me_ms_bayit","ad_ms_bayit","tr_night_me","tr_night_ad","me_shaa","ad_shaa","date_import"]
         },
         {
             "id":857,
             "name":"inf_works",
             "name_heb":"עבודות תשתית בתוקף",
-            "fields":["status","kablan","tr_tokef_me","tr_tokef_ad","shlav","natzig"],
+            "fields":["tr_tokef_me","tr_tokef_ad","mahut","kablan","yozem","date_import"],
             "type":"raster"
         }
     ],

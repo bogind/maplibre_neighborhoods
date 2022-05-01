@@ -24,7 +24,8 @@
             "id":570,
             "name":"library2",
             "name_heb":"ספריות",
-            "fields":["shem","shem_binyan","shem_rechov","ms_bait","knisa","opening_hour","ms_tel1","k_negishut","negishut_reiya","negishut_shmia","negishut_physit"]
+            "fields":["t_sug","shem","shem_binyan","shem_rechov","ms_bait","knisa","ms_tel1","ms_fax","opening_hour",
+                "hearot","shem_menahel","email_menahel","email_library","k_negishut","negishut_reiya","negishut_shmia","negishut_physit","date_import"]
         },
         {
             "id":552,
@@ -60,7 +61,7 @@
             "id":553,
             "name":"mosdot_kehila",
             "name_heb":"מוסדות קהילה",
-            "fields":["shem"],
+            "fields":["t_sug_rashi","shem","shem_rechov","ms_bait","knisa","website","hearot","play_room","date_import"],
             "label_field":["shem"]
         }
         
