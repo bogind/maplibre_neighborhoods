@@ -906,6 +906,7 @@ esriRenderer = (function(){
     function addPopupEvent(layer){
 
         map.on('click', layer['name'], function (e) {
+            
             popupContent = '<p dir="rtl">'
             feature = e.features[0]
             if('label_field' in layer){
@@ -923,9 +924,16 @@ esriRenderer = (function(){
                 }
                 for(var i=0; i < requiredFields.length; i++){
                     fieldName = layer["metadata"][requiredFields[i]]["alias"]
+                    fieldType = layer["metadata"][requiredFields[i]]["type"]
                     if(feature.properties[requiredFields[i]] && 
                         feature.properties[requiredFields[i]] != "null"){
-                        popupContent += "<tr><td>"+fieldName+"</td><td>"+feature.properties[requiredFields[i]]+"</td></tr>"
+                        if(fieldType === "esriFieldTypeDate"){
+                            dateString = new Date(feature.properties[requiredFields[i]]).toLocaleString("he-IL")
+                            popupContent += "<tr><td>"+fieldName+"</td><td>"+dateString+"</td></tr>"    
+                        }else{
+                            popupContent += "<tr><td>"+fieldName+"</td><td>"+feature.properties[requiredFields[i]]+"</td></tr>"
+                        }
+                        
                     }
                 }
                 popupContent += "</table>"
