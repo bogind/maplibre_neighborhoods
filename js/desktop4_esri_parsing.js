@@ -31,6 +31,10 @@ const labelingPositions = {
         "esriServerPolygonPlacementAlwaysHorizontal":"center"
     }
 }
+const fakeSource = {
+    "type": "FeatureCollection",
+    "features": []
+  }
 esriRenderer = (function(){
 
     return {
@@ -159,7 +163,7 @@ esriRenderer = (function(){
                         if(map.getSource(sourceName) === undefined){
                             map.addSource(sourceName, {
                             type: 'geojson',
-                            data: layerUrl
+                            data: fakeSource
                             });
                             if(map.getLayer(layer['name']) === undefined){
                                 map.addLayer(layerJson);
@@ -238,7 +242,7 @@ esriRenderer = (function(){
                 if(map.getSource(sourceName) === undefined){
                     map.addSource(sourceName, {
                     type: 'geojson',
-                    data: layerUrl
+                    data: fakeSource
                     });
                     if(map.getLayer(layer['name']) === undefined){
                         map.addLayer(layerJson);
@@ -331,7 +335,7 @@ esriRenderer = (function(){
                 if(map.getSource(sourceName) === undefined){
                     map.addSource(sourceName, {
                     type: 'geojson',
-                    data: layerUrl
+                    data: fakeSource
                     });
                     if(map.getLayer(layer['name']) === undefined){
                         map.addLayer(layerJson);
@@ -531,7 +535,7 @@ esriRenderer = (function(){
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
             type: 'geojson',
-            data: layerUrl
+            data: fakeSource
             });
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
@@ -629,7 +633,7 @@ esriRenderer = (function(){
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
             type: 'geojson',
-            data: layerUrl
+            data: fakeSource
             });
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
@@ -750,7 +754,7 @@ esriRenderer = (function(){
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
             type: 'geojson',
-            data: layerUrl
+            data: fakeSource
             });
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);

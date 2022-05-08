@@ -5,11 +5,12 @@ maplibregl.setRTLTextPlugin(
   true // Lazy load the plugin
   );
 
-const baseUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
-// innerUrl = "http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/"
-// outerUrl = "https://gisn.tel-aviv.gov.il/ArcGIS/rest/services/WM/IView2WM/MapServer/"
-const cityBorderUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/WM/IView2WM/MapServer/890/query?where=1%3D1&outFields=Shape&geometryPrecision=6&outSR=4326&returnExtentOnly=true&f=geojson"
+const baseUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
+// innerUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
+// outerUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
+const cityBorderUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/890/query?where=1%3D1&outFields=Shape&geometryPrecision=6&outSR=4326&returnExtentOnly=true&f=geojson"
 let baseStyle;
+let QS;
 let map;
 let mapJson;
 let popup = new maplibregl.Popup()
@@ -43,83 +44,67 @@ function loadMap(loadedStyle){
 
 function onMapLoad(){
   if(search.length > 1){
-      var QS = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
-      if("ne" in QS){
-          var neighborhood_code = parseInt(QS.ne)
-          neighborhood_url = baseUrl+"511/query?where=oid_shchuna="
-		  neighborhood_url += neighborhood_code+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
-      }else if("shemShchuna" in QS){
-        var neighborhood_name = QS.shemShchuna
-        neighborhood_url =  baseUrl+"511/query?text="
-		neighborhood_url += neighborhood_name+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
-      }else if("AreaName" in QS){
-        var neighborhood_name = QS.AreaName
-        neighborhood_url = `http://dgt-ags02/arcgis/rest/services/WM/IView2WM/MapServer/567/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
-      }
-          map.on('load', function () {
-              // Add a layer showing the city parks
-              fetch(neighborhood_url)
-              .then(response => response.json())
-              .then(data => {
-                  neighborhhod_bounds = data;
-                  current_bounds = neighborhhod_bounds;
-                  topHeight = document.getElementsByClassName('map-header')[0].clientHeight
-                  topPadding = topHeight+30
-                  map.fitBounds(turf.bbox(neighborhhod_bounds), {
-                      padding: {top: topPadding, bottom:20, left: 20, right: 20},
-                      linear:true
-                      })
-                        
+      QS = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+      
+      createFilter(QS)
+        map.on('load', function () {
+            
+            if(neighborhood_url){
+            fetch(neighborhood_url)
+            .then(response => response.json())
+            .then(data => {
+                neighborhhod_bounds = data;
+                current_bounds = neighborhhod_bounds;
+                topHeight = document.getElementsByClassName('map-header')[0].clientHeight
+                topPadding = topHeight+30
+                map.fitBounds(turf.bbox(neighborhhod_bounds), {
+                    padding: {top: topPadding, bottom:20, left: 20, right: 20},
+                    linear:true
+                    })
                       
-                  
-                    
-                  // Set data source that noth layers use
-                  map.addSource('neighborhood', {
-                        'type': 'geojson',
-                        'data': data
-                      })
-                  // add polygon layers
-                  map.addLayer({
-                      'id': 'neighborhoods',
-                      'type': 'fill',
-                      'source': 'neighborhood',
-                      'paint': {
-                          'fill-color': 'rgba(200, 100, 240, 0)',
-                          'fill-outline-color': 'rgba(200, 100, 240, 1)'
-                      }
-                  },"מנהרות/label/ברירת מחדל");
-                  // add line layer for thicker stroke
-                  map.addLayer({
-                    'id': 'neighborhoods-stroke',
-                    'type': 'line',
+
+                // Set data source that noth layers use
+                map.addSource('neighborhood', {
+                      'type': 'geojson',
+                      'data': data
+                    })
+                // add polygon layers
+                map.addLayer({
+                    'id': 'neighborhoods',
+                    'type': 'fill',
                     'source': 'neighborhood',
                     'paint': {
-                        'line-color': 'rgba(200, 100, 240, 1)',
-                        'line-width': 4
+                        'fill-color': 'rgba(200, 100, 240, 0)',
+                        'fill-outline-color': 'rgba(200, 100, 240, 1)'
                     }
-                },'neighborhoods');
-                
-                  
-              }).then(function(){
-                  if("map" in QS){
-                      jsonUrl = QS["map"]+".json"
-                  }else{
-                      jsonUrl = "AreaProfile.json"
+                },"מנהרות/label/ברירת מחדל");
+                // add line layer for thicker stroke
+                map.addLayer({
+                  'id': 'neighborhoods-stroke',
+                  'type': 'line',
+                  'source': 'neighborhood',
+                  'paint': {
+                      'line-color': 'rgba(200, 100, 240, 1)',
+                      'line-width': 4
                   }
-                  fetch(jsonUrl)
-                  .then(response => response.json())
-                  .then(data => {
-                      mapJson = data
-                      addButtons(mapJson)
-                  })
-  
-              });
+              },'neighborhoods');
               
+                
+            }).then(function(){
+              parseMap(QS)
+            });
+          }else{
             fetch(cityBorderUrl)
             .then(response => response.json())
             .then(data => {
                 city_bounds = data;
+                current_bounds = turf.bboxPolygon(city_bounds.extent.bbox);
+            }).then(() =>{
+              parseMap(QS)
             })
+          }
+              
+            
               
               
           });
@@ -136,7 +121,35 @@ function onMapLoad(){
   */
 }
 
+function createFilter(QS){
+  if("ne" in QS){
+    var neighborhood_code = parseInt(QS.ne)
+    neighborhood_url = baseUrl+"511/query?where=oid_shchuna="
+    neighborhood_url += neighborhood_code+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
+  }else if("shemShchuna" in QS){
+    var neighborhood_name = QS.shemShchuna
+    neighborhood_url =  baseUrl+"511/query?text="
+    neighborhood_url += neighborhood_name+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
+  }else if("AreaName" in QS){
+    var neighborhood_name = QS.AreaName
+    neighborhood_url = baseUrl+`/567/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
+  }
+}
 
+function parseMap(QS){
+    if("map" in QS){
+      jsonUrl = QS["map"]+".json"
+    }else{
+        jsonUrl = "AreaProfile.json"
+    }
+    fetch(jsonUrl)
+    .then(response => response.json())
+    .then(data => {
+        mapJson = data
+        addButtons(mapJson)
+    })
+
+}
 
 
 function addButtons(mapJson){
@@ -182,6 +195,13 @@ function addButtons(mapJson){
                       map.setLayoutProperty(layer["name"],'visibility','visible')  
                       strokeLayerName = layer['name']+'-stroke'
                       labelLayerName = layer['name']+'-labels'
+                      if(neighborhood_url){}else{
+                        sourceName =  layer['name']+"-source"
+                        
+                        current_bounds = utils.updateCurrentBounds(map)
+                        currentLayerUrl = utils.getLayerUrl(layer)
+                        map.getSource(sourceName).setData(currentLayerUrl)
+                      }
                       if(map.getLayer(strokeLayerName) !== undefined){
                         map.setLayoutProperty(strokeLayerName,'visibility','visible')  
                       }  
@@ -238,7 +258,7 @@ function addButtonLayer(layerIDs,_callback){
       layer = utils.getLayer(id)
       
       if(map.getLayer(layer['name']) === undefined){
-		esriRenderer.getMetadata(layer)
+		    esriRenderer.getMetadata(layer)
       }
   }
   if (_callback) {
