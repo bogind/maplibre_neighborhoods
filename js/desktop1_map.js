@@ -44,7 +44,7 @@ function loadMap(loadedStyle){
 
 function onMapLoad(){
   if(search.length > 1){
-      QS = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+      QS = utils.getParamsFromUrl(decodeURI(location))
       
       createFilter(QS)
         map.on('load', function () {

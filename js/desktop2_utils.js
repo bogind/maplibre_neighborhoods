@@ -4,8 +4,9 @@ utils = (function(){
         getLayer: getLayer,
         getLayerUrl: getLayerUrl,
         parseOpacity: parseOpacity,
-        updateCurrentBounds:updateCurrentBounds,
-        updateSource:updateSource
+        updateCurrentBounds: updateCurrentBounds,
+        updateSource: updateSource,
+        getParamsFromUrl: getParamsFromUrl
     }
 
     // get layer object from the current mapJson
@@ -137,6 +138,24 @@ utils = (function(){
         let sourceName =  layer['name']+"-source"
         let layerSource = map.getSource(sourceName)
         layerSource.setData(data)
+    }
+
+    function getParamsFromUrl(url) {
+        url = decodeURI(url);
+        if (typeof url === 'string') {
+            let params = url.split('?');
+            let eachParamsArr = params[1].split('&');
+            let obj = {};
+            if (eachParamsArr && eachParamsArr.length) {
+                eachParamsArr.map(param => {
+                    let keyValuePair = param.split('=')
+                    let key = keyValuePair[0];
+                    let value = keyValuePair[1];
+                    obj[key] = value;
+                })
+            }
+            return obj;
+        }
     }
 
 })();
