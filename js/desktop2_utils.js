@@ -41,7 +41,6 @@ utils = (function(){
         .then(data => {
             featureIDs = data["objectIds"]
             getLayerData(featureIDs,layer)
-            console.log(featureIDs)
         })
         
         
@@ -112,10 +111,10 @@ utils = (function(){
                 }
                 params["outFields"] = fields.join()
             }
-            queryUrl += new URLSearchParams(params).toString();
-            requests.push(queryUrl)
+            //queryUrl += new URLSearchParams(params).toString();
+            let query = {url:queryUrl,params:params}
+            requests.push(query)
         }
-        console.log(requests)
         requests.forEach(element => {
             getDataBatch(element)
             .then(rows => {
@@ -128,8 +127,15 @@ utils = (function(){
 
     }
 
-    async function getDataBatch(url){
-        let res = await fetch(url);
+    async function getDataBatch(element){
+        let url = element["url"];
+        let params = element["params"];
+        let form_data = new FormData();
+
+        for ( var key in params) {
+            form_data.append(key, params[key]);
+        }
+        let res = await fetch(url,{ method: "POST", body: form_data });
         let data = await res.json();
         return data;
     }
