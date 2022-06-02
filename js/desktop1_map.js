@@ -15,9 +15,25 @@ let map;
 let mapJson;
 let popup = new maplibregl.Popup()
 let neighborhood_url;
+let buffered;
+let mapCenterPoint;
+let mapCenterRadius;
+let radiusPolygon;
 let neighborhhod_bounds;
 let current_bounds;
-let city_bounds;
+let city_bounds = {"extent":{"crs":{"type":"name","properties":{"name":"EPSG:4326"}},"bbox":[34.738448375090996,32.028969143258138,34.851560920611377,32.146597154703457]}};
+
+proj4.defs([
+  [
+    'EPSG:4326',
+    '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
+  [
+    "EPSG:2039",
+    "+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs"
+  ]
+]);
+const projConverter = proj4("EPSG:2039");
+
 
 let search = location.search.substring(1);
 
@@ -48,6 +64,8 @@ function onMapLoad(){
       
       createFilter(QS)
         map.on('load', function () {
+            topHeight = document.getElementsByClassName('map-header')[0].clientHeight
+            topPadding = topHeight+30
             
             if(neighborhood_url){
             fetch(neighborhood_url)
@@ -55,8 +73,7 @@ function onMapLoad(){
             .then(data => {
                 neighborhhod_bounds = data;
                 current_bounds = neighborhhod_bounds;
-                topHeight = document.getElementsByClassName('map-header')[0].clientHeight
-                topPadding = topHeight+30
+                
                 map.fitBounds(turf.bbox(neighborhhod_bounds), {
                     padding: {top: topPadding, bottom:20, left: 20, right: 20},
                     linear:true
@@ -93,15 +110,15 @@ function onMapLoad(){
             }).then(function(){
               parseMap(QS)
             });
+          }else if(radiusPolygon){
+            current_bounds = radiusPolygon;
+            map.fitBounds(turf.bbox(radiusPolygon), {
+              padding: {top: topPadding, bottom:20, left: 20, right: 20},
+              linear:true
+              })
           }else{
-            fetch(cityBorderUrl)
-            .then(response => response.json())
-            .then(data => {
-                city_bounds = data;
-                current_bounds = turf.bboxPolygon(city_bounds.extent.bbox);
-            }).then(() =>{
+              current_bounds = turf.bboxPolygon(city_bounds.extent.bbox);
               parseMap(QS)
-            })
           }
               
             
@@ -122,17 +139,28 @@ function onMapLoad(){
 }
 
 function createFilter(QS){
+  if("radius" in QS){
+    mapCenterRadius = QS.radius;
+  }else{
+    mapCenterRadius = 100;
+  }
   if("ne" in QS){
-    var neighborhood_code = parseInt(QS.ne)
+    let neighborhood_code = parseInt(QS.ne);
     neighborhood_url = baseUrl+"511/query?where=oid_shchuna="
     neighborhood_url += neighborhood_code+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
   }else if("shemShchuna" in QS){
-    var neighborhood_name = QS.shemShchuna
+    let neighborhood_name = QS.shemShchuna
     neighborhood_url =  baseUrl+"511/query?text="
     neighborhood_url += neighborhood_name+"&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
   }else if("AreaName" in QS){
-    var neighborhood_name = QS.AreaName
+    let neighborhood_name = QS.AreaName
     neighborhood_url = baseUrl+`/567/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
+  }else if("point" in QS){
+    
+    let point = QS.point.split(",").map(function(x){return Number(x.trim())})
+    console.log(point)
+    radiusPolygon = utils.checkPointCRS(point,mapCenterRadius)
+    
   }
 }
 
@@ -140,7 +168,7 @@ function parseMap(QS){
     if("map" in QS){
       jsonUrl = QS["map"]+".json"
     }else{
-        jsonUrl = "AreaProfile.json"
+      jsonUrl = "AreaProfile.json"
     }
     fetch(jsonUrl)
     .then(response => response.json())

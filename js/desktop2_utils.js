@@ -6,7 +6,8 @@ utils = (function(){
         parseOpacity: parseOpacity,
         updateCurrentBounds: updateCurrentBounds,
         updateSource: updateSource,
-        getParamsFromUrl: getParamsFromUrl
+        getParamsFromUrl: getParamsFromUrl,
+        checkPointCRS: checkPointCRS
     }
 
     // get layer object from the current mapJson
@@ -22,6 +23,12 @@ utils = (function(){
 
         countUrl = baseUrl+layer["id"]+"/query?"
         
+        let geom = turf.buffer(current_bounds,100,{units: 'meters'}).geometry
+        let baseEsriPolygon = {"rings":geom.coordinates,
+        "spatialReference": {
+          "wkid": 4326
+        }}
+        
         
         var params = {
             where:'1=1',
@@ -32,11 +39,17 @@ utils = (function(){
             returnIdsOnly:true,
             returnCountOnly:false,
             inSR:4326,
-            geometryType:'esriGeometryEnvelope',
-            geometry:turf.bbox(turf.buffer(current_bounds,100,{units: 'meters'}))
+            geometryType:'esriGeometryPolygon',
+            geometry:JSON.stringify(baseEsriPolygon)
             }
-        countUrl += new URLSearchParams(params).toString();
-        fetch(countUrl)
+        //countUrl += new URLSearchParams(params).toString();
+        let form_data = new FormData();
+
+        for ( var key in params) {
+            form_data.append(key, params[key]);
+        }
+
+        fetch(countUrl,{ method: "POST", body: form_data })
         .then(res => res.json())
         .then(data => {
             featureIDs = data["objectIds"]
@@ -164,4 +177,28 @@ utils = (function(){
         }
     }
 
+    function checkPointCRS(coordinates,mapCenterRadius){
+        let point = turf.point(coordinates);
+        let invertedPoint = turf.point([coordinates[1],coordinates[0]]);
+        let bounds = turf.bboxPolygon(city_bounds.extent.bbox)
+        let radius = mapCenterRadius/1000
+        let buffered;
+        
+        if(turf.booleanWithin(point,bounds)){
+            buffered = turf.buffer(point, radius, {units: 'kilometers'});
+        }else if(turf.booleanWithin(invertedPoint,bounds)){
+            buffered = turf.buffer(invertedPoint, radius, {units: 'kilometers'});
+        }else{
+            newCoords = projConverter.inverse(coordinates)
+            newReverseCoords = projConverter.inverse([coordinates[1],coordinates[0]])
+            point = turf.point(newCoords);
+            invertedPoint = turf.point(newReverseCoords);
+            if(turf.booleanWithin(point,bounds)){
+                buffered = turf.buffer(point, radius, {units: 'kilometers'});
+            }else if(turf.booleanWithin(invertedPoint,bounds)){
+                buffered = turf.buffer(invertedPoint, radius, {units: 'kilometers'});
+            }
+        }
+        return buffered
+    }
 })();

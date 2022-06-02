@@ -148,9 +148,9 @@ esriRenderer = (function(){
                     'type': 'symbol',
                     'source': sourceName,
                     'layout': {
-                    'icon-image':iconName,
-                    'icon-allow-overlap':true,
-                    'visibility': 'none'
+                        'icon-image':iconName,
+                        'icon-allow-overlap':true,
+                        'visibility': 'none'
                     },
                     "paint": { }
                 }
@@ -809,7 +809,7 @@ esriRenderer = (function(){
             [west, south]
             ]
         curUrl = baseUrl+"export?bbox="
-        curUrl += west.toFixed(4)+","+south.toFixed(4)+","+east.toFixed(4)+","+north.toFixed(4)
+        curUrl += west.toFixed(5)+","+south.toFixed(5)+","+east.toFixed(5)+","+north.toFixed(5)
         curUrl += "&bboxSR=4326&imageSR=3857&size="+width+","+height+"&transparent=true&layers=show:"+layer["id"]+"&f=image"
         sourceName = layer['name']+'-source'
         map.addSource(sourceName, {
