@@ -101,42 +101,49 @@ utils = (function(){
     }
 
     function getLayerData(featureIDs,layer){
-        let requests = [];
-        let baseGeoJson = {
-            "type": "FeatureCollection",
-            "features": []
-          }
-        for(var i=0; i<featureIDs.length;i += 100){
-            let ids = featureIDs.slice(i,i+100)
-            let queryUrl = baseUrl+layer["id"]+"/query?"
-            var params = {
-                where:'1=1',
-                returnGeometry:true,
-                geometryPrecision:6,
-                outSR:4326,
-                f:'geojson',
-                objectIds: ids.join()
-                }
-            if('fields' in layer){
-                fields = layer['fields']
-                if('label_field' in layer){
-                    fields = fields.concat(layer['label_field'])
-                }
-                params["outFields"] = fields.join()
+        try{
+            let requests = [];
+            let baseGeoJson = {
+                "type": "FeatureCollection",
+                "features": []
             }
-            //queryUrl += new URLSearchParams(params).toString();
-            let query = {url:queryUrl,params:params}
-            requests.push(query)
-        }
-        requests.forEach(element => {
-            getDataBatch(element)
-            .then(rows => {
-                let features = rows.features;
-                baseGeoJson.features.push(...features)
-                updateSource(layer,baseGeoJson)
-            })
-            
-        });
+            for(var i=0; i<featureIDs.length;i += 100){
+                let ids = featureIDs.slice(i,i+100)
+                let queryUrl = baseUrl+layer["id"]+"/query?"
+                var params = {
+                    where:'1=1',
+                    returnGeometry:true,
+                    geometryPrecision:6,
+                    outSR:4326,
+                    f:'geojson',
+                    objectIds: ids.join()
+                    }
+                if('fields' in layer){
+                    fields = layer['fields']
+                    if('label_field' in layer){
+                        fields = fields.concat(layer['label_field'])
+                    }
+                    params["outFields"] = fields.join()
+                }
+                //queryUrl += new URLSearchParams(params).toString();
+                let query = {url:queryUrl,params:params}
+                requests.push(query)
+            }
+            requests.forEach(element => {
+                getDataBatch(element)
+                .then(rows => {
+                    console.log(layer)
+                    let features = rows.features;
+                    baseGeoJson.features.push(...features)
+                    updateSource(layer,baseGeoJson)
+                })
+                
+            });
+    }catch(err){
+        console.log(err)
+        console.log('Error at getLayerData')
+        console.log(featureIDs,layer)
+    }
 
     }
 
