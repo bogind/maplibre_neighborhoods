@@ -817,17 +817,32 @@ esriRenderer = (function(){
             url: curUrl,
             coordinates: coords
         });
-        map.addLayer({
-            id: layer['name'],
-            'type': 'raster',
-            'source': sourceName,
-            'layout':{
-                'visibility':'none'
-            },
-            'paint': {
-            'raster-fade-duration': 0
-            }
-        },'neighborhoods-stroke');
+        if(map.getLayer('neighborhoods-stroke')){
+            map.addLayer({
+                id: layer['name'],
+                'type': 'raster',
+                'source': sourceName,
+                'layout':{
+                    'visibility':'none'
+                },
+                'paint': {
+                'raster-fade-duration': 0
+                }
+            },'neighborhoods-stroke');
+        }else{
+            map.addLayer({
+                id: layer['name'],
+                'type': 'raster',
+                'source': sourceName,
+                'layout':{
+                    'visibility':'none'
+                },
+                'paint': {
+                'raster-fade-duration': 0
+                }
+            });
+        }
+        
         
         addRasterPopupEvent(layer)
 
