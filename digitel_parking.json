@@ -1,0 +1,133 @@
+{
+    "layers":[
+        {
+            "id":577,
+            "name":"bike_paths1",
+            "name_heb":"שבילי אופניים",
+            "fields":["shem_mikta","miflas","bitzua","ms_orech","width","direction"]
+        },
+        {
+            "id":835,
+            "name":"telofan_stops",
+            "name_heb":"תחנות תל אופן",
+            "fields":["tachana_id","Shem_tachana","Teur_tachana","free_bikes","free_bikesE","free_amudim","free_amudimE"]
+        },
+        {
+            "id":602,
+            "name":"ototel",
+            "name_heb":"אוטותל",
+            "fields":["id","parkingTypeId","address0","address1","X","Y","capacity","endContractDate","parkingDescription"]
+        },
+        {
+            "id":680,
+            "name":"closed_streets",
+            "name_heb":"רחובות סגורים",
+            "fields":["shem_rechov","k_rechov","me_rechov","add_rechov","me_k_rechov","ad_k_rechov","me_ms_bayit","ad_ms_bayit","ktovet","tr_from","tr_to","t_sug","t_sgira","t_avodat_laila","teur_meshulav","date_import"]
+        },     
+        {
+            "id":633,
+            "name":"planned_light_rail_stations",
+            "name_heb":"תחנות מתוכננות לרכבת קלה",
+            "fields":["shem_tahana","t_sug_tahana"],
+            "label_field":["shem_tahana","t_sug_tahana","date_import"]
+        },
+        {
+            "id":956,
+            "name":"bus_stations",
+            "name_heb":"תחנות אוטובוס",
+            "fields":["stop_name","stop_desc"],
+            "label_field":["stop_name"]
+        },
+        {
+            "id":970,
+            "name":"parking1",
+            "name_heb":"חניוני אחוזות החוף",
+            "fields":["ktovet","shem_chenyon","status_chenyon"]
+        },
+        {
+            "id":555,
+            "name":"parking2",
+            "name_heb":"חניונים פרטיים",
+            "fields":["shem_rechov","ms_bait","t_shimush","num_cley_rechev","shetach_arnona","date_import"]
+        },
+        {
+            "id":556,
+            "name":"parking3",
+            "name_heb":"חניונים ציבוריים",
+            "fields":["address","name","description","rishui_address","ms_rishui","num_vehicles","num_disabled","expiry_date","lot_area","license_date","achuzot","covered","date_import"]
+        },
+        {
+            "id":488,
+            "name":"parking3",
+            "name_heb":"חניונים ציבוריים",
+            "fields":["shem","ktovet","num_vehicles","contact","phone","ahuzat_hof_code","taarif_yom","chalon_taarif_yom","taarif_layla",
+                "hearot_atar","sug_chenyon","rav_chenyon","heaarot"]
+        },
+        {
+            "id":992,
+            "name":"naimbasofash1",
+            "name_heb":"נעים בסו\"ש - קוים",
+            "fields":["Name","Line"]
+        },
+        {
+            "id":993,
+            "name":"naimbasofash2",
+            "name_heb":"נעים בסופ\"ש - תחנות",
+            "fields":["Name","Line"]
+        },
+        
+        {
+            "id":860,
+            "name":"scooters",
+            "name_heb":"תאי חניה לכלים זעירים",
+            "fields":["address","location","cell_size"]
+        }
+    ],
+    "buttons":[
+        {
+            "layers":[577],
+            "label":"שבילי\nאופניים",
+            "icon":"icons/Bicycle paths icon .svg"
+        },
+        {
+            "layers":[835],
+            "label":"תחנות תל אופן",
+            "icon":"icons/telofan_favicon_no_bg.svg"
+        },
+        {
+            "layers":[602],
+            "label":"אוטותל",
+            "icon":"icons/autotel.svg"
+        },
+        {
+            "layers":[680],
+            "label":"רחובות\nסגורים לתנועה",
+            "icon":"icons/close directions icon.svg"
+        },
+        {
+            "layers":[633],
+            "label":"תחנות\nרכבת קלה",
+            "icon":"icons/Train Station icon.svg"
+        },
+        {
+            "layers":[956],
+            "label":"תחנות\nאוטובוס",
+            "icon":"icons/transport_bus_station.svg"
+        },
+        {
+            "layers":[970,555,488],
+            "label":"חניונים",
+            "icon":"icons/local_parking.svg"
+        },
+        {
+            "layers":[992,993],
+            "label":"נעים בסופ\"ש",
+            "icon":"icons/naim basofash.svg"
+        },     
+        {
+            "layers":[860],
+            "label":"ניה לקורקינטים ציבוריים ",
+            "icon":"icons/Bicycle paths icon .svg"
+        }
+    ]
+}
