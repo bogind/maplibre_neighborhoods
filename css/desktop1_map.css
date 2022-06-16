@@ -254,8 +254,8 @@ body {
 .mapboxgl-popup-content{
     direction: rtl;
     overflow: scroll;
-    width: 25vw;
-    height: 40vh;
+    max-width: 25vw;
+    max-height: 40vh;
 }
 .popup-table {
     font-family: Arial, Helvetica, sans-serif;
