@@ -132,7 +132,6 @@ utils = (function(){
             requests.forEach(element => {
                 getDataBatch(element)
                 .then(rows => {
-                    console.log(layer)
                     let features = rows.features;
                     baseGeoJson.features.push(...features)
                     updateSource(layer,baseGeoJson)
