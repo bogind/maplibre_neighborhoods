@@ -35,6 +35,33 @@ const fakeSource = {
     "type": "FeatureCollection",
     "features": []
   }
+const zoomToScale3857 = {
+    "0": 559082264,
+    "1": 279541132,
+    "2": 139770566,
+    "3": 69885283,
+    "4": 34942641,
+    "5": 17471321,
+    "6": 8735660,
+    "7": 4367830,
+    "8": 2183915,
+    "9": 1091957.5,
+    "10": 545978.75,
+    "11": 272989.375,
+    "12": 136494.6875,
+    "13": 68247.34375,
+    "14": 34123.671875,
+    "15": 17061.8359375,
+    "16": 8530.91796875,
+    "17": 4265.458984375,
+    "18": 2132.7294921875,
+    "19": 1066.36474609375,
+    "20": 533.182373046875,
+    "21": 266.5911865234375,
+    "22": 133.29559326171875,
+    "23": 66.64779663085938,
+    "24": 33.32389831542969
+}
 esriRenderer = (function(){
 
     return {
@@ -1044,6 +1071,7 @@ esriRenderer = (function(){
         layerJson['layout']['text-size'] = fontSize
         layerJson['layout']['text-font'] = ["Arial Regular"]
         layerJson['paint']['text-color'] = textColor
+        layerJson['paint']['text-opacity'] = getTextOpacity(labelingInfo)
 
         if(labelingInfo["symbol"]["haloColor"]){
             var haloColor = labelingInfo["symbol"]["haloColor"] ? "rgb("+labelingInfo["symbol"]["haloColor"].slice(0,3).join()+")" : "#ffffff";
@@ -1059,6 +1087,49 @@ esriRenderer = (function(){
         console.log(arguments.callee.toString(), err);
     }
         
+   }
+
+
+   function getTextOpacity(labelingInfo){
+       try {
+        let textOpacity = 1;   
+        
+        
+        if('maxScale' in labelingInfo){
+            maxZoom = labelingInfo['maxScale'] > 0 ? getZoomFromScale(labelingInfo['maxScale']) : 24
+        }
+        if('minScale' in labelingInfo){
+            minZoom = labelingInfo['minScale'] > 0 ? getZoomFromScale(labelingInfo['minScale']) : 0
+        }
+        minZoom = minZoom+0.1
+            textOpacity = ["step",
+                ["zoom"],
+                0,
+                minZoom,
+                1,
+                maxZoom,
+                1
+            ]
+
+        
+        
+        return textOpacity;
+       } catch (error) {
+           
+       }
+       
+   }
+
+   function getZoomFromScale(scale){
+        
+        let outZoom = 25
+       for(var i=0;i<25;i++){
+            if(scale > zoomToScale3857[i]){
+                outZoom = i;
+                break;
+            }
+       }
+       return outZoom;
    }
 
    /*
