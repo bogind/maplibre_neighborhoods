@@ -158,7 +158,6 @@ function createFilter(QS){
   }else if("point" in QS){
     
     let point = QS.point.split(",").map(function(x){return Number(x.trim())})
-    console.log(point)
     radiusPolygon = utils.checkPointCRS(point,mapCenterRadius)
     
   }

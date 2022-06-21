@@ -23,7 +23,13 @@ utils = (function(){
 
         countUrl = baseUrl+layer["id"]+"/query?"
         
-        let geom = turf.buffer(current_bounds,100,{units: 'meters'}).geometry
+        let buffered = turf.buffer(current_bounds,100,{units: 'meters'})
+        let geom;
+        if(current_bounds.type === "Feature"){
+            geom = buffered.geometry
+        }else{
+            geom = buffered.features[0].geometry
+        }
         let baseEsriPolygon = {"rings":geom.coordinates,
         "spatialReference": {
           "wkid": 4326
@@ -53,7 +59,9 @@ utils = (function(){
         .then(res => res.json())
         .then(data => {
             featureIDs = data["objectIds"]
-            getLayerData(featureIDs,layer)
+            if(featureIDs){
+                getLayerData(featureIDs,layer)
+            }
         })
         
         
