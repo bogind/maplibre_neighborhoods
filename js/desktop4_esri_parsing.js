@@ -186,7 +186,7 @@ esriRenderer = (function(){
                 }
 
                 if(!map.hasImage(iconName)){
-                    loadImage(iconName,icon,()=>{
+                    loadImage({"iconName":iconName,"imageData":icon},()=>{
                         if(map.getSource(sourceName) === undefined){
                             map.addSource(sourceName, {
                             type: 'geojson',
@@ -468,7 +468,7 @@ esriRenderer = (function(){
             valueInfo.symbol["label"] = valueInfo["label"]
             valueInfo.symbol.imageData = "data:image/png;base64,"+valueInfo.symbol.imageData
             symbols[valueInfo.value] = valueInfo.symbol
-            loadImage(valueInfo.symbol.iconName,valueInfo.symbol.imageData)
+            loadImage({"iconName":valueInfo.symbol.iconName,"imageData":valueInfo.symbol.imageData})
         }
         // in case of missing default symbol, jsut use the first symbol as the default (required)
         if(renderer.defaultSymbol){
@@ -492,14 +492,15 @@ esriRenderer = (function(){
     /*
         separate function to load images for synchronous loading
     */
-    function loadImage(iconName,imageData,_callback){
-        map.loadImage(imageData, function(error, image) {
+    function loadImage(params,_callback){
+        params.pixelRatio = params.pixelRatio || 1;
+        map.loadImage(params.imageData, function(error, image) {
             if (error) throw error;
             
-            if(map.hasImage(iconName)){
+            if(map.hasImage(params.iconName)){
                 
             }else{
-                map.addImage(iconName, image);
+                map.addImage(params.iconName, image,{pixelRatio:params.pixelRatio});
             }
         })
         if (_callback) {
