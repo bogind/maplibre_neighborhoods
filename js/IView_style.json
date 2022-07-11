@@ -324,7 +324,7 @@
         "type": "symbol",
         "source": "Iview",
         "source-layer": "כתובות",
-        "minzoom": 15.85,
+        "minzoom": 16.85,
         "layout": {
           "icon-image": "כתובות",
           "icon-allow-overlap": true,
