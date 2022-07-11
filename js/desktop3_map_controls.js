@@ -1,14 +1,34 @@
 class MapHeader {
+  constructor(params) {
+      params.location = params.location || '';
+      params.showLocation = params.showLocation || 0;
+      params.title = params.title || '';
+      this.title = params.title;
+      this.location = params.location;
+      this.showLocation = params.showLocation;
+    }
     onAdd(map){
       this.map = map;
       this.container = document.createElement('div');
       this.container.className = 'mapboxgl-ctrl map-header';
       this.container.style.margin = 0;
-      this.container.innerHTML = '<div ng-if="\'True\' ==\'True\'" class="ShhunaReSize smallSize ng-scope">\
-                                  <div class="ShhunaReSizeBtn "></div>\
-                                  <div class="ShhunaReSizeTxt">פתח מפה במסך מלא</div>\
-                              </div>\
-                              <div ng-if="\'True\' ==\'True\'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="\'<b>מפת מרחב</b> הצג לפי:\'"><b>מפת מרחב</b> הצג לפי:</div>';
+      let innerHTML = '<div ng-if="\'True\' ==\'True\'" class="ShhunaReSize smallSize ng-scope">\
+      </div>\
+      <div class="ShhunaReSizeBtn "></div><div class="ShhunaReSizeTxt">פתח מפה במסך מלא</div>\
+      <div ng-if="\'True\' ==\'True\'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="\'<b>מפת מרחב</b> הצג לפי:\'"><b>מפת מרחב</b> הצג לפי:</div>'
+      
+
+     if(this.title.length > 0){
+      innerHTML = `<div class="ShhunaTitle"><b>${this.title}</b></div>`;
+     }else{
+      if(this.location.length > 0){
+        innerHTML = `<div class="ShhunaTitle"><b>מפת מרחב</b>: ${this.location}</div>`;  
+       }
+     }
+
+     this.container.innerHTML = innerHTML;
+     
+      
       return this.container;
     }
     onRemove(){

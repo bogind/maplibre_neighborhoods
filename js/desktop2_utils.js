@@ -174,20 +174,27 @@ utils = (function(){
     }
 
     function getParamsFromUrl(url) {
-        url = decodeURI(url);
-        if (typeof url === 'string') {
-            let params = url.split('?');
-            let eachParamsArr = params[1].split('&');
-            let obj = {};
-            if (eachParamsArr && eachParamsArr.length) {
-                eachParamsArr.map(param => {
-                    let keyValuePair = param.split('=')
-                    let key = keyValuePair[0];
-                    let value = keyValuePair[1];
-                    obj[key] = value;
-                })
-            }
-            return obj;
+        try {
+            url = decodeURI(url);
+            if (typeof url === 'string') {
+                let params = url.split('?');
+                let obj = {};
+                if(params.length < 2){
+                    return obj
+                }
+                let eachParamsArr = params[1].split('&');
+                if (eachParamsArr && eachParamsArr.length) {
+                    eachParamsArr.map(param => {
+                        let keyValuePair = param.split('=')
+                        let key = keyValuePair[0];
+                        let value = keyValuePair[1];
+                        obj[key] = value;
+                    })
+                }
+                return obj;
+            }   
+        } catch (error) {
+            
         }
     }
 
@@ -214,5 +221,9 @@ utils = (function(){
             }
         }
         return buffered
+    }
+
+    function getAddressPoint(k_rechov,ms_bayit){
+        url = `https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/527/query?where=k_rechov=${k_rechov}+AND+ms_bayit=${ms_bayit}&outFields=*&returnGeometry=true&geometryPrecision=7&outSR=4326&returnExtentOnly=false&f=geojson`
     }
 })();

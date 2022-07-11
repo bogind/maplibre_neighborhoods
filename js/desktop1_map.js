@@ -59,13 +59,14 @@ function loadMap(loadedStyle){
 }
 
 function onMapLoad(){
-  if(search.length > 1){
+  try {
+    //if(search.length > 1){
       QS = utils.getParamsFromUrl(decodeURI(location))
-      
+      let headerTitle ='';
+      let headerLocation ='';
+      let headerProperties = {'title':headerTitle,'location':headerLocation}
       createFilter(QS)
         map.on('load', function () {
-            topHeight = document.getElementsByClassName('map-header')[0].clientHeight
-            topPadding = topHeight+30
             
             if(neighborhood_url){
             fetch(neighborhood_url)
@@ -74,6 +75,17 @@ function onMapLoad(){
                 neighborhhod_bounds = data;
                 current_bounds = neighborhhod_bounds;
                 
+                if(current_bounds.features[0].properties && current_bounds.features[0].properties.shem_shchuna){
+                  headerLocation = current_bounds.features[0].properties.shem_shchuna
+                }else if(current_bounds.features[0].properties && current_bounds.features[0].properties.shem_merhav ){
+                  headerLocation = current_bounds.features[0].properties.shem_merhav
+                }
+                
+                headerProperties = {'title':headerTitle,'location':headerLocation}
+                
+                
+                topHeight = map.getContainer().clientHeight*0.15
+                topPadding = topHeight+30
                 map.fitBounds(turf.bbox(neighborhhod_bounds), {
                     padding: {top: topPadding, bottom:20, left: 20, right: 20},
                     linear:true
@@ -108,7 +120,7 @@ function onMapLoad(){
               
                 
             }).then(function(){
-              parseMap(QS)
+              parseMap(QS,headerProperties)
             });
           }else if(radiusPolygon){
             current_bounds = radiusPolygon;
@@ -128,10 +140,11 @@ function onMapLoad(){
       
       
 
+  //}
+  } catch (error) {
+    console.error(error)
   }
-  map.addControl(mapHeaderControl);
-  map.addControl(new maplibregl.NavigationControl());
-  map.addControl(legendAdd)
+  
   /*
   still needs a way to reload all layers for the new extent.
   map.addControl(changeBounds)
@@ -163,7 +176,8 @@ function createFilter(QS){
   }
 }
 
-function parseMap(QS){
+function parseMap(QS,headerProperties={}){
+    
     if("map" in QS){
       jsonUrl = QS["map"]+".json"
     }else{
@@ -173,6 +187,13 @@ function parseMap(QS){
     .then(response => response.json())
     .then(data => {
         mapJson = data
+        if('title' in mapJson){
+          headerProperties.title = mapJson['title'];
+        }
+        const mapHeaderControl = new MapHeader(headerProperties);
+        map.addControl(mapHeaderControl);
+        map.addControl(new maplibregl.NavigationControl());
+        map.addControl(legendAdd)
         addButtons(mapJson)
     })
 
@@ -293,7 +314,7 @@ function addButtonLayer(layerIDs,_callback){
   }
 }
 
-const mapHeaderControl = new MapHeader();
+
 const legendAdd = new MapLegendButton();
 const legend = new MapLegend();
 const changeBounds = new MapChangeBoundsButton();
