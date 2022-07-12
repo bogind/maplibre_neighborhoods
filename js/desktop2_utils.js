@@ -7,7 +7,9 @@ utils = (function(){
         updateCurrentBounds: updateCurrentBounds,
         updateSource: updateSource,
         getParamsFromUrl: getParamsFromUrl,
-        checkPointCRS: checkPointCRS
+        checkPointCRS: checkPointCRS,
+        getAddressPoint: getAddressPoint,
+        getStreetLine: getStreetLine
     }
 
     // get layer object from the current mapJson
@@ -223,7 +225,20 @@ utils = (function(){
         return buffered
     }
 
-    function getAddressPoint(k_rechov,ms_bayit){
-        url = `https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/527/query?where=k_rechov=${k_rechov}+AND+ms_bayit=${ms_bayit}&outFields=*&returnGeometry=true&geometryPrecision=7&outSR=4326&returnExtentOnly=false&f=geojson`
+    async function getAddressPoint(k_rechov,ms_bayit){
+        let url = `https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/527/query?where=k_rechov=${k_rechov}+AND+ms_bayit=${ms_bayit}&outFields=*&returnGeometry=true&geometryPrecision=7&outSR=4326&returnExtentOnly=false&f=geojson`
+        let response = await fetch(url)
+        let data = await response.json()
+        return data;
+    }
+
+    async function getStreetLine(k_rechov){
+        let url = `https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/527/query?where=k_rechov=${k_rechov}&returnGeometry=true&outSR=4326&returnExtentOnly=true&f=geojson`
+        let response = await fetch(url)
+        let data = await response.json()
+        let polygon = await turf.bboxPolygon(data.extent.bbox)
+        polygon = await turf.buffer(polygon,0.075)
+        return polygon
+        
     }
 })();

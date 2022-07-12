@@ -123,11 +123,14 @@ function onMapLoad(){
               parseMap(QS,headerProperties)
             });
           }else if(radiusPolygon){
+            topHeight = map.getContainer().clientHeight*0.15
+            topPadding = topHeight+30
             current_bounds = radiusPolygon;
             map.fitBounds(turf.bbox(radiusPolygon), {
               padding: {top: topPadding, bottom:20, left: 20, right: 20},
               linear:true
               })
+            parseMap(QS)
           }else{
               current_bounds = turf.bboxPolygon(city_bounds.extent.bbox);
               parseMap(QS)
@@ -169,10 +172,17 @@ function createFilter(QS){
     let neighborhood_name = QS.AreaName
     neighborhood_url = baseUrl+`/567/query?text=${neighborhood_name}&outFields=*&returnGeometry=true&outSR=4326&f=geojson`
   }else if("point" in QS){
-    
     let point = QS.point.split(",").map(function(x){return Number(x.trim())})
     radiusPolygon = utils.checkPointCRS(point,mapCenterRadius)
-    
+  }else if("k_rechov" in QS){
+    if("ms_bayit" in QS){
+        utils.getAddressPoint(QS.k_rechov,QS.ms_bayit)
+        .then(point => radiusPolygon = turf.buffer(point,0.05))
+        
+    }else{
+      utils.getStreetLine(QS.k_rechov)
+      .then(polygon => radiusPolygon = polygon)
+    }
   }
 }
 
