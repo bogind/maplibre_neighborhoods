@@ -8,14 +8,14 @@ body {
     font-family: "Segoe UI",Tahoma,Arial,sans-serif;
 }
 .map-container {
-    width: 910px;
+    width: 98%;
     position: absolute; 
-    top: 0; 
-    bottom: 0; 
-    left: 50px;/* DELETE LATER*/
-    height: 100%;
+    top: 1%; 
+    left: 1%;/* DELETE LATER*/
+    height: 98%;
     
 }
+/*
 .gis-header {
     height: 15%;
     background: #00ac4e;
@@ -27,10 +27,11 @@ body {
     bottom: 0; 
     z-index: 4;
 }
+*/
 .map-header {
     height: 15%;
     background: rgb(255, 242, 227);
-    width: 100vw;
+    width: 100%;
     direction: rtl;
     top: 0; 
     bottom: 0; 
@@ -79,8 +80,10 @@ body {
 
 .buttons-span {
     margin-bottom: 5px;
-    margin-right: 5%;
+    margin-right: 2%;
     line-height: 15px;
+    width: 90%;
+    display: block;
 }
 
 .button-span {
@@ -109,6 +112,7 @@ body {
     font-size: 14px;
     height: 46px;
     border-radius: 3px;
+    margin-top: 5px;
 }
 .button > span{
     margin-left:3px;
@@ -283,12 +287,7 @@ body {
     color: white;
 }
 @media (min-width: 1200px){
-    .map-container {
-        width: 1100px;
-    }
-    .map-header {
-        width: 1100px;
-    }
+
     /*.gis-header {
         padding-bottom: 30px;
         height: 90px;
@@ -337,12 +336,7 @@ body {
 }
 
 @media (min-width: 992px){
-    .map-container {
-        width: 910px;
-    }
-    .map-header {
-        width: 910px;
-    }
+
     /*
     .gis-header {
         height: 70px;
