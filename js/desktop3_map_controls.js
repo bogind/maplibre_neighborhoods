@@ -12,10 +12,7 @@ class MapHeader {
       this.container = document.createElement('div');
       this.container.className = 'mapboxgl-ctrl map-header';
       this.container.style.margin = 0;
-      let innerHTML = '<div ng-if="\'True\' ==\'True\'" class="ShhunaReSize smallSize ng-scope">\
-      </div>\
-      <div class="ShhunaReSizeBtn "></div><div class="ShhunaReSizeTxt">פתח מפה במסך מלא</div>\
-      <div ng-if="\'True\' ==\'True\'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="\'<b>מפת מרחב</b> הצג לפי:\'"><b>מפת מרחב</b> הצג לפי:</div>'
+      let innerHTML = '<div ng-if="\'True\' ==\'True\'" class="ShhunaTitle ng-binding ng-scope" ng-bind-html="\'<b>מפת מרחב</b> הצג לפי:\'"><b>מפת מרחב</b> הצג לפי:</div>'
       
 
      if(this.title.length > 0){
