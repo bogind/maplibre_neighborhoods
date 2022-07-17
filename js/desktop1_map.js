@@ -183,6 +183,9 @@ function createFilter(QS){
       utils.getStreetLine(QS.k_rechov)
       .then(polygon => radiusPolygon = polygon)
     }
+  }else if("layer" in QS && "feature" in QS){
+    utils.getLayerFeature(baseUrl,QS.layer,QS.feature)
+    .then(polygon => radiusPolygon = polygon)
   }
 }
 

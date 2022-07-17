@@ -9,7 +9,9 @@ utils = (function(){
         getParamsFromUrl: getParamsFromUrl,
         checkPointCRS: checkPointCRS,
         getAddressPoint: getAddressPoint,
-        getStreetLine: getStreetLine
+        getStreetLine: getStreetLine,
+        getLayerOID: getLayerOID,
+        getLayerFeature: getLayerFeature
     }
 
     // get layer object from the current mapJson
@@ -240,5 +242,43 @@ utils = (function(){
         polygon = await turf.buffer(polygon,0.075)
         return polygon
         
+    }
+
+    async function getLayerOID(layer_id,service="https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer"){
+        let url = service+'/'+ layer_id+'?f=json'
+        let response = await fetch(url)
+        let data = await response.json()
+        let fieldName = await data.fields[data.fields.findIndex(x => x.type === "esriFieldTypeOID")].name
+        return fieldName
+
+    }
+
+    async function getLayerFeature(
+        service="https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/",
+        layer_id,
+        feature_id=1,
+        where=""){
+            let baseUrl =  ''.concat(service, layer_id, '/query?')
+            let baseParameters = 'outFields=*&returnGeometry=true&geometryPrecision=7&outSR=4326&f=geojson&returnExtentOnly=true'
+            if(where.length > 1){
+                let url = baseUrl + baseParameters + `&where=${where}`
+                let response = await fetch(url)
+                let feature = await response.json()
+                let polygon = await turf.bboxPolygon(feature.extent.bbox)
+                return polygon
+            }else{
+                let metaDataUrl = service+ layer_id+'?f=json'
+                let response = await fetch(metaDataUrl)
+                let data = await response.json()
+                let OIDfieldName = await data.fields[data.fields.findIndex(x => x.type === "esriFieldTypeOID")].name
+                let url = await baseUrl + baseParameters + `&where=${OIDfieldName}=${feature_id}`
+                await console.log(url)
+                let response2 = await fetch(url)
+                let feature = await response2.json()
+                let polygon = await turf.bboxPolygon(feature.extent.bbox)
+                return polygon
+            }
+            
+
     }
 })();
