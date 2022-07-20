@@ -1,6 +1,7 @@
 utils = (function(){
 
     return {
+        getUniqueName: getUniqueName,
         getLayer: getLayer,
         getLayerUrl: getLayerUrl,
         parseOpacity: parseOpacity,
@@ -13,6 +14,17 @@ utils = (function(){
         getLayerOID: getLayerOID,
         getLayerFeature: getLayerFeature
     }
+
+    // generate unique ID
+    function getUniqueName(n=8){
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < n; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+        }
 
     // get layer object from the current mapJson
     function getLayer(id){
