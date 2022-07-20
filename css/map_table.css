@@ -1,0 +1,70 @@
+/* Style the tab */
+.map-table-container {
+    overflow-y: scroll;
+    
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    width: 35vw;
+    margin-top: 20vh;
+    height: 75vh;
+
+  }
+  
+  /* Style the buttons inside the tab */
+  .map-table-container button {
+    background-color: inherit;
+    float: right;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    /*padding: 24px 48px;*/
+    padding: 5px;
+    width: 60px;
+    height: 38px;
+    transition: 0.3s;
+    font-size: 12px;
+  }
+  
+  /* Change background color of buttons on hover */
+  .map-table-container button:hover {
+    background-color: #ddd;
+  }
+  
+  /* Create an active/current tablink class */
+  .map-table-container button.active {
+    background-color: #ccc;
+  }
+  
+  .tablesContent{
+    width: 100%; /*calc(30vw - 24px);*/
+    height: 90%;
+    margin: 0;
+    bottom: 0;
+    position: absolute;
+  }
+
+  /* Style the tab content */
+  .map-table {
+    display: none;
+    /*padding: 6px 12px;*/
+    
+    border-top: none;
+    width: 95%;
+    
+  }
+
+  .map-table table {
+    margin: 0;
+    padding: 1px;
+    height: 100%;
+    width: 100%;
+  }
+
+  .map-table table tr{
+    margin: 0;
+    padding: 1px;
+    height: 100%;
+    width: 100%;
+    border: 1px solid #ccc;
+    display: inline-block;
+  }

@@ -3,6 +3,7 @@
     "layers":[
         {
             "id":577,
+            "table":true,
             "name":"bike_paths1",
             "name_heb":"שבילי אופניים",
             "fields":["shem_mikta","miflas","bitzua","ms_orech","width","direction"]
@@ -16,6 +17,7 @@
         {
             "id":602,
             "name":"ototel",
+            "table":true,
             "name_heb":"אוטותל",
             "fields":["id","parkingTypeId","address0","address1","X","Y","capacity","endContractDate","parkingDescription"]
         },
@@ -35,6 +37,7 @@
         {
             "id":956,
             "name":"bus_stations",
+            "table":true,
             "name_heb":"תחנות אוטובוס",
             "fields":["stop_name","stop_desc"],
             "label_field":["stop_name"]

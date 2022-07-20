@@ -86,3 +86,96 @@ class MapLegend {
     this.map = undefined;
   }
 }
+
+class MapTableButton {
+
+  onAdd(map){
+    this.map = map;
+    this.container = document.createElement('div');
+    this.container.id = "add-map-table-button"
+    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group map-table-button';
+    this.container.innerHTML = '<button><i class="fa-solid fa-table"></i></button>';
+    this.container.title = "פתיחת טבלאות"
+    this.container.value = 0;
+    this.container.onclick = tableBuilder.addTables
+    return this.container;
+  }
+
+  onRemove(){
+    this.container.parentNode.removeChild(this.container);
+    this.map = undefined;
+  }
+
+}
+class FillerControl {
+  /*
+    Meant to take up space so other controls can appear naturally under/over it
+  */
+ constructor(opts){
+    this.height = opts.height || 30;
+    this.width = opts.width || 30;
+ }
+ onAdd(map){
+    this.map = map;
+    this.container = document.createElement('div');
+    this.container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+    this.container.innerHTML = ''
+    this.container.style.height = `${this.height}px`
+    this.container.style.width = `${this.width}px`
+    return this.container;
+ }
+ onRemove(){
+    this.container.parentNode.removeChild(this.container);
+    this.map = undefined;
+ }
+}
+
+class LayerTable {
+  constructor(opts) {
+    opts.layers = opts.layers || [];
+    this.layers = opts.layers;
+  }
+  onAdd(map){
+    this.map = map;
+    this.container = document.createElement('div');
+    this.container.id = "map-table-container"
+    this.container.className = 'map-table-container mapboxgl-ctrl mapboxgl-ctrl-group';
+    this.container.innerHTML = '';
+    this.container.onclick = function(e){
+      e.stopPropagation()
+    }
+    let tablesContent = document.createElement('div');
+    tablesContent.className = 'tablesContent';
+    this.container.append(tablesContent)
+    let tables = []
+    if(this.layers.length > 0){
+      this.layers.forEach(element => {
+        if(element.table && element.table == true){
+          let uniqueId = utils.getUniqueName()
+          let tabButton = document.createElement('button')
+          tabButton.className = 'map-table-button'
+          tabButton.innerText = element.name_heb
+          tabButton.onclick = function(event){
+            tableBuilder.toggleTableTab(event,uniqueId)
+          }
+          let table = document.createElement('div')
+          table.id = uniqueId;
+          table.className = 'map-table';
+          let tableContent = tableBuilder.buildTable(element)
+          table.append(tableContent)
+          tables.push(table)
+          this.container.append(tabButton)
+        }
+      });
+      
+      tables.forEach(element => {
+        tablesContent.append(element)
+      })
+    }
+    return this.container;
+  }
+  onRemove(){
+    this.container.parentNode.removeChild(this.container);
+    this.map = undefined;
+  }
+}

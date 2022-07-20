@@ -22,6 +22,8 @@ let radiusPolygon;
 let neighborhhod_bounds;
 let current_bounds;
 let city_bounds = {"extent":{"crs":{"type":"name","properties":{"name":"EPSG:4326"}},"bbox":[34.738448375090996,32.028969143258138,34.851560920611377,32.146597154703457]}};
+let tables;
+let mapHeaderControl;
 
 proj4.defs([
   [
@@ -203,10 +205,12 @@ function parseMap(QS,headerProperties={}){
         if('title' in mapJson){
           headerProperties.title = mapJson['title'];
         }
-        const mapHeaderControl = new MapHeader(headerProperties);
+        mapHeaderControl = new MapHeader(headerProperties);
+        tables = new LayerTable({'layers':mapJson.layers});
         map.addControl(mapHeaderControl);
         map.addControl(new maplibregl.NavigationControl());
         map.addControl(legendAdd)
+        map.addControl(tableAdd)
         addButtons(mapJson)
     })
 
@@ -309,6 +313,7 @@ function addButtons(mapJson){
       buttonSpan.append(newSpan)
   }
   mapHeader.append(buttonSpan)
+  map.addControl(new FillerControl({'height':mapHeaderControl.container.offsetHeight-10}),'top-left')
 
 }
 function addButtonLayer(layerIDs,_callback){
@@ -330,5 +335,6 @@ function addButtonLayer(layerIDs,_callback){
 
 const legendAdd = new MapLegendButton();
 const legend = new MapLegend();
+const tableAdd = new MapTableButton();
 const changeBounds = new MapChangeBoundsButton();
 
