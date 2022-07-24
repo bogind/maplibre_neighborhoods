@@ -33,11 +33,25 @@ let tableBuilder = (function(){
         let source = map.getSource(`${layer.name}-source`);
         let data = source.serialize().data;
         let features = data.features;
+        let fieldNames = Object.keys(features[0].properties);
+        let headerRow = document.createElement('tr');
+        table.append(headerRow)
+        fieldNames.forEach(element => {
+          let th = document.createElement('th');
+          let alias = layer.metadata[element].alias || layer.metadata[element].name;
+          th.innerText = alias
+          headerRow.append(th)
+        })
         features.forEach(element => {
             let tr = document.createElement('tr');
-            let td = document.createElement('td');
-            td.innerHTML = JSON.stringify(element.properties)
-            tr.append(td)
+            
+            Object.values(element.properties).forEach(property => {
+              let td = document.createElement('td');
+              td.innerText = property
+              tr.append(td)
+            })
+            //td.innerHTML = JSON.stringify(element.properties)
+            
             table.append(tr)
         });
         return table

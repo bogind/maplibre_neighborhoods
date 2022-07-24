@@ -58,6 +58,8 @@
     padding: 1px;
     height: 100%;
     width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
   }
 
   .map-table table tr{
@@ -66,5 +68,28 @@
     height: 100%;
     width: 100%;
     border: 1px solid #ccc;
-    display: inline-block;
+    
+  }
+
+  .map-table table td, .map-table table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  .map-table table tr:nth-child(even){
+    background-color: #f2f2f2;
+    border: 1px solid rgb(255, 255, 255);
+  }
+
+  .map-table table tr:hover {
+    background-color: #ddd;
+    border: 1px solid rgb(255, 255, 255);
+  }
+
+  .map-table table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: right;
+    background-color: #0a3d80;
+    color: white;
   }
