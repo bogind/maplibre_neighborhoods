@@ -206,11 +206,19 @@ function parseMap(QS,headerProperties={}){
           headerProperties.title = mapJson['title'];
         }
         mapHeaderControl = new MapHeader(headerProperties);
+        let addTable = false;
+        mapJson.layers.forEach(element => {
+          if("table" in element){
+            addTable = true;
+          }
+        });
         tables = new LayerTable({'layers':mapJson.layers});
         map.addControl(mapHeaderControl);
         map.addControl(new maplibregl.NavigationControl());
         map.addControl(legendAdd)
-        map.addControl(tableAdd)
+        if(addTable){
+          map.addControl(tableAdd)
+        }
         addButtons(mapJson)
     })
 
