@@ -24,6 +24,7 @@ let current_bounds;
 let city_bounds = {"extent":{"crs":{"type":"name","properties":{"name":"EPSG:4326"}},"bbox":[34.738448375090996,32.028969143258138,34.851560920611377,32.146597154703457]}};
 let tables;
 let mapHeaderControl;
+let hoveredStateId;
 
 proj4.defs([
   [

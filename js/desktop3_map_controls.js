@@ -162,6 +162,7 @@ class LayerTable {
           table.id = uniqueId;
           table.className = 'map-table';
           let tableContent = tableBuilder.buildTable(element)
+          esriRenderer.activateHighlightLayer(element)
           table.append(tableContent)
           tables.push(table)
           this.container.append(tabButton)

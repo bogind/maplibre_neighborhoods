@@ -68,8 +68,9 @@ esriRenderer = (function(){
         getMetadata: getMetadata,
         parseSimpleRenderer: parseSimpleRenderer,
         parseUniqueValueRenderer: parseUniqueValueRenderer,
-        loadImage:loadImage,
-        updateRaster:updateRaster
+        loadImage: loadImage,
+        updateRaster: updateRaster,
+        activateHighlightLayer: activateHighlightLayer
     }
 
     /*
@@ -190,10 +191,12 @@ esriRenderer = (function(){
                         if(map.getSource(sourceName) === undefined){
                             map.addSource(sourceName, {
                             type: 'geojson',
+                            generateId:true,
                             data: fakeSource
                             });
                             if(map.getLayer(layer['name']) === undefined){
                                 map.addLayer(layerJson);
+                                addHighlightLayer(layer)
         
                                 addPopupEvent(layer)
                                     
@@ -211,10 +214,12 @@ esriRenderer = (function(){
                         if(map.getSource(sourceName) === undefined){
                             map.addSource(sourceName, {
                             type: 'geojson',
+                            generateId:true,
                             data: layerUrl
                             });
                             if(map.getLayer(layer['name']) === undefined){
                                 map.addLayer(layerJson);
+                                addHighlightLayer(layer)
         
                                 addPopupEvent(layer)
                                     
@@ -269,10 +274,12 @@ esriRenderer = (function(){
                 if(map.getSource(sourceName) === undefined){
                     map.addSource(sourceName, {
                     type: 'geojson',
+                    generateId:true,
                     data: fakeSource
                     });
                     if(map.getLayer(layer['name']) === undefined){
                         map.addLayer(layerJson);
+                        addHighlightLayer(layer)
 
                         addPopupEvent(layer)
                             
@@ -362,10 +369,12 @@ esriRenderer = (function(){
                 if(map.getSource(sourceName) === undefined){
                     map.addSource(sourceName, {
                     type: 'geojson',
+                    generateId:true,
                     data: fakeSource
                     });
                     if(map.getLayer(layer['name']) === undefined){
                         map.addLayer(layerJson);
+                        addHighlightLayer(layer)
 
                         addPopupEvent(layer)
                             
@@ -412,6 +421,7 @@ esriRenderer = (function(){
             if(map.getSource(labelSourceName) === undefined){
                 map.addSource(labelSourceName, {
                 type: 'geojson',
+                generateId:true,
                 data: sourceGeoJson
                 });
                 var labelLayerJson = {
@@ -563,10 +573,12 @@ esriRenderer = (function(){
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
             type: 'geojson',
+            generateId:true,
             data: fakeSource
             });
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
+                addHighlightLayer(layer)
 
                 addPopupEvent(layer)
                     
@@ -661,10 +673,12 @@ esriRenderer = (function(){
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
             type: 'geojson',
+            generateId:true,
             data: fakeSource
             });
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
+                addHighlightLayer(layer)
 
                 addPopupEvent(layer)
                     
@@ -782,10 +796,12 @@ esriRenderer = (function(){
         if(map.getSource(sourceName) === undefined){
             map.addSource(sourceName, {
             type: 'geojson',
+            generateId:true,
             data: fakeSource
             });
             if(map.getLayer(layer['name']) === undefined){
                 map.addLayer(layerJson);
+                addHighlightLayer(layer)
 
                 addPopupEvent(layer)
                     
@@ -806,6 +822,129 @@ esriRenderer = (function(){
         }
 
     }
+
+   /*
+        create secondary layer from source to highlight
+   */
+   function addHighlightLayer(layer){
+        let geomType = layer.geomType;
+        let highlightLayerName = layer['name']+'-highlight'
+        let sourceName = layer['name']+'-source'
+        try{    
+            if(geomType === "esriGeometryPoint"){
+
+                highLightLayerJson = {
+                    'id': highlightLayerName,
+                    'type': 'circle',
+                    'source': sourceName,
+                    'paint':{
+                        'circle-radius': 16,
+                        'circle-opacity': 0,
+                        'circle-stroke-color':"#4cd4ea",
+                        'circle-stroke-width':4,
+                        'circle-stroke-opacity': ['case',
+                        ['boolean', ['feature-state', 'hover'], false],1,
+                        ['boolean', ['feature-state', 'clicked'], false],1,0]
+                    }
+                }
+
+            }else if(geomType === "esriGeometryPolygon"){
+
+                highLightLayerJson = {
+                    'id': highlightLayerName,
+                    'type': 'line',
+                    'source': sourceName,
+                    'paint':{
+                        'line-width': 6,
+                        'line-color':"#4cd4ea",
+                        'line-opacity': ['case',
+                        ['boolean', ['feature-state', 'hover'], false],1,
+                        ['boolean', ['feature-state', 'clicked'], false],1,0]
+                    }
+                }
+                
+            }else if(geomType === "esriGeometryPolyline"){
+                
+                highLightLayerJson = {
+                    'id': highlightLayerName,
+                    'type': 'line',
+                    'source': sourceName,
+                    'paint':{
+                        'line-width': 6,
+                        'line-color':"#4cd4ea",
+                        'line-opacity': ['case',
+                        ['boolean', ['feature-state', 'hover'], false],1,
+                        ['boolean', ['feature-state', 'clicked'], false],1,0]
+                    }
+                }
+
+            }else{
+                console.log(geomType)
+            }
+            map.addLayer(highLightLayerJson);
+        }
+        catch (err) {
+            console.log(arguments.callee.toString(), err);
+        }
+   }
+
+    /*
+        add map events to change feature states so highlight layer will show
+   */
+    function activateHighlightLayer(layer){
+        
+        //let hoveredStateId
+        map.on('mousemove',  layer['name'], highlightMouseMove);
+            
+            // When the mouse leaves the state-fill layer, update the feature state of the
+            // previously hovered feature.
+        map.on('mouseleave',  layer['name'], function(){
+            let sourceName = layer['name']+'-source';
+            if (hoveredStateId) {
+                map.setFeatureState(
+                    { source: sourceName, id: hoveredStateId },
+                    { hover: false }
+                );
+            }
+            hoveredStateId = null;
+        });
+    }
+   
+
+   function highlightMouseMove(e){
+    
+        if (e.features.length > 0) {
+            let layer = e.features[0].layer
+            let sourceName = layer['id']+'-source';
+                    
+            if (hoveredStateId) {
+                map.setFeatureState(
+                    { source: sourceName, id: hoveredStateId },
+                    { hover: false }
+                );
+            }
+            hoveredStateId = e.features[0].id;
+            
+            map.setFeatureState(
+                { source: sourceName, id: hoveredStateId },
+                { hover: true }
+            );
+        }
+    }
+    activateHighlightLayer(layer)
+
+   function highlightMouseOut(e){
+    
+        let sourceName = layer['name']+'-source';
+        if (hoveredStateId) {
+            map.setFeatureState(
+                { source: sourceName, id: hoveredStateId },
+                { hover: false }
+            );
+        }
+        hoveredStateId = null;
+    }
+    activateHighlightLayer(layer)
 
     /*
         add layer as raster image directly from the server
