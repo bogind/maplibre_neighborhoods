@@ -37,7 +37,6 @@ proj4.defs([
 const projConverter = proj4("EPSG:2039");
 
 
-let search = location.search.substring(1);
 
 // load style for basemap
 fetch("js/IView_style.json")
@@ -62,7 +61,7 @@ function loadMap(loadedStyle){
 
 function onMapLoad(){
   try {
-    //if(search.length > 1){
+    
       QS = utils.getParamsFromUrl(decodeURI(location))
       let headerTitle ='';
       let headerLocation ='';
