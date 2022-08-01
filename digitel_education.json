@@ -1,0 +1,57 @@
+{
+    "title":"דיגיתל - תנועה וחניה",
+    "layers":[
+        {
+            "id":461,
+            "table":true,
+            "name":"schools_next_year",
+            "name_heb":"בתי ספר תשפ\"ג",
+            "fields":["shem_mosad","shem_rechov","ms_bait","t_shlav_chinuch","me_kita","ad_kita","t_zerem","t_migzar","t_sug_chinuch"]
+        },
+        {
+            "id":769,
+            "table":true,
+            "name":"schools_current_year",
+            "name_heb":"בתי ספר תשפ\"ב",
+            "fields":["shem_mosad","shem_rechov","ms_bait","t_shlav_chinuch","me_kita","ad_kita","t_zerem","t_migzar","t_sug_chinuch"]
+        },
+        {
+            "id":460,
+            "table":true,
+            "name":"kindergartens_next_year",
+            "name_heb":"גני ילדים תשפ\"ג",
+            "fields":["shem_mosad","shem_rechov","ms_bait","t_shlav_chinuch","me_kita","ad_kita","t_zerem","t_migzar","t_sug_chinuch"]
+        },
+        {
+            "id":768,
+            "table":true,
+            "name":"kindergartens_current_year",
+            "name_heb":"גני ילדים תשפ\"ב",
+            "fields":["shem_mosad","shem_rechov","ms_bait","t_shlav_chinuch","me_kita","ad_kita","t_zerem","t_migzar","t_sug_chinuch"]
+        }
+        
+        
+    ],
+    "buttons":[
+        {
+            "layers":[461],
+            "label":"בתי ספר תשפ\"ג",
+            "icon":"icons/library icon.svg"
+        },
+        {
+            "layers":[769],
+            "label":"בתי ספר תשפ\"ב",
+            "icon":"icons/library icon.svg"
+        },
+        {
+            "layers":[460],
+            "label":"גני ילדים תשפ\"ג",
+            "icon":"icons/Children_icon.svg"
+        },
+        {
+            "layers":[768],
+            "label":"גני ילדים תשפ\"ב",
+            "icon":"icons/Children_icon.svg"
+        }
+    ]
+}
