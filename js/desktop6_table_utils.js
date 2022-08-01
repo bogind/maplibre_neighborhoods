@@ -42,9 +42,14 @@ let tableBuilder = (function(){
           th.innerText = alias
           headerRow.append(th)
         })
+        let ID = 0;
         features.forEach(element => {
-            let tr = document.createElement('tr');
             
+            let tr = document.createElement('tr');
+            tr.value = {source:`${layer.name}-source`,id:ID}
+            tr.onclick = tableRowClick;
+            tr.onmouseover = tableRowOver;
+            tr.onmouseleave = tableRowLeave;
             Object.values(element.properties).forEach(property => {
               let td = document.createElement('td');
               td.innerText = property
@@ -53,8 +58,79 @@ let tableBuilder = (function(){
             //td.innerHTML = JSON.stringify(element.properties)
             
             table.append(tr)
+            ID += 1;
         });
         return table
+    }
+
+    function tableRowClick(evt){
+      try {
+        let rowData;
+      if(evt.target.tagName == "TR"){
+        rowData = evt.target.value;
+      }else{
+        rowData = evt.target.parentElement.value;
+      }
+      
+      let source = map.getSource(rowData.source);
+      let data = source.serialize().data;
+      let feature = data.features[rowData.id];
+      let bbox = turf.bbox(feature);
+      let mlBbox = [[bbox[0],bbox[1]],[bbox[2],bbox[3]]]
+      map.fitBounds(mlBbox, {
+        padding: {top: topPadding, bottom:20, left: 20, right: 20},
+        linear:true
+        });
+      } catch (error) {
+        console.log(error)
+      }
+      
+    }
+
+    function tableRowOver(evt){
+      try {
+        let rowData;
+        let element;
+      if(evt.target.tagName == "TR"){
+        element = evt.target;
+        rowData = evt.target.value;
+      }else{
+        element = evt.target.parentElement;
+        rowData = evt.target.parentElement.value;
+      }
+      element.style.backgroundColor = "#ddd";
+      element.style.border = "1px solid rgb(255, 255, 255)"
+      map.setFeatureState(
+          { source: rowData.source, id: rowData.id },
+          { hover: true }
+      );
+      
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    function tableRowLeave(evt){
+      try {
+        let rowData;
+        let element;
+      if(evt.target.tagName == "TR"){
+        element = evt.target;
+        rowData = evt.target.value;
+      }else{
+        element = evt.target.parentElement;
+        rowData = evt.target.parentElement.value;
+      }
+      element.style.backgroundColor = "";
+      element.style.border = "";
+      map.setFeatureState(
+          { source: rowData.source, id: rowData.id },
+          { hover: false }
+      );
+      
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     function toggleTableTab(event, ID){

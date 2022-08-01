@@ -907,6 +907,11 @@ esriRenderer = (function(){
                 );
             }
             hoveredStateId = null;
+            rows = Array.from(document.getElementsByTagName('tr'));
+            rows.forEach(element => {
+                element.style.backgroundColor = "";
+                element.style.border = ""
+            })
         });
     }
    
@@ -929,9 +934,24 @@ esriRenderer = (function(){
                 { source: sourceName, id: hoveredStateId },
                 { hover: true }
             );
+            if(map.hasControl(tables)){
+                rows = Array.from(document.getElementsByTagName('tr'));
+                rows.forEach(element => {
+                    if(element.value){
+                        if(element.value.source == sourceName && 
+                            element.value.id == hoveredStateId){
+                                element.style.backgroundColor = "#ddd";
+                                element.style.border = "1px solid rgb(255, 255, 255)"
+                        }else{
+                                element.style.backgroundColor = "";
+                                element.style.border = ""
+                            }
+                    }
+                });
+            }
         }
     }
-    activateHighlightLayer(layer)
+    
 
    function highlightMouseOut(e){
     
@@ -944,7 +964,7 @@ esriRenderer = (function(){
         }
         hoveredStateId = null;
     }
-    activateHighlightLayer(layer)
+    
 
     /*
         add layer as raster image directly from the server
