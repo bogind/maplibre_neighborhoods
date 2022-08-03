@@ -66,21 +66,33 @@ let tableBuilder = (function(){
     function tableRowClick(evt){
       try {
         let rowData;
+        let element;
       if(evt.target.tagName == "TR"){
+        element = evt.target;
         rowData = evt.target.value;
       }else{
+        element = evt.target.parentElement;
         rowData = evt.target.parentElement.value;
       }
+      if(rowData.status && rowData.status == "focused"){
+        element.value["status"] = "home"
+        map.fitBounds(turf.bbox(current_bounds),{
+          padding: {top: topPadding, bottom:20, left: 20, right: 20},
+          linear:true
+          });
+      }else{
+        element.value["status"] = "focused"
+        let source = map.getSource(rowData.source);
+        let data = source.serialize().data;
+        let feature = data.features[rowData.id];
+        let bbox = turf.bbox(feature);
+        let mlBbox = [[bbox[0],bbox[1]],[bbox[2],bbox[3]]]
+        map.fitBounds(mlBbox, {
+          padding: {top: topPadding, bottom:20, left: 20, right: 20},
+          linear:true
+          });
+      }
       
-      let source = map.getSource(rowData.source);
-      let data = source.serialize().data;
-      let feature = data.features[rowData.id];
-      let bbox = turf.bbox(feature);
-      let mlBbox = [[bbox[0],bbox[1]],[bbox[2],bbox[3]]]
-      map.fitBounds(mlBbox, {
-        padding: {top: topPadding, bottom:20, left: 20, right: 20},
-        linear:true
-        });
       } catch (error) {
         console.log(error)
       }
