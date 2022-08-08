@@ -26,6 +26,10 @@ let city_bounds = {"extent":{"crs":{"type":"name","properties":{"name":"EPSG:432
 let tables;
 let mapHeaderControl;
 let hoveredStateId;
+let topHeight;
+let topPadding;
+let jsonUrl;
+let buttonDefs;
 
 proj4.defs([
   [
@@ -328,9 +332,9 @@ function addButtons(mapJson){
 function addButtonLayer(layerIDs,_callback){
   
   for(var i=0;i<layerIDs.length;i++){
-      id = layerIDs[i]
+      let id = layerIDs[i]
       
-      layer = utils.getLayer(id)
+      let layer = utils.getLayer(mapJson,id)
       
       if(map.getLayer(layer['name']) === undefined){
 		    esriRenderer.getMetadata(layer)

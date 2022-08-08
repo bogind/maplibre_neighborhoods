@@ -42,8 +42,8 @@ export default function(){
      * @param {integer} id - ID of the layer as defined in the ArcGIS server service and as defined by the "id" key in the layer object.
      * @return {object}   A layer object from the map configuration file.
      */
-    function getLayer(id){
-        layer = mapJson["layers"].filter(obj => {
+    function getLayer(mapJson,id){
+        let layer = mapJson["layers"].filter(obj => {
             return obj.id === id
           })[0]
         return layer
