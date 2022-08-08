@@ -1,3 +1,8 @@
+/**
+ * Creates a map header control, used to contain title and buttons.
+ * @class
+ * @param {Object} params - an object containing keys for `location`, `showLocation` and `title`  
+ */
 class MapHeader {
   constructor(params) {
       params.location = params.location || '';
@@ -34,6 +39,10 @@ class MapHeader {
     }
   }
 
+/**
+ * Creates button to show and hide the map legend.
+ * @class
+ */
 class MapLegendButton {
   onAdd(map){
     this.map = map;
@@ -69,6 +78,10 @@ class MapChangeBoundsButton {
   }
 }
 
+/**
+ * Container control for map legend
+ * @class
+ */
 class MapLegend {
   onAdd(map){
     this.map = map;
@@ -87,6 +100,10 @@ class MapLegend {
   }
 }
 
+/**
+ * Creates button to show and hide the map table container.
+ * @class
+ */
 class MapTableButton {
 
   onAdd(map){
@@ -107,6 +124,11 @@ class MapTableButton {
   }
 
 }
+
+/**
+ * Creates an empty control of defined height and width
+ * @class
+ */
 class FillerControl {
   /*
     Meant to take up space so other controls can appear naturally under/over it
@@ -130,6 +152,11 @@ class FillerControl {
  }
 }
 
+/**
+ * Creates a tabbed table for the visible features of each layer
+ * @class
+ * @param {Array} layers - an Array of layer objects
+ */
 class LayerTable {
   constructor(opts) {
     opts.layers = opts.layers || [];

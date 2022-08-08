@@ -4,7 +4,8 @@ maplibregl.setRTLTextPlugin(
   null,
   true // Lazy load the plugin
   );
-
+import utilities from './desktop2_utils.js';
+const utils = new utilities;
 const baseUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
 // innerUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
 // outerUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
@@ -346,3 +347,35 @@ const legend = new MapLegend();
 const tableAdd = new MapTableButton();
 const changeBounds = new MapChangeBoundsButton();
 
+// For Documentation, definitions for the configuration files
+/**
+ * mapJson configuration settings
+ * @global
+ * @name mapJson
+ * @type {object}
+ * @property {Array} layers - Array of {@link mapJson-layer} Objects
+ * @property {Array} buttons - CArray of {@link mapJson-button} Objects
+ * @property {string} title - Identifying name for this layer within the mapJson
+ */
+/**
+ * mapJson Layer configuration settings
+ * @global
+ * @name mapJson-layer
+ * @type {object}
+ * @property {integer} id - Layer ID within the ArcGIS Server map/featureservice
+ * @property {boolean} table - Create a table for this layer
+ * @property {string} name - Identifying name for this layer within the mapJson
+ * @property {string} name_heb - Display name for this layer, used in button tabs and legend
+ * @property {string} type - indicate wether layer should be loaded as a raster instead of recreating its symbology
+ * @property {Array} label_field - field name to be used for a labeling layer
+ * @property {Array} fields - Fields to query and display in popup nd table columns, can be set to [*] to display all fields except object ID field
+ */
+/**
+ * mapJson button configuration settings
+ * @global
+ * @name mapJson-button
+ * @type {object}
+ * @property {Array} layers - Array of layer ids as integers
+ * @property {string} label - Text to be displayed on the button
+ * @property {string} icon - Icon to be displayed on the button, relative path to svg or png file
+ */
