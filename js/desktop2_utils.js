@@ -1,9 +1,4 @@
-/**
- * Utility functions
- * @module utilities
- */
-export const name = 'utilities';
-export default function(){
+utils = (function(){
 
     return {
         getUniqueName: getUniqueName,
@@ -20,12 +15,7 @@ export default function(){
         getLayerFeature: getLayerFeature
     }
 
-    /**
-     * Generate unique ID
-     * @function
-     * @param {integer} n - length of the unique ID, by default n=8.
-     * @return {string}   A unique combination of only letters and numbers to be used as an ID.
-     */
+    // generate unique ID
     function getUniqueName(n=8){
         var result           = '';
         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -36,12 +26,7 @@ export default function(){
         return result;
         }
 
-    /**
-     * Get layer object from the current mapJson
-     * @function
-     * @param {integer} id - ID of the layer as defined in the ArcGIS server service and as defined by the "id" key in the layer object.
-     * @return {object}   A layer object from the map configuration file.
-     */
+    // get layer object from the current mapJson
     function getLayer(mapJson,id){
         let layer = mapJson["layers"].filter(obj => {
             return obj.id === id
@@ -308,4 +293,24 @@ export default function(){
             
 
     }
-};
+})();
+/**
+ * Utility functions
+ * @module utilities
+ */
+ 
+ /**
+ * Generate unique ID
+ * @function
+ * @name getUniqueName
+ * @param {integer} n - length of the unique ID, by default n=8.
+ * @return {string}   A unique combination of only letters and numbers to be used as an ID.
+ */
+	 
+/**
+ * Get layer object from the current mapJson
+ * @function
+ * @name getLayer
+ * @param {integer} id - ID of the layer as defined in the ArcGIS server service and as defined by the "id" key in the layer object.
+ * @return {object}   A layer object from the map configuration file.
+ */

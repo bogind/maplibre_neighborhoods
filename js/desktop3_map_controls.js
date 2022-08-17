@@ -44,6 +44,9 @@ class MapHeader {
  * @class
  */
 class MapLegendButton {
+  constructor(opts){
+    this.LegendBuilder = opts.LegendBuilder;
+ }
   onAdd(map){
     this.map = map;
     this.container = document.createElement('div');
@@ -52,7 +55,7 @@ class MapLegendButton {
     this.container.innerHTML = '<button><i class="fg-map-legend fg-lg" style="color:#000;"></i></button>';
     this.container.title = "הדלקת מקרא"
     this.container.value = 0;
-    this.container.onclick = LegendBuilder.addLegend
+    this.container.onclick = this.LegendBuilder.addLegend
     return this.container;
   }
   onRemove(){

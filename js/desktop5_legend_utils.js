@@ -22,7 +22,7 @@ let LegendBuilder = (function(){
         
       }
       catch (err) {
-            console.log(arguments.callee.toString(), err);
+            console.log(err);
       }
     }
 

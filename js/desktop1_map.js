@@ -4,8 +4,7 @@ maplibregl.setRTLTextPlugin(
   null,
   true // Lazy load the plugin
   );
-import utilities from './desktop2_utils.js';
-const utils = new utilities;
+
 const baseUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
 // innerUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
 // outerUrl = "https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"
@@ -30,6 +29,10 @@ let topHeight;
 let topPadding;
 let jsonUrl;
 let buttonDefs;
+let legendAdd;
+let legend = new MapLegend();;
+let changeBounds;
+let tableAdd;
 
 proj4.defs([
   [
@@ -197,7 +200,11 @@ function createFilter(QS){
 }
 
 function parseMap(QS,headerProperties={}){
+  
+    legendAdd = new MapLegendButton({'LegendBuilder':LegendBuilder});
     
+    changeBounds = new MapChangeBoundsButton();
+    tableAdd = new MapTableButton();
     if("map" in QS){
       jsonUrl = QS["map"]+".json"
     }else{
@@ -265,16 +272,16 @@ function addButtons(mapJson){
               if(this.value === "0"){
                 this.value = "1"
                 this.className = "button-on"
-                  for(layerI in layerIDs){
-                      layerID = layerIDs[layerI]
-                      layer = mapJson["layers"].filter(obj => {
+                  for(let layerI in layerIDs){
+                      let layerID = layerIDs[layerI]
+                      let layer = mapJson["layers"].filter(obj => {
                           return obj.id === layerID
                         })[0]
                       map.setLayoutProperty(layer["name"],'visibility','visible')  
-                      strokeLayerName = layer['name']+'-stroke'
-                      labelLayerName = layer['name']+'-labels'
+                      let strokeLayerName = layer['name']+'-stroke'
+                      let labelLayerName = layer['name']+'-labels'
                       if(neighborhood_url){}else{
-                        sourceName =  layer['name']+"-source"
+                        let sourceName =  layer['name']+"-source"
                         
                         current_bounds = utils.updateCurrentBounds(map)
                         currentLayerUrl = utils.getLayerUrl(layer)
@@ -346,10 +353,6 @@ function addButtonLayer(layerIDs,_callback){
 }
 
 
-const legendAdd = new MapLegendButton();
-const legend = new MapLegend();
-const tableAdd = new MapTableButton();
-const changeBounds = new MapChangeBoundsButton();
 
 // For Documentation, definitions for the configuration files
 /**

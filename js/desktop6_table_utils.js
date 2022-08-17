@@ -161,3 +161,15 @@ let tableBuilder = (function(){
     }
 
 })();
+
+/**
+ * Functions used in the creation and manipulation of the table control
+ * @module table_utils
+*/
+
+/**
+ * Shows or hides the table control
+ * @function
+ * @name addTables
+ * @param {event} e - Mouse Click event on the show table container
+*/
