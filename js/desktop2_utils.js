@@ -296,7 +296,7 @@ utils = (function(){
 })();
 /**
  * Utility functions
- * @module utilities
+ * @module utils
  */
  
  /**
@@ -313,4 +313,25 @@ utils = (function(){
  * @name getLayer
  * @param {integer} id - ID of the layer as defined in the ArcGIS server service and as defined by the "id" key in the layer object.
  * @return {object}   A layer object from the map configuration file.
+ */
+/**
+ * get URL for retreiving a GeoJson contained by a buffer of the neighborhood
+ * @function
+ * @name getLayerUrl
+ * @param {Object} layer - An object of [mapJson-layer]{@link mapJson-layer} type
+ * @return {string}   A URL for the subset of the layer features required by the defined extent/polyogn
+ */
+/**
+ * Convert 8bit value to normalized opacity (0-255 -> 0.0-1.0)
+ * @function
+ * @name parseOpacity
+ * @param {integer} inputOpacity - Value between 0 and 255
+ * @return {number}   A normalized value between 0 and 1
+ */
+/**
+ * Returns current map bounds as a GeoJson polygon feature
+ * @function
+ * @name updateCurrentBounds
+ * @param {Object} map - A [MapLibre map]{@link https://maplibre.org/maplibre-gl-js-docs/api/map/} object
+ * @return {Object} - A GeoJson [Feature]{@link https://tools.ietf.org/html/rfc7946#section-3.2}[<Polygon>]{@link https://tools.ietf.org/html/rfc7946#section-3.1.6}, Result of [Turf.js bboxPolygon]{@link https://turfjs.org/docs/#bboxPolygon}
  */
