@@ -355,5 +355,41 @@ utils = (function(){
  * @name checkPointCRS
  * @param {Array} coordinates - center coordinates for the buffer in EPSG:4326 or EPSG:2039
  * @param {Integer} mapCenterRadius - Radius for the created buffer, in meters
- * @return {GeoJson~Feature} QS an object containing all url parameters after "?" as key:value pairs.
+ * @return {GeoJson~Feature} Result of the [Turf.js buffer]{@link https://turfjs.org/docs/#buffer}
+ */
+/**
+ * Get a Geojson Object of the requested address (street code and house number)
+ * @function
+ * @name getAddressPoint
+ * @param {Integer} k_rechov - Street code from the [addresses layer]{@link https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/527}
+ * @param {Integer} ms_bayit - House number on the street 
+ * @return {GeoJson} 
+ */
+/**
+ * Get a Geojson Object of the requested street's extent, with a buffer of 75 meters
+ * @function
+ * @name getStreetLine
+ * @param {Integer} k_rechov - Street code from the [addresses layer]{@link https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/527}
+ * @return {GeoJson} 
+ */
+/**
+ * Get the layer's Object ID field name
+ * ArcGIS Server has a designated field type of ObjectID (defined as "esriFieldTypeOID")
+ * The field name can vary since it can be altered, so in order to extract features by ID, the field name is needed.
+ * @function
+ * @name getLayerOID
+ * @param {Integer} layer_id - layer ID in the map/feature service
+ * @param {string} [service="https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer"] - The Service from which to extract the layer fields
+ * @return {string} The field name of the layer's Object ID
+ */
+/**
+ * Extract a single feature from a map/feature server layer
+ * Returns a GeoJson of 
+ * @function
+ * @name getLayerFeature
+ * @param {String} [service="https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/"] - The service from which to extract features
+ * @param {Integer} layer_id - layer ID in the map/feature service
+ * @param {Integer} [feature_id=1] - The ID of the feature to extract
+ * @param {String} [where=""] Where clause for the query rest API
+ * @return {GeoJson}
  */
