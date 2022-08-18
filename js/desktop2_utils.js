@@ -333,5 +333,27 @@ utils = (function(){
  * @function
  * @name updateCurrentBounds
  * @param {Object} map - A [MapLibre map]{@link https://maplibre.org/maplibre-gl-js-docs/api/map/} object
- * @return {Object} - A GeoJson [Feature]{@link https://tools.ietf.org/html/rfc7946#section-3.2}[<Polygon>]{@link https://tools.ietf.org/html/rfc7946#section-3.1.6}, Result of [Turf.js bboxPolygon]{@link https://turfjs.org/docs/#bboxPolygon}
+ * @return {GeoJson~Feature} - A GeoJson [Feature]{@link https://tools.ietf.org/html/rfc7946#section-3.2}[<Polygon>]{@link https://tools.ietf.org/html/rfc7946#section-3.1.6}, Result of [Turf.js bboxPolygon]{@link https://turfjs.org/docs/#bboxPolygon}
+ */
+/**
+ * Replaces the data currently used data for the layer's source
+ * @function
+ * @name updateSource
+ * @param {mapJson-layer} layer - An object of [mapJson-layer]{@link mapJson-layer} type
+ * @param {GeoJson} data - A GeoJson Object
+ */
+/**
+ * Parses url query string parameters and returns an object of key:value pairs
+ * @function
+ * @name getParamsFromUrl
+ * @param {String} url - the current location, extracted using decodeURI(location), needed for parameters
+ * @return {Object} QS an object containing all url parameters after "?" as key:value pairs.
+ */
+/**
+ * Checks if the input coordinates are in EPSG:4326 or EPSG:2039 and creates a buffer for the ceneter coordinate using the mapCenterRadius in meters.
+ * @function
+ * @name checkPointCRS
+ * @param {Array} coordinates - center coordinates for the buffer in EPSG:4326 or EPSG:2039
+ * @param {Integer} mapCenterRadius - Radius for the created buffer, in meters
+ * @return {GeoJson~Feature} QS an object containing all url parameters after "?" as key:value pairs.
  */
