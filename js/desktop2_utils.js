@@ -361,6 +361,34 @@ utils = (function(){
  * Get a Geojson Object of the requested address (street code and house number)
  * @function
  * @name getAddressPoint
+ * @example <caption> Get Tashach, 2 </caption>
+ * utils.getAddressPoint(574,2)
+ * // returns {"type":"FeatureCollection",
+ * //           "crs":{"type":"name","properties":{"name":"EPSG:4326"}},
+ * //           "features":[
+ * //                       {"type":"Feature",
+ * //                       "id":42241,
+ * //                       "geometry":{
+ * //                           "type":"Point",
+ * //                           "coordinates":[34.7871253,32.0848195]},
+ * //                       "properties":{
+ * //                           "oid_ktovet":42241,
+ * //                           "id_ktovet":119371,
+ * //                           "k_rechov":574,
+ * //                           "t_rechov":"תש\"ח",
+ * //                           "ms_bayit":2,
+ * //                           "knisa":" ",
+ * //                           "t_bayit_veknisa":"2 ",
+ * //                           "t_ktovet_melea":"תש\"ח 2 ",
+ * //                           "x":180058.89000000001,
+ * //                           "y":665800.43999999994,
+ * //                           "ms_gush":6213,
+ * //                           "ms_chelka":661,
+ * //                           "k_status_hesder":0,
+ * //                           "UniqueId":"527-119371",
+ * //                           "lon":34.787125000000003,
+ * //                           "lat":32.084817999999999,
+ * //                           "date_import":"18/08/2022 01:03:04"}}]}
  * @param {Integer} k_rechov - Street code from the [addresses layer]{@link https://gisn.tel-aviv.gov.il/arcgis/rest/services/IView2/MapServer/527}
  * @param {Integer} ms_bayit - House number on the street 
  * @return {GeoJson} 
