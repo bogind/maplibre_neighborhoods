@@ -1,3 +1,15 @@
+/**
+ * functions for converting esri map/feature server styling definitions to mapbox GL JS style
+ * @module esriRenderer
+ */
+/**
+ * dictionaries for translating esri label postions to appropriate mapbox gl js style positions
+ * Organized into sub-dictionaries by (esri) geometry types
+ * @typedef labelingPositions
+ * @property {Object} esriGeometryPoint - Dictionary for point label placements
+ * @property {Object} esriGeometryPolyline - Dictionary for line label placements
+ * @property {Object} esriGeometryPolygon - Dictionary for polygon label placements, contains only 1 value
+ */
 const labelingPositions = {
     "esriGeometryPoint" :{
         "esriServerPointLabelPlacementAboveCenter":"bottom",
@@ -31,10 +43,21 @@ const labelingPositions = {
         "esriServerPolygonPlacementAlwaysHorizontal":"center"
     }
 }
+/**
+ * empty GeoJson object for creating sources before data loads
+ * @typedef fakeSource
+ * @property {String} [type="FeatureCollection"] - default type for GeoJson 
+ * @property {Array} [features=[]] - empty array
+ */
 const fakeSource = {
     "type": "FeatureCollection",
     "features": []
   }
+  /**
+ * Dictionary between web map zoom levels and aproximate scale in EPSG:3857
+ * contains a key:value pair for zoom levels between 0 and 24
+ * @typedef zoomToScale3857
+ */
 const zoomToScale3857 = {
     "0": 559082264,
     "1": 279541132,
@@ -75,6 +98,20 @@ esriRenderer = (function(){
 
     /*
         get layer metadata (if vector) and start parsing draw info details in the renderer
+    */
+    /**
+     * Start the process of adding a vector layer to the map.<br>
+     * uses the [mapJson-layer]{@link mapJson-layer} object to get the metadata of the ArcGIS Server layer.<br>
+     * After the metadat is obtained the process continues through either [parseSimpleRenderer]{@link parseSimpleRenderer} or [parseUniqueValueRenderer]{@link parseUniqueValueRenderer} depending on renderer type.<br>
+     * Adds the following metadata to the layer:<ol>
+     * <li> "metadata": fields
+     * <li> "geomType": geometry type ("esriGeometryPoint"|"esriGeometryPolygon"|"esriGeometryPolyline")
+     * <li> "labelingInfo" : esri labeling info object
+     * <li> "renderer": full renderer object with rendering instructions
+     * Still missing: parsing class breaks symbology
+     * @function
+     * @name getMetadata
+     * @param {mapJson-layer} layer - An object of [mapJson-layer]{@link mapJson-layer} type
     */
     function getMetadata(layer){
         try{
@@ -124,6 +161,13 @@ esriRenderer = (function(){
     /*
         activate specific simple renderer function
     */
+   /**
+     * Decide which function to use nect by geometry type
+     * @function
+     * @name parseSimpleRenderer
+     * @param {Object} renderer - An Object of [esri-renderer]{@link https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-SimpleRenderer.html} type
+     * @param {mapJson-layer} layer - An object of [mapJson-layer]{@link mapJson-layer} type
+    */
     function parseSimpleRenderer(renderer,layer){
         try{    
             if(layer["geomType"] === "esriGeometryPoint"){
@@ -143,6 +187,13 @@ esriRenderer = (function(){
 
     /*
         activate specific unique value renderer function
+    */
+   /**
+     * Decide which function to use nect by geometry type
+     * @function
+     * @name parseUniqueValueRenderer
+     * @param {Object} renderer - An Object of [esri-renderer]{@link https://developers.arcgis.com/javascript/latest/api-reference/esri-renderers-SimpleRenderer.html} type
+     * @param {mapJson-layer} layer - An object of [mapJson-layer]{@link mapJson-layer} type
     */
     function parseUniqueValueRenderer(renderer,layer){
         if(layer["geomType"] === "esriGeometryPoint"){
@@ -501,6 +552,15 @@ esriRenderer = (function(){
 
     /*
         separate function to load images for synchronous loading
+    */
+   /**
+     * load an image into the [maplibregl.Map]{@link https://maplibre.org/maplibre-gl-js-docs/api/map/} context.<br>
+     * required before using the image in the style.<br>
+     * used in async context for loading multiple images in case of a categorized/graduated style.
+     * @function
+     * @name loadImage
+     * @param {Object} params - image parameters in an object 
+     * @param {Callback} _callback - callback function
     */
     function loadImage(params,_callback){
         params.pixelRatio = params.pixelRatio || 1;
@@ -1048,6 +1108,14 @@ esriRenderer = (function(){
     /*
         update raster layer by source name
     */
+    /**
+     * Update the image for an image source.<br>
+     * based on map bounds when the function is called, a new image is requested from the ArcGIS Server using the [export]{@link https://developers.arcgis.com/rest/services-reference/enterprise/export-map.htm} endpoint.<br>
+     * The update is done using <i>`map.getSource(sourceName).updateImage({ url: curUrl, coordinates: coords})`</i> which needs both current map extent for coordinates and a new image.
+     * @function
+     * @name updateRaster
+     * @param {String} sourceName - name of the source, as added to map context
+    */
     function updateRaster(sourceName){
         height = map.getCanvas().height
         width = map.getCanvas().width
@@ -1383,6 +1451,10 @@ esriRenderer = (function(){
 
 
 
+
+
+ 
+	 
 
 
 
